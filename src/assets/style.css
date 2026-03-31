@@ -16,7 +16,7 @@
     --statusbar-pad: max(env(safe-area-inset-top));
 
     /* Squircle Uniformity Tokens */
-    --radius-card: 42px;
+    --radius-card: 28px;
     --radius-button: 20px;
     --radius-inner: 12px;
 
@@ -772,7 +772,7 @@ main.container {
 /* --- UPDATED UNIFORM SQUIRCLE ELEMENTS --- */
 
 .roundedImage {
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important;
     border: 0.5px solid var(--outline);
     overflow: hidden;
@@ -786,7 +786,7 @@ main.container {
     text-align: left;
     margin-left: auto;
     margin-right: auto;
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important;
 }
 
@@ -821,7 +821,7 @@ main.container {
     font-weight: bold;
     transition: 0.5s;
     float: inline-block;
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important; /* Fixed: smaller radius for uniform squircle look */
 }
 
@@ -832,7 +832,7 @@ main.container {
     background: var(--primaryContainer);
     color: var(--onPrimaryContainer);
     border: none;
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important; /* Synchronized with AboutBox */
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -1301,8 +1301,7 @@ menu-iframe {
     font-size: 14px;
     height: 40px;
     border: none;
-    corner-shape: squircle;
-    border-radius: var(--radius-card) !important; /* Fixed: smaller radius for uniform squircle look */
+    border-radius: 600px; /* Fixed: smaller radius for uniform squircle look */
     margin-bottom: 5px;
 }
 
@@ -1382,20 +1381,40 @@ menu-iframe {
     }
 }
 
-/* Cleaned up for Vaso Integration */
 .acrylic-on .card,
 .acrylic-on .card.glass-container-ready {
-    background: transparent !important; /* Force transparent so Vaso SVG can show */
+    background: var(--glass-tint) !important;
     color: var(--onPrimaryContainer);
+    border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow);
 }
 
-/* Kill the old pseudo-elements that were adding thick, dark overlay shadows */
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .acrylic-on .card,
+    .acrylic-on .card.glass-container-ready {
+        backdrop-filter: blur(18px) saturate(165%);
+        -webkit-backdrop-filter: blur(18px) saturate(165%);
+    }
+}
+
 .acrylic-on .card::before,
-.acrylic-on .card.glass-container-ready::before,
+.acrylic-on .card.glass-container-ready::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-noise);
+    opacity: var(--glass-noise-opacity);
+}
+
 .acrylic-on .card::after,
 .acrylic-on .card.glass-container-ready::after {
-    display: none !important; 
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.7;
 }
 
 .glass-filter, .glass-overlay, .glass-specular { display: none !important; }
@@ -1731,7 +1750,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     background-color: rgba(0,0,0,0.05); 
     padding: 4px;
     border: 1px solid var(--outline);
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important; /* Fixed: smaller radius for uniform squircle look */
 }
 
@@ -1743,7 +1762,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     overflow-x: auto;
     white-space: nowrap;
     scrollbar-width: none;
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important; /* Fixed: smaller radius for uniform squircle look */
 }
 
@@ -1767,7 +1786,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     transition: all 0.3s ease;
     cursor: pointer;
     opacity: 0.7;
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important; /* Fixed: smaller radius for uniform squircle look */
 }
 
@@ -1787,7 +1806,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     cursor: pointer;
     opacity: 0.7;
     flex-shrink: 0;
-    corner-shape: squircle;
+    
     border-radius: var(--radius-card) !important; /* Fixed: smaller radius for uniform squircle look */
 }
 
@@ -1811,7 +1830,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     border-radius: var(--radius-card);
     background-color: color-mix(in srgb, var(--surfaceVarient) 70%, transparent);
     color: var(--onPrimaryContainer);
-    corner-shape: squircle;
+    
 }
 
 .switchContainer {
@@ -1819,7 +1838,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     border: 0.5px solid var(--outline);
     border-radius: var(--radius-card);
     background-color: color-mix(in srgb, var(--tertiaryContainer) 70%, transparent);
-    corner-shape: squircle;
+    
 }
 
 /* Refined Selector Styling */
@@ -1839,7 +1858,7 @@ p { margin-top: 0; margin-bottom: 1rem; }
     height: 54px;
     transition: all 0.3s ease;
     backdrop-filter: blur(4px);
-    corner-shape: squircle;
+    
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24' fill='%23101c2b'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
 }
 
@@ -1903,11 +1922,4 @@ input:checked + .slider:before {
 }
 .slider.round:before {
   border-radius: 50%;
-}
-
-/* Fix for Liquid Glass rendering conflicts */
-.acrylic-on .liquid-card-wrapper {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
 }

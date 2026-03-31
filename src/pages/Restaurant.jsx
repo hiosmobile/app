@@ -20,7 +20,7 @@ export default function Restaurant() {
       </Card>
 
       <Card className="mt-2">
-        <MenuActionBtn 
+        <MenuActionBtn
           icon="local_cafe" 
           text="Your HiCafe™️ Visit" 
           className="joinTop" 

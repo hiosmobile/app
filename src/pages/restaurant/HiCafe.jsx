@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/Card';
 import PageNavHeader from '../../../components/PageNavHeader';
 import RippleButton from '../../../components/RippleButton';
@@ -7,6 +8,7 @@ import ScrollTop from '../../assets/buttons/scrolltop.bmp';
 export default function HiCafe() {
   const [activeMainTab, setActiveMainTab] = useState('book');
   const [activeMenuTab, setActiveMenuTab] = useState('normal');
+  const navigate = useNavigate();
 
   const mainTabs = [
     { id: 'book', icon: 'table_restaurant', label: 'Book' },
@@ -35,7 +37,6 @@ export default function HiCafe() {
         {/* --- BOOK TAB CONTENT --- */}
         {activeMainTab === 'book' && (
           <div className="fade show active">
-            {/* ADDED bodyClass="text-start" HERE */}
             <Card className="joinBottom" bodyClass="text-start">
               <div className="top-container">
                 <h1 className="blue-h2"><span className="titleIcon material-symbols-rounded">table_restaurant</span>Book a Table</h1>
@@ -43,7 +44,15 @@ export default function HiCafe() {
               </div>
             </Card>
             <Card className="mt-2 full">
-              <RippleButton className="form-button">
+              <RippleButton 
+                className="form-button"
+                onClick={() => navigate('/viewer', {
+                  state: {
+                    src: "https://docs.google.com/forms/d/e/1FAIpQLSfeP-cO7te979Dc-QRmUsBwQTzIojYRtg7Yx3OufiiUcn2r2g/viewform?embedded=true",
+                    title: "Book a Table"
+                  }
+                })}
+              >
                 <span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Form Fullscreen
               </RippleButton>
               <div className="iframe-wrapper">
@@ -57,7 +66,6 @@ export default function HiCafe() {
         {/* --- MENUS TAB CONTENT --- */}
         {activeMainTab === 'menus' && (
           <div className="fade show active">
-            {/* ADDED bodyClass="text-start" HERE */}
             <Card className="joinBottom" bodyClass="text-start">
               <div className="top-container">
                 <h1 className="blue-h2"><span className="titleIcon material-symbols-rounded">menu_book</span>Menus</h1>
@@ -99,7 +107,17 @@ export default function HiCafe() {
                 <Card className="joinBottom fade show active">
                   <h2 className="card-title">Main</h2>
                   <p className="card-text">This menu includes Lunch, Dinner, and more.</p>
-                  <RippleButton className="form-button"><span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen</RippleButton>
+                  <RippleButton 
+                    className="form-button"
+                    onClick={() => navigate('/viewer', {
+                      state: {
+                        src: "https://drive.google.com/file/d/1asnkFiTAX-bancBcS094ge9XE3Q-Bn3d/preview",
+                        title: "Main Menu"
+                      }
+                    })}
+                  >
+                    <span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen
+                  </RippleButton>
                   <div className="iframe-wrapper roundedImage">
                     <iframe className="menu-iframe roundedImage" src="https://drive.google.com/file/d/1asnkFiTAX-bancBcS094ge9XE3Q-Bn3d/preview" width="100%" height="600" frameBorder="0"></iframe>
                   </div>
@@ -111,7 +129,17 @@ export default function HiCafe() {
                 <Card className="joinBottom fade show active">
                   <h2 className="card-title">Worldwide</h2>
                   <p className="card-text">This is our brand new worldwide foods menu</p>
-                  <RippleButton className="form-button"><span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen</RippleButton>
+                  <RippleButton 
+                    className="form-button"
+                    onClick={() => navigate('/viewer', {
+                      state: {
+                        src: "https://drive.google.com/file/d/1ZTnLTPCGjV0MdHNjTP9JJBSW_WdtSm8i/preview",
+                        title: "Worldwide Menu"
+                      }
+                    })}
+                  >
+                    <span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen
+                  </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe className="menu-iframe roundedImage" src="https://drive.google.com/file/d/1ZTnLTPCGjV0MdHNjTP9JJBSW_WdtSm8i/preview" width="100%" height="1000" frameBorder="0"></iframe>
                   </div>
@@ -123,7 +151,17 @@ export default function HiCafe() {
                 <Card className="joinBottom fade show active">
                   <h1 className="card-title">Pizza</h1>
                   <p className="card-text">Take a look at our majestic new pizza menu below now!</p>
-                  <RippleButton className="form-button"><span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen</RippleButton>
+                  <RippleButton 
+                    className="form-button"
+                    onClick={() => navigate('/viewer', {
+                      state: {
+                        src: "https://drive.google.com/file/d/1YezhyJuuUg-sghImzB-zWn-wGnI6l8Ww/preview",
+                        title: "Pizza Menu"
+                      }
+                    })}
+                  >
+                    <span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen
+                  </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe className="menu-iframe roundedImage" src="https://drive.google.com/file/d/1YezhyJuuUg-sghImzB-zWn-wGnI6l8Ww/preview" width="100%" height="1000" frameBorder="0"></iframe>
                   </div>
@@ -135,7 +173,17 @@ export default function HiCafe() {
                 <Card className="joinBottom fade show active">
                   <h1 className="card-title">Gastro</h1>
                   <p className="card-text">This is our most premium menu that you will love!</p>
-                  <RippleButton className="form-button"><span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen</RippleButton>
+                  <RippleButton 
+                    className="form-button"
+                    onClick={() => navigate('/viewer', {
+                      state: {
+                        src: "https://drive.google.com/file/d/1iHoe-pBMn0niY9R2IoZgYmhgXLaz7Mrz/preview",
+                        title: "Gastro Menu"
+                      }
+                    })}
+                  >
+                    <span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Menu Fullscreen
+                  </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe className="menu-iframe roundedImage" src="https://drive.google.com/file/d/1iHoe-pBMn0niY9R2IoZgYmhgXLaz7Mrz/preview" width="100%" height="1000" frameBorder="0"></iframe>
                   </div>
@@ -149,7 +197,6 @@ export default function HiCafe() {
         {/* --- ORDER TAB CONTENT --- */}
         {activeMainTab === 'order' && (
           <div className="fade show active">
-            {/* ADDED bodyClass="text-start" HERE */}
             <Card className="joinBottom" bodyClass="text-start">
               <div className="top-container">
                 <h1 className="blue-h2"><span className="titleIcon material-symbols-rounded">edit</span>Order</h1>
@@ -157,7 +204,15 @@ export default function HiCafe() {
               </div>
             </Card>
             <Card className="mt-2 full">
-              <RippleButton className="form-button">
+              <RippleButton 
+                className="form-button"
+                onClick={() => navigate('/viewer', {
+                  state: {
+                    src: "https://docs.google.com/forms/d/e/1FAIpQLSfGzW5su4bVmpeRVGRbDDeudfZkvhbyuXi-pySKLW4qA8WnaA/viewform?embedded=true",
+                    title: "Order"
+                  }
+                })}
+              >
                 <span className="form-button-icon material-symbols-rounded">fullscreen</span>Open Form Fullscreen
               </RippleButton>
               <div className="iframe-wrapper">
