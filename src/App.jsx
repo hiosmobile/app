@@ -1,24 +1,25 @@
-import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '../components/ThemeContext';
+import React from "react";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "../components/ThemeContext";
 
-import Gateway from './pages/Gateway';
+import Gateway from "./pages/Gateway";
 
-import Home from './pages/Welcome';
+import Home from "./pages/Welcome";
 
-import Restaurant from './pages/Restaurant';
-import HiCafe from './pages/restaurant/HiCafe';
-import Breakfast from './pages/restaurant/Breakfast';
-import CafeFiesta from './pages/restaurant/CafeFiesta';
-import Locations from './pages/restaurant/Locations';
+import Restaurant from "./pages/Restaurant";
+import HiCafe from "./pages/restaurant/HiCafe";
+import Breakfast from "./pages/restaurant/Breakfast";
+import CafeFiesta from "./pages/restaurant/CafeFiesta";
+import Locations from "./pages/restaurant/Locations";
 
-import HotelActivities from './pages/HotelActivities';
+import HotelActivities from "./pages/HotelActivities";
 
-import Roomkey from './pages/Roomkey';
+import Roomkey from "./pages/Roomkey";
 
-import Appearance from './pages/settings/Appearance';
+import Settings from "./pages/Settings";
+import Appearance from "./pages/settings/Appearance";
 
-import FullscreenViewer from './pages/FullscreenViewer';
+import FullscreenViewer from "./pages/FullscreenViewer";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/restaurant/locations" element={<Locations />} />
           <Route path="/hotelactivities" element={<HotelActivities />} />
           <Route path="/roomkey" element={<Roomkey />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/settings/appearance" element={<Appearance />} />
           <Route path="/viewer" element={<FullscreenViewer />} />
         </Routes>
