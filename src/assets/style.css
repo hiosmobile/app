@@ -735,7 +735,7 @@ main.container {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: -1;
+    z-index: 0; /* FIXED: was -1, which breaks backdrop-filter */
     pointer-events: none;
 }
 
@@ -745,7 +745,7 @@ main.container {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("backgrounds/backgroundimage.png");
+    background-image: url("/assets/backgrounds/backgroundimage.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -761,13 +761,13 @@ main.container {
 }
 
 .background-wrapper::before {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05);
     mix-blend-mode: soft-light;
 }
 
 .background-wrapper::after {
     background-image: var(--glass-noise);
-    opacity: 0.08;
+    opacity: 0.04;
 }
 
 /* --- UPDATED UNIFORM SQUIRCLE ELEMENTS --- */
@@ -779,14 +779,18 @@ main.container {
 }
 
 .translucentAboutBox {
-    background-color: var(--tertiaryContainer);
+    background-color: color-mix(
+        in srgb,
+        var(--tertiaryContainer) 40%,
+        transparent
+    );
     color: var(--onTertiaryContainer);
     padding: 10px;
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(24px);
     text-align: left;
     margin-left: auto;
     margin-right: auto;
-
+    z-index: 1;
     border-radius: var(--radius-card) !important;
 }
 
@@ -818,7 +822,7 @@ main.container {
     height: 60px;
     background-color: color-mix(
         in srgb,
-        var(--secondaryContainer) 70%,
+        var(--secondaryContainer) 35%,
         transparent
     );
     color: var(--onSecondaryContainer);
@@ -838,12 +842,10 @@ main.container {
     background: var(--primaryContainer);
     color: var(--onPrimaryContainer);
     border: none;
-    isolation: isolate; /* Added stacking context to fix noise overlap */
-    border-radius: var(
-        --radius-card
-    ) !important; /* Synchronized with AboutBox */
+    border-radius: var(--radius-card) !important;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1; /* NEW: ensures card sits above background */
 }
 
 /* ------------------------------------------ */
@@ -914,7 +916,12 @@ main.container {
 .translucentBox {
     padding: 10px;
     min-width: 300px;
-    background-color: var(--primaryContainer);
+    background-color: color-mix(
+        in srgb,
+        var(--primaryContainer) 40%,
+        transparent
+    );
+    backdrop-filter: blur(24px);
     color: var(--onPrimaryContainer);
     margin-left: auto;
     margin-right: auto;
@@ -1387,27 +1394,27 @@ menu-iframe {
 }
 
 :root {
-    --glass-tint: rgba(255, 255, 255, 0.62);
-    --glass-border: rgba(0, 0, 0, 0.08);
-    --glass-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
-    --glass-noise-opacity: 0.6;
+    --glass-tint: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+    --glass-noise-opacity: 0.3;
     --glass-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
     --glass-sheen: linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0.35),
+        rgba(255, 255, 255, 0.45),
         rgba(255, 255, 255, 0)
     );
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --glass-tint: rgba(32, 32, 32, 0.62);
-        --glass-border: rgba(255, 255, 255, 0.1);
-        --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
-        --glass-noise-opacity: 0.05;
+        --glass-tint: rgba(20, 20, 20, 0.35);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --glass-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+        --glass-noise-opacity: 0.08;
         --glass-sheen: linear-gradient(
             to bottom,
-            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.15),
             rgba(255, 255, 255, 0)
         );
     }
@@ -1421,14 +1428,10 @@ menu-iframe {
     box-shadow: var(--glass-shadow);
 }
 
-@supports (
-    (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))
-) {
-    .acrylic-on .card,
-    .acrylic-on .card.glass-container-ready {
-        backdrop-filter: blur(18px) saturate(165%);
-        -webkit-backdrop-filter: blur(18px) saturate(165%);
-    }
+.acrylic-on .card,
+.acrylic-on .card.glass-container-ready {
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 .acrylic-on .card::before,
@@ -1437,8 +1440,8 @@ menu-iframe {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: var(--glass-noise);
-    opacity: var(--glass-noise-opacity);
+    /*background-image: var(--glass-noise);
+    opacity: var(--glass-noise-opacity);*/
     z-index: -1; /* Pushes the noise behind text */
 }
 
@@ -1449,7 +1452,7 @@ menu-iframe {
     inset: 0;
     pointer-events: none;
     background-image: var(--glass-sheen);
-    opacity: 0.7;
+    opacity: 0.4;
     z-index: -1; /* Pushes the sheen behind text */
 }
 
@@ -1468,7 +1471,7 @@ menu-iframe {
 
 .acrylic-on .card .form-control,
 .acrylic-on .glass-content .form-control {
-    background-color: rgba(0, 0, 0, 0.06) !important;
+    background-color: rgba(0, 0, 0, 0.03) !important;
     border-color: rgba(255, 255, 255, 0.18) !important;
     color: var(--onSurface) !important;
     border-radius: 40px !important;
@@ -1477,7 +1480,7 @@ menu-iframe {
 @media (prefers-color-scheme: dark) {
     .acrylic-on .card .form-control,
     .acrylic-on .glass-content .form-control {
-        background-color: rgba(255, 255, 255, 0.06) !important;
+        background-color: rgba(255, 255, 255, 0.03) !important;
         border-color: rgba(255, 255, 255, 0.14) !important;
     }
 }
@@ -1503,6 +1506,13 @@ menu-iframe {
 }
 .background-off .glass-content {
     padding: 0;
+}
+
+body:not(.acrylic-on) .card,
+body:not(.acrylic-on) .card.glass-container-ready {
+    background: var(--primaryContainer) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 :root {
@@ -1694,8 +1704,8 @@ p {
 .drawer-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.22);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(16px);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
@@ -1714,7 +1724,7 @@ p {
     height: 100%;
     width: 340px;
     max-width: 92%;
-    background: var(--primaryContainer);
+    background: color-mix(in srgb, var(--primaryContainer) 40%, transparent);
     color: var(--onPrimaryContainer);
     border: 1px solid var(--outline);
     border-radius: 24px 0 0 24px;
@@ -1726,7 +1736,7 @@ p {
     flex-direction: column;
     padding: 1rem;
     gap: 0.75rem;
-    backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(24px) saturate(150%);
     isolation: isolate; /* Added stacking context to fix noise overlap */
 }
 
@@ -1746,7 +1756,7 @@ p {
     inset: 0;
     pointer-events: none;
     background-image: var(--glass-sheen);
-    opacity: 0.6;
+    opacity: 0.3;
     z-index: -1; /* Pushes the sheen behind text */
 }
 
@@ -1783,7 +1793,7 @@ p {
     padding: 0.85rem 1rem;
     border: none !important;
     border-radius: 14px;
-    background: color-mix(in srgb, var(--secondaryContainer) 78%, transparent);
+    background: color-mix(in srgb, var(--secondaryContainer) 30%, transparent);
     color: var(--onSecondaryContainer);
     text-align: left;
     font: inherit;
@@ -1797,7 +1807,7 @@ p {
 }
 
 .drawer-btn:hover {
-    background: color-mix(in srgb, var(--secondaryContainer) 80%, transparent);
+    background: color-mix(in srgb, var(--secondaryContainer) 50%, transparent);
     transform: translateY(-1px);
 }
 
@@ -2039,7 +2049,7 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--surfaceVarient) 70%,
+        var(--surfaceVarient) 30%,
         transparent
     );
     color: var(--onPrimaryContainer);
@@ -2051,7 +2061,7 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--tertiaryContainer) 70%,
+        var(--tertiaryContainer) 30%,
         transparent
     );
 }
@@ -2063,7 +2073,7 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card) !important;
     background-color: color-mix(
         in srgb,
-        var(--secondaryContainer) 40%,
+        var(--secondaryContainer) 25%,
         transparent
     ) !important;
     color: var(--onSecondaryContainer) !important;
@@ -2076,7 +2086,7 @@ img[src$="scrolltop.bmp"] {
     padding-right: 45px;
     height: 54px;
     transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(16px);
 
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24' fill='%23101c2b'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
 }

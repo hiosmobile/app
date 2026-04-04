@@ -6,13 +6,11 @@ export default function About() {
   return (
     <main className="container mt-4 mb-5">
       <Card>
-        <div className="card-body">
-          <div className="top-container">
-            <h1 className="blue-h2">
-              <span className="titleIcon material-symbols-rounded">info</span>
-              About App
-            </h1>
-          </div>
+        <div className="top-container">
+          <h1 className="blue-h2">
+            <span className="titleIcon material-symbols-rounded">info</span>
+            About App
+          </h1>
         </div>
       </Card>
       <Card className="mt-2">
