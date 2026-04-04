@@ -20,6 +20,7 @@ import Settings from "./pages/Settings";
 import Appearance from "./pages/settings/Appearance";
 import Apps from "./pages/settings/Apps";
 import About from "./pages/settings/About";
+import Privacy from "./pages/settings/Privacy";
 
 import FullscreenViewer from "./pages/FullscreenViewer";
 
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/settings/appearance" element={<Appearance />} />
           <Route path="/settings/apps" element={<Apps />} />
           <Route path="/settings/about" element={<About />} />
+          <Route path="/settings/privacy" element={<Privacy />} />
           <Route path="/viewer" element={<FullscreenViewer />} />
         </Routes>
       </HashRouter>
