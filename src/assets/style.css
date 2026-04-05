@@ -706,17 +706,6 @@ body.generic-orange {
     }
 }
 
-:root {
-    /* Adding text shadow variables to make text pop against glass */
-    --glass-text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --glass-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-    }
-}
-
 body {
     background-color: var(--background);
     font-family: var(--fontPrimary);
@@ -792,7 +781,7 @@ main.container {
 .translucentAboutBox {
     background-color: color-mix(
         in srgb,
-        var(--tertiaryContainer) 55%,
+        var(--tertiaryContainer) 75%,
         transparent
     );
     color: var(--onTertiaryContainer);
@@ -803,7 +792,6 @@ main.container {
     margin-right: auto;
     z-index: 1;
     border-radius: var(--radius-card) !important;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 /* Stacked section containers */
@@ -834,7 +822,7 @@ main.container {
     height: 60px;
     background-color: color-mix(
         in srgb,
-        var(--secondaryContainer) 50%,
+        var(--secondaryContainer) 70%,
         transparent
     );
     color: var(--onSecondaryContainer);
@@ -843,7 +831,6 @@ main.container {
     font-weight: bold;
     transition: 0.5s;
     float: inline-block;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 
     border-radius: 600px !important;
 }
@@ -931,7 +918,7 @@ main.container {
     min-width: 300px;
     background-color: color-mix(
         in srgb,
-        var(--primaryContainer) 55%,
+        var(--primaryContainer) 75%,
         transparent
     );
     backdrop-filter: blur(24px);
@@ -939,7 +926,6 @@ main.container {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .imageBox {
@@ -1408,8 +1394,8 @@ menu-iframe {
 }
 
 :root {
-    --glass-tint: rgba(255, 255, 255, 0.45);
-    --glass-border: rgba(255, 255, 255, 0.35);
+    --glass-tint: rgba(255, 255, 255, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.45);
     --glass-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
     --glass-noise-opacity: 0.3;
     --glass-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
@@ -1422,7 +1408,7 @@ menu-iframe {
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --glass-tint: rgba(20, 20, 20, 0.55);
+        --glass-tint: rgba(10, 10, 10, 0.5);
         --glass-border: rgba(255, 255, 255, 0.15);
         --glass-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
         --glass-noise-opacity: 0.08;
@@ -1440,7 +1426,6 @@ menu-iframe {
     color: var(--onPrimaryContainer);
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow);
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .acrylic-on .card,
@@ -1737,7 +1722,7 @@ p {
     height: 100%;
     width: 340px;
     max-width: 92%;
-    background: color-mix(in srgb, var(--primaryContainer) 55%, transparent);
+    background: color-mix(in srgb, var(--primaryContainer) 75%, transparent);
     color: var(--onPrimaryContainer);
     border: 1px solid var(--outline);
     border-radius: 24px 0 0 24px;
@@ -1793,7 +1778,6 @@ p {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .side-drawer .drawer-nav {
@@ -1807,7 +1791,7 @@ p {
     padding: 0.85rem 1rem;
     border: none !important;
     border-radius: 14px;
-    background: color-mix(in srgb, var(--secondaryContainer) 45%, transparent);
+    background: color-mix(in srgb, var(--secondaryContainer) 65%, transparent);
     color: var(--onSecondaryContainer);
     text-align: left;
     font: inherit;
@@ -1818,11 +1802,10 @@ p {
     transition:
         background 0.2s ease,
         transform 0.1s ease;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .drawer-btn:hover {
-    background: color-mix(in srgb, var(--secondaryContainer) 65%, transparent);
+    background: color-mix(in srgb, var(--secondaryContainer) 80%, transparent);
     transform: translateY(-1px);
 }
 
@@ -2004,7 +1987,6 @@ img[src$="scrolltop.bmp"] {
     cursor: pointer;
     opacity: 0.8;
     border-radius: var(--radius-card) !important;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .sub-header-tab {
@@ -2024,7 +2006,6 @@ img[src$="scrolltop.bmp"] {
     opacity: 0.8;
     flex-shrink: 0;
     border-radius: var(--radius-card) !important;
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .header-tab .material-symbols-rounded {
@@ -2036,7 +2017,6 @@ img[src$="scrolltop.bmp"] {
     color: var(--onPrimary);
     opacity: 1;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-shadow: none; /* Removing custom shadow from solid active blocks */
 }
 
 @media (max-width: 360px) {
@@ -2055,11 +2035,10 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--surfaceVarient) 50%,
+        var(--surfaceVarient) 70%,
         transparent
     );
     color: var(--onPrimaryContainer);
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 }
 
 .switchContainer {
@@ -2068,7 +2047,7 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--tertiaryContainer) 45%,
+        var(--tertiaryContainer) 65%,
         transparent
     );
 }
@@ -2080,7 +2059,7 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card) !important;
     background-color: color-mix(
         in srgb,
-        var(--secondaryContainer) 50%,
+        var(--secondaryContainer) 70%,
         transparent
     ) !important;
     color: var(--onSecondaryContainer) !important;
@@ -2094,7 +2073,6 @@ img[src$="scrolltop.bmp"] {
     height: 54px;
     transition: all 0.3s ease;
     backdrop-filter: blur(16px);
-    text-shadow: var(--glass-text-shadow); /* Added for legibility */
 
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24' fill='%23101c2b'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
 }

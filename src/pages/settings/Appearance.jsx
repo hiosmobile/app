@@ -301,7 +301,7 @@ export default function Appearance() {
                   }}
                 >
                   The acrylic glass effect is the glassy blur effect used
-                  throughout HiOSMobile. You can disable this above for
+                  throughout HiOS. You can disable this above for
                   accessibility's sake, or just personal preference.
                 </p>
               </div>
