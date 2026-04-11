@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import ProgressWidget from "../../components/ProgressWidget";
 import RewardsCodeWidget from "../../components/RewardsCodeWidget";
 import DateWidget from "../../components/DateWidget";
 import WeatherWidget from "../../components/WeatherWidget";
 import frameImg from "../assets/media/frame.png";
+import MenuActionBtn from "../../components/MenuActionBtn";
+import { Menu } from "lucide-react";
 
 export default function Home() {
-  const [greeting, setGreeting] = useState("");
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  // Calculate the greeting directly without using state or effects
+  const getGreeting = () => {
     const hrs = new Date().getHours();
-    if (hrs < 12) setGreeting("Good Morning");
-    else if (hrs >= 12 && hrs <= 17) setGreeting("Good Afternoon");
-    else setGreeting("Good Evening");
-  }, []);
+    if (hrs < 12) return "Good Morning";
+    if (hrs <= 17) return "Good Afternoon";
+    return "Good Evening";
+  };
+
+  const greeting = getGreeting();
 
   return (
     <main className="container mt-4 mb-5">
@@ -76,6 +82,26 @@ export default function Home() {
           </Card>
 
           <DateWidget />
+
+          <Card className="mt-2">
+            <h2 className="card-title">Welcome to the new HiOS!</h2>
+            <p>
+              This version was built completely from scratch with ReactJS, and a
+              brand new custom UI, featuring the all-new HiMaterial 7.1, with
+              some beautiful new backgrounds to go with it!
+            </p>
+            <p className="mt-2">
+              This version is still in beta, so we'd apprechiate if you'd pass
+              us on some feedback! Ensure to include 'HiOSNext' in the
+              submission somewhere.
+            </p>
+            <MenuActionBtn
+              text="Send Feedback"
+              icon="feedback"
+              className="full"
+              onClick={() => navigate("/help/feedback")}
+            />
+          </Card>
         </div>
       </div>
     </main>

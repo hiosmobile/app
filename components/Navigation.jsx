@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import "./Navigation.css";
+import "./navigation.css";
 
 const navItems = [
   { path: "/", icon: "home", label: "Home" },
-  { path: "/restaurant", icon: "restaurant", label: "Food" },
-  { path: "/hotel", icon: "hotel", label: "Hotel" },
-  { path: "/roomkey", icon: "key", label: "Key" },
+  { path: "/restaurant", icon: "award_meal", label: "Eat" },
+  { path: "/hotelactivities", icon: "hotel", label: "Stay" },
+  { path: "/roomkey", icon: "key", label: "Room Key" },
 ];
 
 export function BottomNav() {

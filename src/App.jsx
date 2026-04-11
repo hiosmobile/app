@@ -2,7 +2,11 @@ import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "../components/ThemeContext";
 
-import Gateway from "./pages/Gateway";
+// Layouts
+import Layout from "../components/Layout.jsx";
+import TopBarWrapper from "../components/TopBarWrapper.jsx";
+
+// Pages
 import Home from "./pages/Welcome";
 import Restaurant from "./pages/Restaurant";
 import HiCafe from "./pages/restaurant/HiCafe";
@@ -11,45 +15,107 @@ import CafeFiesta from "./pages/restaurant/CafeFiesta";
 import Locations from "./pages/restaurant/Locations";
 import HotelActivities from "./pages/HotelActivities";
 import Roomkey from "./pages/Roomkey";
+
 import Settings from "./pages/Settings";
 import Appearance from "./pages/settings/Appearance";
 import Accessibility from "./pages/settings/Accessibility";
 import Apps from "./pages/settings/Apps";
 import About from "./pages/settings/About";
 import Privacy from "./pages/settings/Privacy";
-import Help from "./pages/HelpCenter";
-import FullscreenViewer from "./pages/FullscreenViewer";
 
-// Import the named exports instead of a default export
-import { BottomNav, SideRail } from "../components/Navigation";
+import Help from "./pages/HelpCenter";
+import AppFeedback from "./pages/help/AppFeedback.jsx";
+
+import FullscreenViewer from "./pages/FullscreenViewer";
 
 export default function App() {
   return (
     <ThemeProvider>
       <HashRouter>
         <Routes>
-          <Route path="/" element={<Gateway />} />
-          <Route path="/welcome" element={<Home />} />
-          <Route path="/restaurant" element={<Restaurant />} />
-          <Route path="/restaurant/hicafe" element={<HiCafe />} />
-          <Route path="/restaurant/breakfast" element={<Breakfast />} />
-          <Route path="/restaurant/cafefiesta" element={<CafeFiesta />} />
-          <Route path="/restaurant/locations" element={<Locations />} />
-          <Route path="/hotelactivities" element={<HotelActivities />} />
-          <Route path="/roomkey" element={<Roomkey />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/appearance" element={<Appearance />} />
-          <Route path="/settings/accessibility" element={<Accessibility />} />
-          <Route path="/settings/apps" element={<Apps />} />
-          <Route path="/settings/about" element={<About />} />
-          <Route path="/settings/privacy" element={<Privacy />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/viewer" element={<FullscreenViewer />} />
-        </Routes>
+          {/* =========================================
+              MAIN APP LAYOUT (Nav Rails & FAB)
+              ========================================= */}
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/restaurant" element={<Restaurant />} />
+            <Route path="/restaurant/hicafe" element={<HiCafe />} />
+            <Route path="/restaurant/breakfast" element={<Breakfast />} />
+            <Route path="/restaurant/cafefiesta" element={<CafeFiesta />} />
+            <Route path="/restaurant/locations" element={<Locations />} />
+            <Route path="/hotelactivities" element={<HotelActivities />} />
+            <Route path="/roomkey" element={<Roomkey />} />
+            <Route path="/viewer" element={<FullscreenViewer />} />
+          </Route>
 
-        {/* Render both navigation components */}
-        <BottomNav />
-        <SideRail />
+          {/* =========================================
+              TOP BAR LAYOUT (Settings & Help Center)
+              ========================================= */}
+          <Route
+            path="/settings"
+            element={
+              <TopBarWrapper title="Settings">
+                <Settings />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/settings/appearance"
+            element={
+              <TopBarWrapper title="Appearance">
+                <Appearance />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/settings/accessibility"
+            element={
+              <TopBarWrapper title="Accessibility">
+                <Accessibility />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/settings/apps"
+            element={
+              <TopBarWrapper title="Apps">
+                <Apps />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/settings/about"
+            element={
+              <TopBarWrapper title="About">
+                <About />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/settings/privacy"
+            element={
+              <TopBarWrapper title="Privacy">
+                <Privacy />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/help"
+            element={
+              <TopBarWrapper title="Help Center">
+                <Help />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/help/feedback"
+            element={
+              <TopBarWrapper title="Send Feedback">
+                <AppFeedback />
+              </TopBarWrapper>
+            }
+          />
+        </Routes>
       </HashRouter>
     </ThemeProvider>
   );

@@ -36,11 +36,8 @@ export default function HelpCenter() {
               onClick={() => navigate("/help/tutorial")}
             />
           </Card>
-        </div>
 
-        {/*Right col*/}
-        <div className="col-12 col-md-6">
-          <Card>
+          <Card className="mt-2">
             <h1 className="card-title">General</h1>
             <MenuActionBtn
               icon="restaurant"
@@ -75,6 +72,19 @@ export default function HelpCenter() {
               text="WiFi and Internet"
               className="joinBottom"
               onClick={() => navigate("/help/internet")}
+            />
+          </Card>
+        </div>
+
+        {/*Right col*/}
+        <div className="col-12 col-md-6">
+          <Card>
+            <h1 className="card-title">More</h1>
+            <MenuActionBtn
+              icon="feedback"
+              text="Send Feedback"
+              className="joinTop"
+              onClick={() => navigate("/help/feedback")}
             />
           </Card>
         </div>

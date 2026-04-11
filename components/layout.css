@@ -1,0 +1,507 @@
+@font-face {
+    font-family: "Material Symbols Rounded";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/icons.woff2") format("woff2");
+}
+
+.material-symbols-rounded {
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: "Google Sans Flex";
+    font-style: normal;
+    font-weight: 500;
+    src: url("../fonts/google-sans.woff2") format("woff2");
+}
+
+/* Color Variables */
+:root {
+    --bg-color: #fdfcff;
+    --text-color: #1a1c1e;
+    --nav-bg: rgba(255, 255, 255, 0.85);
+    --rail-bg: #fdfcff;
+    --border-color: #73777f;
+    --icon-active-bg: #d2e4ff;
+    --icon-active-color: #001c37;
+    --icon-inactive-color: #001c37;
+    --fab-bg: #d2e4ff;
+    --fab-color: #001c37;
+    --sheet-bg: #fdfcff;
+    --sheet-button-bg: #d7e3f8;
+    --sheet-button-color: #101c2b;
+    --overlay-bg: rgba(0, 0, 0, 0.5);
+    --primary: #0061a6;
+    --onPrimary: #ffffff;
+    --primaryContainer: #d2e4ff;
+    --onPrimaryContainer: #001c37;
+    --secondary: #535f70;
+    --onSecondary: #ffffff;
+    --secondaryContainer: #d7e3f8;
+    --onSecondaryContainer: #101c2b;
+    --tertiary: #6c5778;
+    --onTertiary: #ffffff;
+    --tertiaryContainer: #f3daff;
+    --onTertiaryContainer: #251431;
+    --background: #fdfcff;
+    --onBackground: #1a1c1e;
+    --surface: #fdfcff;
+    --onSurface: #1a1c1e;
+    --outline: #73777f;
+    --surfaceVarient: #dfe2eb;
+    --onSurfaceVarient: #43474e;
+    --glass-tint: rgba(255, 255, 255, 0.62);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    --radius-card: 42px;
+    --radius-medium: 22px;
+    --radius-small: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1a1c1e;
+        --text-color: #e3e2e6;
+        --nav-bg: rgba(30, 30, 30, 0.85);
+        --rail-bg: #1a1c1e;
+        --border-color: #8d9199;
+        --icon-active-bg: #253141;
+        --icon-active-color: #d2e4ff;
+        --icon-inactive-color: #e3e2e6;
+        --fab-bg: #253141;
+        --fab-color: #d2e4ff;
+        --sheet-bg: #1a1c1e;
+        --sheet-button-bg: #3c4858;
+        --sheet-button-color: #d7e3f8;
+        --overlay-bg: rgba(0, 0, 0, 0.7);
+        --primary: #a0c9ff;
+        --onPrimary: #00325a;
+        --primaryContainer: #253141;
+        --onPrimaryContainer: #d2e4ff;
+        --secondary: #bbc7db;
+        --onSecondary: #253141;
+        --secondaryContainer: #3c4858;
+        --onSecondaryContainer: #d7e3f8;
+        --tertiary: #d7bde4;
+        --onTertiary: #3b2947;
+        --tertiaryContainer: #533f5f;
+        --onTertiaryContainer: #f3daff;
+        --background: #1a1c1e;
+        --onBackground: #e3e2e6;
+        --surface: #1a1c1e;
+        --onSurface: #e3e2e6;
+        --outline: #8d9199;
+        --surfaceVarient: #43474e;
+        --onSurfaceVarient: #c3c6cf;
+        --glass-tint: rgba(26, 28, 30, 0.62);
+        --glass-border: rgba(255, 255, 255, 0.08);
+    }
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    font-family: "Google Sans Flex", sans-serif;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
+.main-content {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    transition: border-radius 0.3s ease;
+}
+
+/* FAB */
+.fab {
+    position: fixed;
+    bottom: 1px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    color: var(--onPrimary);
+    background-color: var(--primary);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1001;
+    border-radius: 15px;
+}
+
+/* Bottom Sheet */
+.bottom-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--overlay-bg);
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.bottom-sheet-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.bottom-sheet {
+    position: fixed;
+    bottom: 20px;
+    left: 16px;
+    right: 16px;
+    /* Glass Effect */
+    background-color: var(--glass-tint);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    color: var(--text-color);
+    padding: 12px 24px 24px 24px;
+    z-index: 2001;
+    transform: translateY(150%);
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: var(--radius-card);
+
+    /* Crucial for keeping the sheen contained */
+    isolation: isolate;
+}
+
+/* The glass sheen layer */
+.bottom-sheet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+/* Ensure the content stays above the glass sheen layer */
+.bottom-sheet > * {
+    position: relative;
+    z-index: 1;
+}
+
+.bottom-sheet.open {
+    transform: translateY(0);
+}
+
+.bottom-sheet-drag-handle {
+    width: 32px;
+    height: 4px;
+    background-color: var(--outline);
+    border-radius: 2px;
+    margin: 0 auto 12px auto;
+    opacity: 0.4;
+}
+
+.bottom-sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.bottom-sheet-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    z-index: 2; /* Ensure button stays above sheen */
+}
+
+.close-button:hover {
+    background-color: var(--surfaceVarient);
+}
+
+.sheet-button {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--sheet-button-bg);
+    color: var(--sheet-button-color);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-card);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sheet-button i {
+    margin-right: 12px;
+}
+
+/* App Shell Layout Toggles */
+@media (max-width: 767px) {
+    .main-content {
+        padding-bottom: 120px;
+    }
+    .bottom-sheet {
+        bottom: 100px;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-container {
+        padding: 0px;
+    }
+    .main-content {
+        border-radius: var(--radius-card);
+    }
+    .fab {
+        right: 16px;
+        bottom: 16px;
+    }
+}
+
+/* Top App Bar Styling */
+.top-app-bar {
+    height: 60px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+    flex-shrink: 0;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    margin-right: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition:
+        background-color 0.2s ease,
+        color 0.3s ease;
+}
+
+.back-button:active {
+    background-color: var(--border-color);
+}
+
+.top-bar-title {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.top-bar-wrapper-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    background-color: var(--background);
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        padding 0.3s ease;
+}
+
+@media (max-width: 767px) {
+    .side-rail {
+        display: none;
+    }
+
+    /* Add top padding so the floating pill doesn't cover content */
+    .top-bar-wrapper-container {
+        padding-top: 40px;
+    }
+
+    /* Transform mobile top bar into a floating pill */
+    .top-app-bar {
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: auto;
+        min-height: 44px;
+        width: calc(100% - 20px); /* Leaves a 16px gap on both sides */
+        padding: 8px 24px;
+        justify-content: center;
+        border-radius: var(--radius-card);
+        z-index: 1000;
+
+        /* Glass Effect */
+        background-color: var(--glass-tint);
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        box-shadow: var(--glass-shadow);
+        border: 1px solid var(--glass-border);
+        isolation: isolate;
+    }
+
+    .top-app-bar::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: var(--glass-sheen);
+        opacity: 0.3;
+        z-index: -1;
+        border-radius: inherit;
+    }
+
+    /* Keep the title and button above the sheen */
+    .top-app-bar > * {
+        z-index: 1;
+    }
+
+    /* Absolute position the back button so the title stays perfectly centered */
+    .top-bar-wrapper-container .back-button {
+        position: absolute;
+        left: 12px;
+        margin: 0;
+    }
+
+    /* Round all corners of the content now that the bar floats above it */
+    .main-content,
+    .top-bar-wrapper-container iframe {
+        position: relative;
+        z-index: 10;
+    }
+
+    .bottom-sheet {
+        bottom: 100px;
+    }
+}
+
+/* Desktop & Tablet Layout (Floating Island) */
+@media (min-width: 768px) {
+    .bottom-nav {
+        display: none;
+    }
+
+    .top-bar-wrapper-container {
+        padding-top: 40px; /* Leaves space so the top bar doesn't cover content */
+    }
+
+    /* Transform Top App Bar into a floating pill on desktop to match card width */
+    .top-bar-wrapper-container .top-app-bar {
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: auto;
+        min-height: 44px;
+
+        /* ALIGNS EXACTLY WITH YOUR MAIN CONTENT CARDS */
+        width: calc(100% - 32px);
+        max-width: 1108px;
+
+        padding: 8px 24px;
+        justify-content: center;
+        border-radius: var(--radius-card);
+        z-index: 1000;
+
+        /* Glass Effect */
+        background-color: var(--glass-tint);
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        box-shadow: var(--glass-shadow);
+        border: 1px solid var(--glass-border);
+        isolation: isolate;
+    }
+
+    .top-bar-wrapper-container .top-app-bar::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: var(--glass-sheen);
+        opacity: 0.3;
+        z-index: -1;
+        border-radius: inherit;
+    }
+
+    /* Keep the title and button above the sheen */
+    .top-bar-wrapper-container .top-app-bar > * {
+        z-index: 1;
+    }
+
+    /* Position the back button nicely inside the pill */
+    .top-bar-wrapper-container .back-button {
+        position: absolute;
+        left: 12px;
+        margin: 0;
+    }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.main-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.main-content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
