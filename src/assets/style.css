@@ -1426,18 +1426,43 @@ menu-iframe {
     }
 }
 
-.acrylic-on .card,
-.acrylic-on .card.glass-container-ready {
+body.acrylic-on .card,
+body.acrylic-on .card.glass-container-ready,
+body.acrylic-on .bottom-sheet,
+body.acrylic-on .top-app-bar,
+body.acrylic-on .side-rail,
+body.acrylic-on .bottom-nav {
     background: var(--glass-tint) !important;
-    color: var(--onPrimaryContainer);
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow);
 }
 
+body.acrylic-on .card::after,
+body.acrylic-on .card.glass-container-ready::after,
+body.acrylic-on .bottom-sheet::after,
+body.acrylic-on .top-app-bar::after,
+body.acrylic-on .side-rail::after,
+body.acrylic-on .bottom-nav::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: inherit;
+}
+
 .acrylic-on .card,
-.acrylic-on .card.glass-container-ready {
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+.acrylic-on .card.glass-container-ready,
+.acrylic-on .bottom-sheet,
+.acrylic-on .top-app-bar,
+.acrylic-on .side-rail,
+.acrylic-on .bottom-nav {
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 }
 
 .acrylic-on .card::before,
@@ -1513,7 +1538,11 @@ menu-iframe {
 }
 
 body:not(.acrylic-on) .card,
-body:not(.acrylic-on) .card.glass-container-ready {
+body:not(.acrylic-on) .card.glass-container-ready,
+body:not(.acrylic-on) .bottom-sheet,
+body:not(.acrylic-on) .top-app-bar,
+body:not(.acrylic-on) .side-rail,
+body:not(.acrylic-on) .bottom-nav {
     background: var(--primaryContainer) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;

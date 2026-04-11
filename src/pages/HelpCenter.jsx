@@ -61,13 +61,6 @@ export default function HelpCenter() {
             />
 
             <MenuActionBtn
-              icon="support_agent"
-              text="Support"
-              className="joinMiddle"
-              onClick={() => navigate("/help/support")}
-            />
-
-            <MenuActionBtn
               icon="wifi"
               text="WiFi and Internet"
               className="joinBottom"
@@ -81,9 +74,16 @@ export default function HelpCenter() {
           <Card>
             <h1 className="card-title">More</h1>
             <MenuActionBtn
+              icon="support_agent"
+              text="Customer Support"
+              className="joinTop"
+              onClick={() => navigate("/help/support")}
+            />
+
+            <MenuActionBtn
               icon="feedback"
               text="Send Feedback"
-              className="joinTop"
+              className="joinBottom"
               onClick={() => navigate("/help/feedback")}
             />
           </Card>

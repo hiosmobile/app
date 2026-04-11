@@ -24,6 +24,10 @@ import About from "./pages/settings/About";
 import Privacy from "./pages/settings/Privacy";
 
 import Help from "./pages/HelpCenter";
+import Tutorial from "./pages/help/Tutorial";
+import RestaurantHelp from "./pages/help/Restaurant.jsx";
+import HotelHelp from "./pages/help/Hotel.jsx";
+import RoomkeyHelp from "./pages/help/Roomkey.jsx";
 import AppFeedback from "./pages/help/AppFeedback.jsx";
 
 import FullscreenViewer from "./pages/FullscreenViewer";
@@ -104,6 +108,38 @@ export default function App() {
             element={
               <TopBarWrapper title="Help Center">
                 <Help />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/help/tutorial"
+            element={
+              <TopBarWrapper title="Tutorial">
+                <Tutorial />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/help/food"
+            element={
+              <TopBarWrapper title="Food">
+                <RestaurantHelp />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/help/hotel"
+            element={
+              <TopBarWrapper title="Hotel">
+                <HotelHelp />
+              </TopBarWrapper>
+            }
+          />
+          <Route
+            path="/help/roomkey"
+            element={
+              <TopBarWrapper title="Room Key">
+                <RoomkeyHelp />
               </TopBarWrapper>
             }
           />

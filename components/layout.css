@@ -187,10 +187,6 @@ body {
     bottom: 20px;
     left: 16px;
     right: 16px;
-    /* Glass Effect */
-    background-color: var(--glass-tint);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     color: var(--text-color);
@@ -201,21 +197,6 @@ body {
     max-width: 500px;
     margin: 0 auto;
     border-radius: var(--radius-card);
-
-    /* Crucial for keeping the sheen contained */
-    isolation: isolate;
-}
-
-/* The glass sheen layer */
-.bottom-sheet::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: var(--glass-sheen);
-    opacity: 0.3;
-    z-index: -1;
-    border-radius: inherit;
 }
 
 /* Ensure the content stays above the glass sheen layer */
@@ -292,8 +273,14 @@ body {
     .main-content {
         padding-bottom: 120px;
     }
+
     .bottom-sheet {
         bottom: 100px;
+    }
+
+    .fab {
+        right: 20px;
+        bottom: 90px;
     }
 }
 
@@ -389,25 +376,6 @@ body {
         justify-content: center;
         border-radius: var(--radius-card);
         z-index: 1000;
-
-        /* Glass Effect */
-        background-color: var(--glass-tint);
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        box-shadow: var(--glass-shadow);
-        border: 1px solid var(--glass-border);
-        isolation: isolate;
-    }
-
-    .top-app-bar::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background-image: var(--glass-sheen);
-        opacity: 0.3;
-        z-index: -1;
-        border-radius: inherit;
     }
 
     /* Keep the title and button above the sheen */
@@ -461,25 +429,6 @@ body {
         justify-content: center;
         border-radius: var(--radius-card);
         z-index: 1000;
-
-        /* Glass Effect */
-        background-color: var(--glass-tint);
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        box-shadow: var(--glass-shadow);
-        border: 1px solid var(--glass-border);
-        isolation: isolate;
-    }
-
-    .top-bar-wrapper-container .top-app-bar::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background-image: var(--glass-sheen);
-        opacity: 0.3;
-        z-index: -1;
-        border-radius: inherit;
     }
 
     /* Keep the title and button above the sheen */

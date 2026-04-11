@@ -2,7 +2,7 @@
   "name": "core",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://hiosmobile.github.io/core",
+  "homepage": "https://hiosmobile.github.io/app",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./layout.css";
 
 export default function TopBarWrapper({ title, children }) {
   const navigate = useNavigate();

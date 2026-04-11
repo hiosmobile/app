@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import "./navigation.css";
 
 const navItems = [
   { path: "/", icon: "home", label: "Home" },
