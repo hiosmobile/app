@@ -39,9 +39,6 @@
 /* =========================================
    DESKTOP TOP NAV (Side Rail)
    ========================================= */
-/* =========================================
-      DESKTOP TOP NAV (Side Rail)
-      ========================================= */
 .side-rail {
     position: fixed;
     top: 10px;
@@ -135,7 +132,6 @@
    ========================================= */
 .bottom-nav {
     position: fixed;
-    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
@@ -160,6 +156,7 @@
 
     /* Crucial for keeping the sheen contained */
     isolation: isolate;
+    bottom: calc(10px + var(--nav-pad-bottom));
 }
 
 /* =========================================
@@ -175,8 +172,5 @@
 @media (min-width: 768px) {
     .bottom-nav {
         display: none;
-    }
-    .side-rail {
-        top: 8px;
     }
 }

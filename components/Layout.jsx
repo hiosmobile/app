@@ -6,11 +6,11 @@ import "./layout.css";
 export default function Layout() {
   return (
     <div className="app-container">
-      <SideRail />
       <main className="main-content">
         <Outlet />
         <FabMenu />
       </main>
+      <SideRail />
       <BottomNav />
     </div>
   );

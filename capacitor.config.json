@@ -1,5 +1,11 @@
 {
-  "appId": "com.hios.mobile",
-  "appName": "hiosmobile",
-  "webDir": "dist"
+  "appId": "com.nugget.hiosunified3",
+  "appName": "HiOS",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true
+    }
+  }
 }

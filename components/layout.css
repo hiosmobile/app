@@ -280,7 +280,7 @@ body {
 
     .fab {
         right: 20px;
-        bottom: 90px;
+        bottom: calc(90px + var(--nav-pad-bottom));
     }
 }
 
@@ -293,7 +293,7 @@ body {
     }
     .fab {
         right: 16px;
-        bottom: 16px;
+        bottom: calc(16px + var(--nav-pad-bottom));
     }
 }
 
@@ -358,39 +358,34 @@ body {
         display: none;
     }
 
-    /* Add top padding so the floating pill doesn't cover content */
     .top-bar-wrapper-container {
-        padding-top: 40px;
+        padding-top: calc(60px + var(--statusbar-pad));
     }
 
-    /* Transform mobile top bar into a floating pill */
     .top-app-bar {
         position: fixed;
-        top: 10px;
+        top: calc(10px + var(--statusbar-pad));
         left: 50%;
         transform: translateX(-50%);
         height: auto;
         min-height: 44px;
-        width: calc(100% - 20px); /* Leaves a 16px gap on both sides */
+        width: calc(100% - 20px);
         padding: 8px 24px;
         justify-content: center;
         border-radius: var(--radius-card);
         z-index: 1000;
     }
 
-    /* Keep the title and button above the sheen */
     .top-app-bar > * {
         z-index: 1;
     }
 
-    /* Absolute position the back button so the title stays perfectly centered */
     .top-bar-wrapper-container .back-button {
         position: absolute;
         left: 12px;
         margin: 0;
     }
 
-    /* Round all corners of the content now that the bar floats above it */
     .main-content,
     .top-bar-wrapper-container iframe {
         position: relative;
@@ -409,10 +404,9 @@ body {
     }
 
     .top-bar-wrapper-container {
-        padding-top: 40px; /* Leaves space so the top bar doesn't cover content */
+        padding-top: 30px;
     }
 
-    /* Transform Top App Bar into a floating pill on desktop to match card width */
     .top-bar-wrapper-container .top-app-bar {
         position: fixed;
         top: 10px;
@@ -420,23 +414,18 @@ body {
         transform: translateX(-50%);
         height: auto;
         min-height: 44px;
-
-        /* ALIGNS EXACTLY WITH YOUR MAIN CONTENT CARDS */
         width: calc(100% - 32px);
         max-width: 1108px;
-
         padding: 8px 24px;
         justify-content: center;
         border-radius: var(--radius-card);
         z-index: 1000;
     }
 
-    /* Keep the title and button above the sheen */
     .top-bar-wrapper-container .top-app-bar > * {
         z-index: 1;
     }
 
-    /* Position the back button nicely inside the pill */
     .top-bar-wrapper-container .back-button {
         position: absolute;
         left: 12px;

@@ -14,7 +14,8 @@
 
 /*Variables*/
 :root {
-    --statusbar-pad: max(env(safe-area-inset-top));
+    --statusbar-pad: env(safe-area-inset-top);
+    --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
 
     /* Squircle Uniformity Tokens */
     --radius-card: 28px;
