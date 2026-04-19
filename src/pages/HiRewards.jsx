@@ -135,18 +135,13 @@ export default function Rewards() {
           <h2 className="card-title m-0" style={{ fontSize: "1.25rem" }}>
             {offer.title}
           </h2>
-          {formattedDate && (
-            <small className="text-muted">{formattedDate}</small>
-          )}
+          {formattedDate && <small>{formattedDate}</small>}
         </div>
-        <p
-          className="card-text mt-2 text-muted"
-          style={{ whiteSpace: "pre-line" }}
-        >
+        <p className="card-text mt-2" style={{ whiteSpace: "pre-line" }}>
           {offer.description}
         </p>
         <div
-          className="d-flex align-items-center mb-3 text-muted"
+          className="d-flex align-items-center mb-3"
           style={{ fontSize: "0.85rem" }}
         >
           <span
@@ -233,13 +228,13 @@ export default function Rewards() {
         ) : error ? (
           <Card className="joinBottom text-center py-5">
             <span
-              className="material-symbols-rounded text-muted"
+              className="material-symbols-rounded"
               style={{ fontSize: "48px" }}
             >
               cloud_off
             </span>
             <h2 className="card-title mt-3">Connection Error</h2>
-            <p className="card-text text-muted mx-4">{error}</p>
+            <p className="card-text mx-4">{error}</p>
             <RippleButton
               className="form-button mx-auto mt-3"
               onClick={fetchOffers}
@@ -254,13 +249,13 @@ export default function Rewards() {
                 {activeOffers.length === 0 ? (
                   <Card className="mt-2 joinBottom text-center py-5">
                     <span
-                      className="material-symbols-rounded text-muted"
+                      className="material-symbols-rounded"
                       style={{ fontSize: "48px" }}
                     >
                       local_offer
                     </span>
                     <h2 className="card-title mt-3">No active offers</h2>
-                    <p className="card-text text-muted">
+                    <p className="card-text">
                       Check back later for new rewards!
                     </p>
                   </Card>
@@ -281,13 +276,13 @@ export default function Rewards() {
                 {expiredOffers.length === 0 ? (
                   <Card className="joinBottom text-center py-5">
                     <span
-                      className="material-symbols-rounded text-muted"
+                      className="material-symbols-rounded"
                       style={{ fontSize: "48px" }}
                     >
                       local_offer
                     </span>
                     <h2 className="card-title mt-3">No expired offers</h2>
-                    <p className="card-text text-muted">
+                    <p className="card-text">
                       You have no expired offers to display.
                     </p>
                   </Card>
