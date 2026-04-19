@@ -188,7 +188,9 @@ export default function Rewards() {
               HiRewards
             </h1>
             <p id="para" className="subtitle mb-0">
-              Scan and Save, {firstName}!
+              The more money you spend at our brands, the more money we make,
+              and eventually the more money you save. Time to dig deep in that
+              wallet of yours, {firstName}.
             </p>
           </Card>
         </div>
