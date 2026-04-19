@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import RippleButton from "../../components/RippleButton";
 import RewardsCodeWidget from "../../components/RewardsCodeWidget";
@@ -13,6 +14,13 @@ export default function Rewards() {
   const [activeTab, setActiveTab] = useState("active");
 
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
+
+  // Extract first name and generate a membership code from UID
+  const firstName = currentUser?.displayName?.split(" ")[0] || "Member";
+  const membershipCode = currentUser?.uid
+    ? currentUser.uid.slice(0, 10).toUpperCase()
+    : "490020-384380-3842992-9";
 
   const BLOG_ID = "8654667946288784337";
   const API_KEY = import.meta.env.VITE_BLOGGER_API_KEY || "";
@@ -63,7 +71,6 @@ export default function Rewards() {
 
   const parseBloggerPost = (post) => {
     let rawContent = post.content || "";
-
     let textWithNewlines = rawContent
       .replace(/<br\s*\/?>/gi, "\n")
       .replace(/<\/div>/gi, "\n")
@@ -83,37 +90,12 @@ export default function Rewards() {
     if (detailsSection) {
       const lines = detailsSection.split("\n");
       lines.forEach((line) => {
-        const cleanLine = line.trim();
-        const lowerLine = cleanLine.toLowerCase();
-
-        if (lowerLine.startsWith("points:")) {
-          const val = parseInt(cleanLine.substring(7).trim(), 10);
+        const cleanLine = line.trim().toLowerCase();
+        if (cleanLine.startsWith("points:")) {
+          const val = parseInt(line.substring(7).trim(), 10);
           if (!isNaN(val)) points = val;
-        } else if (lowerLine.startsWith("expires:")) {
-          expiryInfo = cleanLine.substring(8).trim();
-        } else if (lowerLine.startsWith("posted:")) {
-          const dateStr = cleanLine.substring(7).trim();
-          const spaceSplit = dateStr.split(" ");
-
-          if (spaceSplit.length > 0) {
-            const dateParts = spaceSplit[0].split("/");
-            if (dateParts.length === 3) {
-              const day = parseInt(dateParts[0], 10);
-              const month = parseInt(dateParts[1], 10) - 1;
-              const year = parseInt(dateParts[2], 10);
-
-              let hours = 0;
-              let minutes = 0;
-              if (spaceSplit.length > 1) {
-                const timeParts = spaceSplit[1].split(":");
-                if (timeParts.length >= 2) {
-                  hours = parseInt(timeParts[0], 10);
-                  minutes = parseInt(timeParts[1], 10);
-                }
-              }
-              postedDate = new Date(year, month, day, hours, minutes);
-            }
-          }
+        } else if (cleanLine.startsWith("expires:")) {
+          expiryInfo = line.substring(8).trim();
         }
       });
     }
@@ -137,9 +119,7 @@ export default function Rewards() {
   };
 
   const handleRedeem = (offer) => {
-    alert(
-      `To redeem "${offer.title}", please scan your membership barcode at the till.`,
-    );
+    alert(`To redeem "${offer.title}", please scan your QR code at the till.`);
   };
 
   const renderOfferCard = (offer, isExpired, isLast) => {
@@ -155,15 +135,18 @@ export default function Rewards() {
           <h2 className="card-title m-0" style={{ fontSize: "1.25rem" }}>
             {offer.title}
           </h2>
-          {formattedDate && <small>{formattedDate}</small>}
+          {formattedDate && (
+            <small className="text-muted">{formattedDate}</small>
+          )}
         </div>
-
-        <p className="card-text mt-2" style={{ whiteSpace: "pre-line" }}>
+        <p
+          className="card-text mt-2 text-muted"
+          style={{ whiteSpace: "pre-line" }}
+        >
           {offer.description}
         </p>
-
         <div
-          className="d-flex align-items-center mb-3"
+          className="d-flex align-items-center mb-3 text-muted"
           style={{ fontSize: "0.85rem" }}
         >
           <span
@@ -174,17 +157,12 @@ export default function Rewards() {
           </span>
           {offer.expiryInfo}
         </div>
-
         {showRedeemButton && (
           <div className="d-flex justify-content-between align-items-center pt-3 border-top">
             <div className="text-start">
               <small
                 className="d-block fw-bold"
-                style={{
-                  fontSize: "10px",
-                  letterSpacing: "1px",
-                  textTransform: "uppercase",
-                }}
+                style={{ fontSize: "10px", textTransform: "uppercase" }}
               >
                 Cost
               </small>
@@ -204,32 +182,39 @@ export default function Rewards() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Card className="full" bodyClass="text-start">
-        <div className="top-container">
-          <h1 className="blue-h2">
-            <span className="titleIcon material-symbols-rounded">loyalty</span>
-            HiRewards
-          </h1>
-          <p className="subtitle mb-0">
-            View your active offers and scan your membership at checkout.
-          </p>
+      {/* Header Row - Matches Welcome Page Style */}
+      <div className="row mb-2">
+        <div className="col-12">
+          <Card bodyClass="text-start">
+            <h1 className="blue-h2">
+              <span className="titleIcon material-symbols-rounded">
+                award_star
+              </span>
+              HiRewards
+            </h1>
+            <p id="para" className="subtitle mb-0">
+              Scan and Save, {firstName}!
+            </p>
+          </Card>
         </div>
-      </Card>
+      </div>
 
+      {/* Persistent Membership Card - Now Above the Tabs */}
+      <div className="mb-2">
+        <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />
+      </div>
+
+      {/* Local Navigation Bar (Tabs) */}
       <Card className="mt-2 joinTop" bodyClass="p-2">
         <div className="sub-nav-pills-header">
           <button
-            className={`sub-header-tab ripple-button ${
-              activeTab === "active" ? "active" : ""
-            }`}
+            className={`sub-header-tab ripple-button ${activeTab === "active" ? "active" : ""}`}
             onClick={() => setActiveTab("active")}
           >
             Active Offers
           </button>
           <button
-            className={`sub-header-tab ripple-button ${
-              activeTab === "expired" ? "active" : ""
-            }`}
+            className={`sub-header-tab ripple-button ${activeTab === "expired" ? "active" : ""}`}
             onClick={() => setActiveTab("expired")}
           >
             Expired Offers
@@ -237,6 +222,7 @@ export default function Rewards() {
         </div>
       </Card>
 
+      {/* Offers List */}
       <div className="tab-content mt-2">
         {isLoading ? (
           <Card className="joinBottom text-center py-5">
@@ -247,20 +233,17 @@ export default function Rewards() {
         ) : error ? (
           <Card className="joinBottom text-center py-5">
             <span
-              className="material-symbols-rounded"
+              className="material-symbols-rounded text-muted"
               style={{ fontSize: "48px" }}
             >
               cloud_off
             </span>
             <h2 className="card-title mt-3">Connection Error</h2>
-            <p className="card-text mx-4">{error}</p>
+            <p className="card-text text-muted mx-4">{error}</p>
             <RippleButton
               className="form-button mx-auto mt-3"
               onClick={fetchOffers}
             >
-              <span className="form-button-icon material-symbols-rounded">
-                refresh
-              </span>
               Retry
             </RippleButton>
           </Card>
@@ -268,22 +251,16 @@ export default function Rewards() {
           <>
             {activeTab === "active" && (
               <div className="fade show active">
-                {/* Replaced static icon card with RewardsCodeWidget */}
-                <RewardsCodeWidget
-                  code="490020-384380-3842992-9"
-                  imageSrc={frameImg}
-                />
-
                 {activeOffers.length === 0 ? (
                   <Card className="mt-2 joinBottom text-center py-5">
                     <span
-                      className="material-symbols-rounded"
+                      className="material-symbols-rounded text-muted"
                       style={{ fontSize: "48px" }}
                     >
                       local_offer
                     </span>
                     <h2 className="card-title mt-3">No active offers</h2>
-                    <p className="card-text">
+                    <p className="card-text text-muted">
                       Check back later for new rewards!
                     </p>
                   </Card>
@@ -304,13 +281,13 @@ export default function Rewards() {
                 {expiredOffers.length === 0 ? (
                   <Card className="joinBottom text-center py-5">
                     <span
-                      className="material-symbols-rounded"
+                      className="material-symbols-rounded text-muted"
                       style={{ fontSize: "48px" }}
                     >
                       local_offer
                     </span>
                     <h2 className="card-title mt-3">No expired offers</h2>
-                    <p className="card-text">
+                    <p className="card-text text-muted">
                       You have no expired offers to display.
                     </p>
                   </Card>

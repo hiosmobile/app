@@ -15,6 +15,10 @@ export default function Home() {
   const { currentUser } = useAuth();
   const name = currentUser?.displayName?.split(" ")[0] || "HiOS User";
 
+  const membershipCode = currentUser?.uid
+    ? currentUser.uid.slice(0, 10).toUpperCase()
+    : "490020-384380-3842992-9";
+
   // Calculate the greeting directly without using state or effects
   const getGreeting = () => {
     const hrs = new Date().getHours();
@@ -45,10 +49,7 @@ export default function Home() {
       <div className="row g-2">
         {/* Left Column */}
         <div className="col-12 col-md-6">
-          <RewardsCodeWidget
-            code="490020-384380-3842992-9"
-            imageSrc={frameImg}
-          />
+          <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />
 
           <Card title="Your rewards, at a glance" className="mt-2">
             <div className="row g-2">
