@@ -123,6 +123,12 @@ body {
     overflow: hidden;
 }
 
+@media (orientation: landscape) {
+    html, body {
+        background-color: #000000 !important;
+    }
+}
+
 .app-container {
     display: flex;
     height: 100vh;
@@ -130,6 +136,9 @@ body {
     overflow: hidden;
     background-color: var(--background);
     color: var(--text-color);
+    padding-left: max(env(safe-area-inset-left, 0px), 0px);
+    padding-right: max(env(safe-area-inset-right, 0px), 0px);
+    box-sizing: border-box;
 }
 
 .main-content {
@@ -280,7 +289,7 @@ body {
 
     .fab {
         right: 20px;
-        bottom: 90px;
+        bottom: calc(90px + var(--nav-pad-bottom));
     }
 }
 
@@ -293,7 +302,7 @@ body {
     }
     .fab {
         right: 16px;
-        bottom: 16px;
+        bottom: calc(16px + var(--nav-pad-bottom));
     }
 }
 
@@ -358,43 +367,46 @@ body {
         display: none;
     }
 
-    /* Add top padding so the floating pill doesn't cover content */
     .top-bar-wrapper-container {
-        padding-top: 40px;
+        padding-top: calc(48px + var(--statusbar-pad));
     }
 
-    /* Transform mobile top bar into a floating pill */
     .top-app-bar {
         position: fixed;
-        top: 10px;
+        top: calc(4px + var(--statusbar-pad));
         left: 50%;
         transform: translateX(-50%);
         height: auto;
         min-height: 44px;
-        width: calc(100% - 20px); /* Leaves a 16px gap on both sides */
+        width: calc(100% - 20px);
         padding: 8px 24px;
         justify-content: center;
         border-radius: var(--radius-card);
         z-index: 1000;
     }
 
-    /* Keep the title and button above the sheen */
     .top-app-bar > * {
         z-index: 1;
     }
 
-    /* Absolute position the back button so the title stays perfectly centered */
     .top-bar-wrapper-container .back-button {
         position: absolute;
         left: 12px;
         margin: 0;
     }
 
-    /* Round all corners of the content now that the bar floats above it */
     .main-content,
     .top-bar-wrapper-container iframe {
         position: relative;
         z-index: 10;
+    }
+
+    .top-bar-wrapper-container .main-content {
+        padding-bottom: var(--nav-pad-bottom);
+    }
+
+    .top-bar-wrapper-container main.container {
+        padding-top: 0 !important;
     }
 
     .bottom-sheet {
@@ -409,34 +421,32 @@ body {
     }
 
     .top-bar-wrapper-container {
-        padding-top: 40px; /* Leaves space so the top bar doesn't cover content */
+        padding-top: calc(48px + var(--statusbar-pad));
     }
 
-    /* Transform Top App Bar into a floating pill on desktop to match card width */
+    .top-bar-wrapper-container main.container {
+        padding-top: 0 !important;
+    }
+
     .top-bar-wrapper-container .top-app-bar {
         position: fixed;
-        top: 10px;
+        top: calc(4px + var(--statusbar-pad));
         left: 50%;
         transform: translateX(-50%);
         height: auto;
         min-height: 44px;
-
-        /* ALIGNS EXACTLY WITH YOUR MAIN CONTENT CARDS */
         width: calc(100% - 32px);
         max-width: 1108px;
-
         padding: 8px 24px;
         justify-content: center;
         border-radius: var(--radius-card);
         z-index: 1000;
     }
 
-    /* Keep the title and button above the sheen */
     .top-bar-wrapper-container .top-app-bar > * {
         z-index: 1;
     }
 
-    /* Position the back button nicely inside the pill */
     .top-bar-wrapper-container .back-button {
         position: absolute;
         left: 12px;
@@ -495,12 +505,9 @@ body {
 /* =========================================
    DESKTOP TOP NAV (Side Rail)
    ========================================= */
-/* =========================================
-      DESKTOP TOP NAV (Side Rail)
-      ========================================= */
 .side-rail {
     position: fixed;
-    top: 10px;
+    top: calc(4px + var(--statusbar-pad));
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -591,13 +598,12 @@ body {
    ========================================= */
 .bottom-nav {
     position: fixed;
-    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
     max-width: 500px;
     height: 60px;
-    border-radius: var(--radius-card);
+    border-radius: 600px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -616,6 +622,7 @@ body {
 
     /* Crucial for keeping the sheen contained */
     isolation: isolate;
+    bottom: calc(10px + var(--nav-pad-bottom));
 }
 
 /* =========================================
@@ -631,9 +638,6 @@ body {
 @media (min-width: 768px) {
     .bottom-nav {
         display: none;
-    }
-    .side-rail {
-        top: 8px;
     }
 }
 
@@ -651,8 +655,8 @@ body {
 }
 /*Variables*/
 :root {
-    --glass-blur-value: blur(24px) saturate(180%);
-    --statusbar-pad: max(env(safe-area-inset-top));
+    --statusbar-pad: env(safe-area-inset-top);
+    --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
 
     /* Squircle Uniformity Tokens */
     --radius-card: 28px;
@@ -1874,10 +1878,16 @@ menu-iframe {
     right: 10px;
 }
 .form-control {
+    font-size: 25px !important;
     border-radius: 40px !important;
     background-color: var(--secondaryContainer);
     color: var(--onSecondaryContainer) !important;
     padding: 15px;
+    border: 1px solid var(--outline) !important;
+    user-select: true;
+}
+.form-control::placeholder {
+    color: var(--onPrimaryContainer);
 }
 @media (prefers-color-scheme: dark) {
     :root {
@@ -1941,7 +1951,8 @@ body.acrylic-on .top-app-bar,
 body.acrylic-on .side-rail,
 body.acrylic-on .bottom-nav {
     background: var(--glass-tint) !important;
-    backdrop-filter: var(--glass-blur-value) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow);
 }
@@ -1966,7 +1977,8 @@ body.acrylic-on .bottom-nav::after {
 .acrylic-on .top-app-bar,
 .acrylic-on .side-rail,
 .acrylic-on .bottom-nav {
-    backdrop-filter: var(--glass-blur-value) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 }
 .acrylic-on .card::before,
 .acrylic-on .card.glass-container-ready::before {
@@ -2000,14 +2012,21 @@ body.acrylic-on .bottom-nav::after {
 .acrylic-on .card .form-control,
 .acrylic-on .glass-content .form-control {
     background-color: rgba(0, 0, 0, 0.05) !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
     color: var(--onSurface) !important;
     border-radius: 40px !important;
+}
+.acrylic-on .card,
+.acrylic-on .glass-content {
+    border-color: rgba(255, 255, 255, 0.25) !important;
 }
 @media (prefers-color-scheme: dark) {
     .acrylic-on .card .form-control,
     .acrylic-on .glass-content .form-control {
         background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .acrylic-on .card,
+    .acrylic-on .glass-content {
         border-color: rgba(255, 255, 255, 0.18) !important;
     }
 }
@@ -2039,6 +2058,7 @@ body:not(.acrylic-on) .side-rail,
 body:not(.acrylic-on) .bottom-nav {
     background: var(--primaryContainer) !important;
     backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 :root {
     --h-margin-bottom: 0.5rem;
