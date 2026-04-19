@@ -24,6 +24,15 @@ export default function Settings() {
   const [modalStatus, setModalStatus] = useState({ type: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
 
+  // Greeting Logic
+  const getGreeting = () => {
+    const hrs = new Date().getHours();
+    if (hrs < 12) return "Good Morning";
+    if (hrs <= 17) return "Good Afternoon";
+    return "Good Evening";
+  };
+  const firstName = currentUser?.displayName?.split(" ")[0] || "Member";
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -47,7 +56,6 @@ export default function Settings() {
     e.preventDefault();
     setModalStatus({ type: "", message: "" });
     setIsLoading(true);
-
     try {
       await updateProfile(currentUser, { displayName: nameInput });
       setModalStatus({
@@ -66,7 +74,6 @@ export default function Settings() {
     e.preventDefault();
     setModalStatus({ type: "", message: "" });
     setIsLoading(true);
-
     try {
       const credential = EmailAuthProvider.credential(
         currentUser.email,
@@ -74,7 +81,6 @@ export default function Settings() {
       );
       await reauthenticateWithCredential(currentUser, credential);
       await updatePassword(currentUser, newPasswordInput);
-
       setModalStatus({
         type: "success",
         message: "Password updated successfully!",
@@ -83,7 +89,7 @@ export default function Settings() {
     } catch (error) {
       setModalStatus({
         type: "error",
-        message: "Failed to update. Check your current password.",
+        message: "Error: Current password incorrect.",
       });
     } finally {
       setIsLoading(false);
@@ -94,7 +100,6 @@ export default function Settings() {
     e.preventDefault();
     setModalStatus({ type: "", message: "" });
     setIsLoading(true);
-
     try {
       const credential = EmailAuthProvider.credential(
         currentUser.email,
@@ -102,13 +107,9 @@ export default function Settings() {
       );
       await reauthenticateWithCredential(currentUser, credential);
       await deleteUser(currentUser);
-      // Firebase automatically logs the user out upon deletion
       navigate("/");
     } catch (error) {
-      setModalStatus({
-        type: "error",
-        message: "Failed to delete account. Check your password.",
-      });
+      setModalStatus({ type: "error", message: "Error: Password incorrect." });
     } finally {
       setIsLoading(false);
     }
@@ -117,6 +118,7 @@ export default function Settings() {
   return (
     <>
       <main className="container mt-4 mb-5">
+        {/* Header Greeting Row */}
         <div className="row mb-2">
           <div className="col-12">
             <Card>
@@ -136,7 +138,7 @@ export default function Settings() {
         </div>
 
         <div className="row g-2">
-          {/* Left Column */}
+          {/* Left Column: Account Profile */}
           <div className="col-12 col-md-6">
             <Card bodyClass="text-center py-4">
               <div
@@ -160,11 +162,10 @@ export default function Settings() {
                   person
                 </span>
               </div>
-
               <h2 className="card-title mb-0" style={{ fontSize: "1.5rem" }}>
-                {currentUser?.displayName || "HiOS Member"}
+                {currentUser?.displayName || "HiOS User"}
               </h2>
-              <p className="text-muted mb-4">{currentUser?.email}</p>
+              <p className="mb-4">{currentUser?.email}</p>
 
               <div className="text-start">
                 <MenuActionBtn
@@ -186,7 +187,7 @@ export default function Settings() {
                   onClick={handleLogout}
                 />
                 <MenuActionBtn
-                  icon="person_remove"
+                  icon="warning"
                   text="Delete HiAccount"
                   className="joinBottom"
                   onClick={() => setActiveModal("delete")}
@@ -195,7 +196,7 @@ export default function Settings() {
             </Card>
           </div>
 
-          {/* Right Column */}
+          {/* Right Column: Settings Categories */}
           <div className="col-12 col-md-6">
             <Card title="Customisation">
               <MenuActionBtn
@@ -220,6 +221,7 @@ export default function Settings() {
                 onClick={() => navigate("/settings/apps")}
               />
             </Card>
+
             <Card className="mt-2" title="About">
               <MenuActionBtn
                 icon="info"
@@ -247,7 +249,9 @@ export default function Settings() {
             left: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.5)",
+            backgroundColor: "rgba(0,0,0,0.4)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             zIndex: 9999,
             display: "flex",
             alignItems: "center",
@@ -257,9 +261,12 @@ export default function Settings() {
         >
           <Card
             className="full p-4"
-            style={{ maxWidth: "400px", width: "100%" }}
+            style={{ maxWidth: "450px", width: "100%" }}
           >
-            <h2 className="mb-3" style={{ fontSize: "1.25rem" }}>
+            <h2
+              className="card-title mb-3"
+              style={{ fontSize: "1.5rem", textAlign: "left" }}
+            >
               {activeModal === "name" && "Change Name"}
               {activeModal === "password" && "Change Password"}
               {activeModal === "delete" && "Delete Account"}
@@ -267,28 +274,33 @@ export default function Settings() {
 
             {modalStatus.message && (
               <div
-                className={`alert ${modalStatus.type === "success" ? "alert-success" : "alert-danger"}`}
+                className="infoBubble text-start mb-3"
                 style={{
-                  borderRadius: "8px",
-                  padding: "10px",
-                  fontSize: "0.9rem",
-                  marginBottom: "15px",
+                  backgroundColor:
+                    modalStatus.type === "success"
+                      ? "var(--primaryContainer)"
+                      : "var(--errorContainer)",
+                  color:
+                    modalStatus.type === "success"
+                      ? "var(--onPrimaryContainer)"
+                      : "var(--onErrorContainer)",
                 }}
               >
                 {modalStatus.message}
               </div>
             )}
 
-            {/* Change Name Form */}
-            {activeModal === "name" && (
-              <form
-                onSubmit={handleNameChange}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
+            <form
+              onSubmit={
+                activeModal === "name"
+                  ? handleNameChange
+                  : activeModal === "password"
+                    ? handlePasswordChange
+                    : handleDeleteAccount
+              }
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
+              {activeModal === "name" && (
                 <input
                   type="text"
                   className="form-control"
@@ -297,118 +309,75 @@ export default function Settings() {
                   onChange={(e) => setNameInput(e.target.value)}
                   required
                 />
-                <div className="d-flex gap-2 mt-3">
-                  <button
-                    type="button"
-                    className="btn btn-light flex-grow-1 rounded-pill"
-                    onClick={closeModal}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </button>
-                  <RippleButton
-                    type="submit"
-                    className="button m-0 flex-grow-1"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Saving..." : "Update"}
-                  </RippleButton>
-                </div>
-              </form>
-            )}
+              )}
 
-            {/* Change Password Form */}
-            {activeModal === "password" && (
-              <form
-                onSubmit={handlePasswordChange}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Current Password"
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  required
-                />
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="New Password (min 6 chars)"
-                  value={newPasswordInput}
-                  onChange={(e) => setNewPasswordInput(e.target.value)}
-                  required
-                  minLength="6"
-                />
-                <div className="d-flex gap-2 mt-3">
-                  <button
-                    type="button"
-                    className="btn btn-light flex-grow-1 rounded-pill"
-                    onClick={closeModal}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </button>
-                  <RippleButton
-                    type="submit"
-                    className="button m-0 flex-grow-1"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Saving..." : "Update"}
-                  </RippleButton>
-                </div>
-              </form>
-            )}
+              {activeModal === "password" && (
+                <>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Current Password"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    required
+                  />
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="New Password"
+                    value={newPasswordInput}
+                    onChange={(e) => setNewPasswordInput(e.target.value)}
+                    required
+                    minLength="6"
+                  />
+                </>
+              )}
 
-            {/* Delete Account Form */}
-            {activeModal === "delete" && (
-              <form
-                onSubmit={handleDeleteAccount}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <p className="text-muted" style={{ fontSize: "0.9rem" }}>
-                  This action is permanent and cannot be undone. Please enter
-                  your password to confirm.
-                </p>
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Password"
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  required
-                />
-                <div className="d-flex gap-2 mt-3">
-                  <button
-                    type="button"
-                    className="btn btn-light flex-grow-1 rounded-pill"
-                    onClick={closeModal}
-                    disabled={isLoading}
-                  >
-                    Cancel
-                  </button>
-                  <RippleButton
-                    type="submit"
-                    className="button m-0 flex-grow-1"
-                    style={{
-                      backgroundColor: "var(--errorContainer)",
-                      color: "var(--onErrorContainer)",
-                    }}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Deleting..." : "Delete"}
-                  </RippleButton>
-                </div>
-              </form>
-            )}
+              {activeModal === "delete" && (
+                <>
+                  <p className="text-start text-muted mb-2">
+                    This is permanent. Enter your password to confirm deletion.
+                  </p>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Confirm Password"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    required
+                  />
+                </>
+              )}
+
+              <div className="d-flex gap-2 mt-4">
+                <button
+                  type="button"
+                  className="navButtonInactive flex-grow-1"
+                  onClick={closeModal}
+                  disabled={isLoading}
+                >
+                  Cancel
+                </button>
+                <RippleButton
+                  type="submit"
+                  className="form-button m-0 flex-grow-1"
+                  style={{
+                    backgroundColor:
+                      activeModal === "delete"
+                        ? "var(--error)"
+                        : "var(--primary)",
+                    color: "var(--onPrimary)",
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading
+                    ? "Processing..."
+                    : activeModal === "delete"
+                      ? "Delete Forever"
+                      : "Save Changes"}
+                </RippleButton>
+              </div>
+            </form>
           </Card>
         </div>
       )}
