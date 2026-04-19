@@ -137,7 +137,7 @@
     width: 90%;
     max-width: 500px;
     height: 60px;
-    border-radius: var(--radius-card);
+    border-radius: 600px;
     display: flex;
     justify-content: space-around;
     align-items: center;
