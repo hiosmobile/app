@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Card from "../../components/Card";
 import RippleButton from "../../components/RippleButton";
+import RewardsCodeWidget from "../../components/RewardsCodeWidget";
+import frameImg from "../assets/media/frame.png";
+import { useAuth } from "../AuthContext";
 
 export default function Rewards() {
   const [activeOffers, setActiveOffers] = useState([]);
@@ -8,6 +11,8 @@ export default function Rewards() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("active");
+
+  const { currentUser } = useAuth();
 
   const BLOG_ID = "8654667946288784337";
   const API_KEY = import.meta.env.VITE_BLOGGER_API_KEY || "";
@@ -59,17 +64,14 @@ export default function Rewards() {
   const parseBloggerPost = (post) => {
     let rawContent = post.content || "";
 
-    // Safely convert Blogger's HTML structure into plain text with line breaks
     let textWithNewlines = rawContent
       .replace(/<br\s*\/?>/gi, "\n")
       .replace(/<\/div>/gi, "\n")
       .replace(/<\/p>/gi, "\n\n");
 
-    // Use DOMParser to safely strip all remaining HTML tags and decode entities
     const doc = new DOMParser().parseFromString(textWithNewlines, "text/html");
     const cleanText = doc.body.textContent || "";
 
-    // Split using the new, safer plain-text marker
     const parts = cleanText.split("===DETAILS===");
     const description = parts[0].trim();
     const detailsSection = parts.length > 1 ? parts[1].trim() : "";
@@ -90,7 +92,6 @@ export default function Rewards() {
         } else if (lowerLine.startsWith("expires:")) {
           expiryInfo = cleanLine.substring(8).trim();
         } else if (lowerLine.startsWith("posted:")) {
-          // Parse UK Date Format: DD/MM/YYYY HH:MM
           const dateStr = cleanLine.substring(7).trim();
           const spaceSplit = dateStr.split(" ");
 
@@ -154,20 +155,15 @@ export default function Rewards() {
           <h2 className="card-title m-0" style={{ fontSize: "1.25rem" }}>
             {offer.title}
           </h2>
-          {formattedDate && (
-            <small className="text-muted">{formattedDate}</small>
-          )}
+          {formattedDate && <small>{formattedDate}</small>}
         </div>
 
-        <p
-          className="card-text mt-2 text-muted"
-          style={{ whiteSpace: "pre-line" }}
-        >
+        <p className="card-text mt-2" style={{ whiteSpace: "pre-line" }}>
           {offer.description}
         </p>
 
         <div
-          className="d-flex align-items-center text-muted mb-3"
+          className="d-flex align-items-center mb-3"
           style={{ fontSize: "0.85rem" }}
         >
           <span
@@ -183,7 +179,7 @@ export default function Rewards() {
           <div className="d-flex justify-content-between align-items-center pt-3 border-top">
             <div className="text-start">
               <small
-                className="text-muted d-block fw-bold"
+                className="d-block fw-bold"
                 style={{
                   fontSize: "10px",
                   letterSpacing: "1px",
@@ -223,13 +219,17 @@ export default function Rewards() {
       <Card className="mt-2 joinTop" bodyClass="p-2">
         <div className="sub-nav-pills-header">
           <button
-            className={`sub-header-tab ripple-button ${activeTab === "active" ? "active" : ""}`}
+            className={`sub-header-tab ripple-button ${
+              activeTab === "active" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("active")}
           >
             Active Offers
           </button>
           <button
-            className={`sub-header-tab ripple-button ${activeTab === "expired" ? "active" : ""}`}
+            className={`sub-header-tab ripple-button ${
+              activeTab === "expired" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("expired")}
           >
             Expired Offers
@@ -247,13 +247,13 @@ export default function Rewards() {
         ) : error ? (
           <Card className="joinBottom text-center py-5">
             <span
-              className="material-symbols-rounded text-muted"
+              className="material-symbols-rounded"
               style={{ fontSize: "48px" }}
             >
               cloud_off
             </span>
             <h2 className="card-title mt-3">Connection Error</h2>
-            <p className="card-text text-muted mx-4">{error}</p>
+            <p className="card-text mx-4">{error}</p>
             <RippleButton
               className="form-button mx-auto mt-3"
               onClick={fetchOffers}
@@ -268,35 +268,22 @@ export default function Rewards() {
           <>
             {activeTab === "active" && (
               <div className="fade show active">
-                <Card
-                  className="mt-2 text-center py-4"
-                  bodyClass="p-4"
-                  style={{ backgroundColor: "#f8f9fa" }}
-                >
-                  <h2 className="card-title" style={{ fontSize: "1.2rem" }}>
-                    Your Membership
-                  </h2>
-                  <span
-                    className="material-symbols-rounded my-3"
-                    style={{ fontSize: "120px" }}
-                  >
-                    qr_code_2
-                  </span>
-                  <p className="card-text text-muted mb-0">
-                    Please scan this at checkout to apply offers
-                  </p>
-                </Card>
+                {/* Replaced static icon card with RewardsCodeWidget */}
+                <RewardsCodeWidget
+                  code="490020-384380-3842992-9"
+                  imageSrc={frameImg}
+                />
 
                 {activeOffers.length === 0 ? (
                   <Card className="mt-2 joinBottom text-center py-5">
                     <span
-                      className="material-symbols-rounded text-muted"
+                      className="material-symbols-rounded"
                       style={{ fontSize: "48px" }}
                     >
                       local_offer
                     </span>
                     <h2 className="card-title mt-3">No active offers</h2>
-                    <p className="card-text text-muted">
+                    <p className="card-text">
                       Check back later for new rewards!
                     </p>
                   </Card>
@@ -317,13 +304,13 @@ export default function Rewards() {
                 {expiredOffers.length === 0 ? (
                   <Card className="joinBottom text-center py-5">
                     <span
-                      className="material-symbols-rounded text-muted"
+                      className="material-symbols-rounded"
                       style={{ fontSize: "48px" }}
                     >
                       local_offer
                     </span>
                     <h2 className="card-title mt-3">No expired offers</h2>
-                    <p className="card-text text-muted">
+                    <p className="card-text">
                       You have no expired offers to display.
                     </p>
                   </Card>

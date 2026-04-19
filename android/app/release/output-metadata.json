@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.hios.mobile",
+  "applicationId": "com.nugget.hiosunified",
   "variantName": "release",
   "elements": [
     {
