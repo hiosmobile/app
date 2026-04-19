@@ -1363,10 +1363,17 @@ menu-iframe {
 }
 
 .form-control {
+    font-size: 25px !important;
     border-radius: 40px !important;
     background-color: var(--secondaryContainer);
     color: var(--onSecondaryContainer) !important;
     padding: 15px;
+    border: 1px solid var(--outline) !important;
+    user-select: true;
+}
+
+.form-control::placeholder {
+    color: var(--onPrimaryContainer);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1502,15 +1509,23 @@ body.acrylic-on .bottom-nav::after {
 .acrylic-on .card .form-control,
 .acrylic-on .glass-content .form-control {
     background-color: rgba(0, 0, 0, 0.05) !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
     color: var(--onSurface) !important;
     border-radius: 40px !important;
+}
+
+.acrylic-on .card,
+.acrylic-on .glass-content {
+    border-color: rgba(255, 255, 255, 0.25) !important;
 }
 
 @media (prefers-color-scheme: dark) {
     .acrylic-on .card .form-control,
     .acrylic-on .glass-content .form-control {
         background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .acrylic-on .card,
+    .acrylic-on .glass-content {
         border-color: rgba(255, 255, 255, 0.18) !important;
     }
 }

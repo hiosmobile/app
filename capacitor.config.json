@@ -1,5 +1,5 @@
 {
-  "appId": "com.nugget.hiosunified3",
+  "appId": "com.nugget.hiosunified",
   "appName": "HiOS",
   "webDir": "dist",
   "bundledWebRuntime": false,
@@ -7,5 +7,9 @@
     "StatusBar": {
       "overlaysWebView": true
     }
+  },
+  "server": {
+    "hostname": "hios.unified",
+    "androidScheme": "http"
   }
 }

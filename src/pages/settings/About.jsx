@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "../../../components/Card";
-import logoNew from "../../assets/pics/logos/logo_new.png";
+import logoNew from "../../assets/pics/logos/logo_hiosunified3.png";
 
 export default function About() {
   return (

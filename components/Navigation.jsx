@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 
 const navItems = [
   { path: "/", icon: "home", label: "Home" },
-  { path: "/restaurant", icon: "award_meal", label: "Eat" },
+  { path: "/restaurant", icon: "restaurant", label: "Eat" },
   { path: "/hotelactivities", icon: "hotel", label: "Stay" },
-  { path: "/roomkey", icon: "key", label: "Room Key" },
+  { path: "/hirewards", icon: "award_star", label: "HiRewards" },
 ];
 
 export function BottomNav() {

@@ -8,9 +8,12 @@ import WeatherWidget from "../../components/WeatherWidget";
 import frameImg from "../assets/media/frame.png";
 import MenuActionBtn from "../../components/MenuActionBtn";
 import { Menu } from "lucide-react";
+import { useAuth } from "../AuthContext";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const name = currentUser?.displayName?.split(" ")[0] || "HiOS User";
 
   // Calculate the greeting directly without using state or effects
   const getGreeting = () => {
@@ -29,11 +32,11 @@ export default function Home() {
         <div className="col-12">
           <Card bodyClass="text-start">
             <p className="gradientHeading mb-0">
-              <b>{greeting}!</b>
+              <b>
+                {greeting}, {name}!
+              </b>
             </p>
-            <p className="gradientHeadingSmall">
-              Welcome to The Highland Cafe™!
-            </p>
+            <p className="gradientHeadingSmall">Welcome to HiOS!</p>
           </Card>
         </div>
       </div>
