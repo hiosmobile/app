@@ -24,7 +24,10 @@ export default function Signup() {
       await signup(email, password, name);
       await logout();
       navigate("/login", {
-        state: { message: "Account created! Please log in." },
+        state: {
+          message:
+            "Account created! Please check your email to verify your account before logging in.",
+        },
       });
     } catch (err) {
       setError("Failed to create account. Email may already be in use.");

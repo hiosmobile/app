@@ -6,6 +6,9 @@ import { AuthProvider, useAuth } from "./AuthContext"; // Adjust path if necessa
 // Layouts
 import Layout from "../components/Layout.jsx";
 import TopBarWrapper from "../components/TopBarWrapper.jsx";
+import Card from "../components/Card.jsx";
+import RippleButton from "../components/RippleButton.jsx";
+import MenuActionBtn from "../components/MenuActionBtn.jsx";
 
 // Auth Pages
 import Gateway from "./pages/Gateway"; // Adjust path if necessary
@@ -40,7 +43,7 @@ import AppFeedback from "./pages/help/AppFeedback.jsx";
 import FullscreenViewer from "./pages/FullscreenViewer";
 
 function AppRoutes() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   // =========================================
   // UNAUTHENTICATED FLOW
@@ -55,6 +58,41 @@ function AppRoutes() {
         {/* Redirect any unknown route back to Gateway */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+    );
+  }
+
+  if (currentUser && !currentUser.emailVerified) {
+    return (
+      <main className="container mt-5">
+        <Card>
+          <div className="top-container">
+            <h1 className="blue-h2">
+              <span className="material-symbols-rounded titleIcon">
+                mark_email_unread
+              </span>
+              Verify your email
+            </h1>
+          </div>
+        </Card>
+
+        <Card className="mt-2 text-start">
+          <h2 className="card-title">
+            Please click the link sent to <b>{currentUser.email}</b> to activate
+            your HiAccount.
+          </h2>
+          <p>
+            If it's "not there", it is -- just look in your spam folder. Let's
+            not be lazy.
+          </p>
+
+          <MenuActionBtn
+            icon="arrow_back"
+            text="Back to log-in page"
+            className="full"
+            onClick={() => logout()}
+          />
+        </Card>
+      </main>
     );
   }
 

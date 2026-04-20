@@ -8,6 +8,7 @@ import {
   updatePassword,
   updateProfile,
   sendPasswordResetEmail,
+  sendEmailVerification,
 } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -35,6 +36,9 @@ export function AuthProvider({ children }) {
     await updateProfile(userCredential.user, {
       displayName: name,
     });
+
+    await sendEmailVerification(userCredential.user);
+
     return userCredential;
   }
 
@@ -48,22 +52,6 @@ export function AuthProvider({ children }) {
 
   function resetPassword(email) {
     return sendPasswordResetEmail(auth, email);
-  }
-
-  async function uploadProfilePicture(file) {
-    if (!currentUser) return;
-
-    // Create a folder path in storage: avatars/USER_ID
-    const fileRef = ref(storage, `avatars/${currentUser.uid}`);
-    await uploadBytes(fileRef, file);
-    const photoURL = await getDownloadURL(fileRef);
-
-    // Update the Firebase profile
-    await updateProfile(currentUser, { photoURL });
-
-    // Update local state to immediately show the new picture
-    setCurrentUser({ ...currentUser, photoURL });
-    return photoURL;
   }
 
   useEffect(() => {
@@ -81,7 +69,6 @@ export function AuthProvider({ children }) {
     logout,
     changePassword,
     resetPassword,
-    uploadProfilePicture,
   };
 
   return (
