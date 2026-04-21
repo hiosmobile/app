@@ -1,8 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import MenuActionBtn from "../../components/MenuActionBtn";
+import {
+  Card,
+  MenuActionBtn,
+  Row,
+  Col,
+  InfoBubble,
+} from "../../components/HiMaterial";
 import Logo from "../assets/pics/logos/hiosbadge.png";
+import { openExternalLink } from "../utils/externalLink";
 
 export default function Gateway() {
   const navigate = useNavigate();
@@ -18,106 +24,102 @@ export default function Gateway() {
 
   return (
     <main className="container mt-4 mb-5">
-      <div className="row mb-2">
-        <div className="col-12">
-          <Card bodyClass="text-start p-4">
-            <div className="d-flex align-items-center">
-              <img
-                src={Logo}
-                alt="HiOS Logo"
-                style={{ width: "60px", marginRight: "15px" }}
-              />
-              <div>
-                <p className="gradientHeading mb-0">
+      <Row className="mb-2">
+        <Col size={12}>
+          <Card bodyClass="p-4">
+            {/* Use g-3 to set a specific, clean gap between logo and text */}
+            <Row className="align-items-center g-3">
+              <Col size="auto">
+                <img
+                  src={Logo}
+                  alt="HiOS Logo"
+                  style={{ width: "80px", display: "block" }}
+                />
+              </Col>
+              <Col className="text-start">
+                <p
+                  className="gradientHeading mb-0"
+                  style={{
+                    lineHeight: "1.2", // Tightens the "Good Morning" wrap
+                  }}
+                >
                   <b>{greeting}!</b>
                 </p>
                 <p className="gradientHeadingSmall mb-0">Welcome to HiOS!</p>
-              </div>
-            </div>
+              </Col>
+            </Row>
           </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="row g-2">
-        <div className="col-12 col-md-6">
-          <Card title="Get Started" bodyClass="text-start">
+      <Row className="g-2">
+        <Col size={12} md={6}>
+          <Card title="Get Started">
             <p>
               Please log in to or create your HiAccount to access your
               membership, view your rewards, and manage your stays.
             </p>
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
+            <MenuActionBtn
+              icon="login"
+              text="Log-in"
+              onClick={() => navigate("/login")}
+            />
+            <InfoBubble
+              icon="waving_hand"
+              title="Hello, nice to see you again!"
             >
-              <MenuActionBtn
-                icon="login"
-                text="Log-in"
-                className="joinTop"
-                onClick={() => navigate("/login")}
-              />
-
-              <MenuActionBtn
-                icon="person_add"
-                text="Sign-up"
-                className="joinBottom"
-                onClick={() => navigate("/signup")}
-              />
-            </div>
+              Welcome back! We're glad to have you here!
+            </InfoBubble>
           </Card>
-        </div>
 
-        <div className="col-12 col-md-6">
-          <Card title="What can you do with HiOS?" className="h-100">
-            <div className="d-flex align-items-start mb-3 text-start">
-              <span
-                className="material-symbols-rounded me-2"
-                style={{ color: "var(--primary)" }}
-              >
-                award_star
-              </span>
-              <div>
-                <h4>HiRewards</h4>
-                <p>
-                  Earn points on every purchase and unlock exclusive discounts
-                  across all our locations.
-                </p>
-              </div>
-            </div>
-
-            <div className="d-flex align-items-start mb-3 text-start">
-              <span
-                className="material-symbols-rounded me-2"
-                style={{ color: "var(--primary)" }}
-              >
-                restaurant
-              </span>
-              <div>
-                <h4>Dining</h4>
-                <p>
-                  Browse menus, order ahead, and book tables at The Highland
-                  Cafe(tm) and CafeFiesta.
-                </p>
-              </div>
-            </div>
-
-            <div className="d-flex align-items-start text-start">
-              <span
-                className="material-symbols-rounded me-2"
-                style={{ color: "var(--primary)" }}
-              >
-                hotel
-              </span>
-              <div>
-                <h4>weB&B Stays</h4>
-                <p>
-                  Manage your hotel reservations, check in digitally, and access
-                  your mobile room key.
-                </p>
-              </div>
-            </div>
+          <Card title="No HiAccount? Make a new one!" className="mt-2">
+            <MenuActionBtn
+              icon="person_add"
+              text="Sign-up"
+              onClick={() => navigate("/signup")}
+            />
+            <InfoBubble
+              icon="shield_with_heart"
+              title="Your details are safe with us."
+            >
+              Your HiAccount details are kept encrypted, so not even we can see
+              it. Now that's how privacy and security should be.
+            </InfoBubble>
           </Card>
-        </div>
-      </div>
+        </Col>
+
+        <Col size={12} md={6}>
+          <Card title="What can HiOS do?">
+            <InfoBubble icon="dashboard" title="Your dashboard.">
+              HiOS has a beautiful dashboard for you to see all your HiCafe™
+              info at a glance.
+            </InfoBubble>
+
+            <InfoBubble
+              icon="restaurant"
+              title="Your HiCafe™, your way."
+              className="mt-2"
+            >
+              Browse menus, order ahead, and book tables at The Highland Cafe™
+              and CafeFiesta™.
+            </InfoBubble>
+
+            <InfoBubble icon="hotel" title="Your weB&B stays" className="mt-2">
+              Manage your hotel reservations, check in digitally, and access
+              your mobile room key.
+            </InfoBubble>
+
+            <InfoBubble
+              icon="award_star"
+              title="Rewards with HiRewards™"
+              className="mt-2"
+            >
+              Earn points on every purchase and unlock exclusive discounts
+              across all our locations.
+            </InfoBubble>
+          </Card>
+        </Col>
+      </Row>
     </main>
   );
 }

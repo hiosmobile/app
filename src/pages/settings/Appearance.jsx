@@ -1,6 +1,14 @@
 import React, { useContext } from "react";
+import PageHeader from "../../../components/PageHeader";
+import InfoBubble from "../../../components/InfoBubble";
 import Card from "../../../components/Card";
+import Switch from "../../../components/Switch";
+import Dropdown from "../../../components/Dropdown";
 import { ThemeContext } from "../../../components/ThemeContext";
+import { openExternalLink } from "../../utils/externalLink";
+import MenuActionBtn from "../../../components/MenuActionBtn";
+
+//code lines went from 320 to ~200 after cleanup
 
 export default function Appearance() {
   const {
@@ -20,8 +28,7 @@ export default function Appearance() {
 
   const effectiveAuto = backgroundEnabled ? autoColor : false;
 
-  const handleBackgroundToggle = (e) => {
-    const isChecked = e.target.checked;
+  const handleBackgroundToggle = (isChecked) => {
     setBackgroundEnabled(isChecked);
     if (!isChecked) {
       setAutoColor(false);
@@ -29,282 +36,155 @@ export default function Appearance() {
     }
   };
 
+  const wallpaperOptions = [
+    { value: "default", label: "Montenegrin Lake (Default)" },
+    { value: "dobrota", label: "Dobrota, Montenegro" },
+    { value: "spain", label: "Montefrío, Spain" },
+    { value: "france", label: "Terrasson, France" },
+    { value: "turkey", label: "Tlos, Turkey" },
+    { value: "morocco", label: "Dades Gorge, Morocco" },
+    { value: "clouds", label: "Cloudy Sunrise, Liverpool" },
+    { value: "london", label: "Tower Bridge, London" },
+    { value: "yorkshire", label: "Keld, North Yorkshire" },
+    { value: "scotland", label: "Knockan Crag, Scotland" },
+  ];
+
+  const darkModeOptions = [
+    { value: "auto", label: "Auto (Default)" },
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+  ];
+
+  const genericColourOptions = [
+    { value: "default-light", label: "HiOSMobile 2.x (Default)" },
+    { value: "generic-cyan", label: "HiOSMobile v1.3.2 (Cyan)" },
+    { value: "generic-green", label: "Green" },
+    { value: "generic-orange", label: "Orange" },
+  ];
+
   return (
     <main className="container mt-4 mb-5">
       <div className="row mb-2">
         <div className="col-12">
-          <Card>
-            <div className="top-container">
-              <h1 className="blue-h2">
-                <span className="titleIcon material-symbols-rounded">
-                  palette
-                </span>
-                Appearance
-              </h1>
-              <p id="para">Customise the look and feel of HiOS below.</p>
-            </div>
-          </Card>
+          <PageHeader
+            icon="palette"
+            title="Appearance"
+            subtitle="Customise the look and feel of HiOS to your taste below."
+          />
         </div>
       </div>
 
       <div className="row g-2">
         {/* Left Column */}
         <div className="col-12 col-md-6">
-          <Card>
-            <h1 className="card-title">Backgrounds</h1>
-
+          <Card title="Wallpaper settings">
             <div className="settings-group mt-3">
-              <div className="switchContainer p-3">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <label
-                    className="form-check-label ms-2"
-                    style={{ marginRight: "auto" }}
-                  >
-                    Background Image
-                  </label>
-                  <label className="switch" style={{ marginLeft: "auto" }}>
-                    <input
-                      type="checkbox"
-                      checked={backgroundEnabled}
-                      onChange={handleBackgroundToggle}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="infoBubble">
-                <h4>
-                  <span className="material-symbols-rounded helpcenterIcons">
-                    wallpaper
-                  </span>{" "}
-                  Turn on or off the background image.
-                </h4>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    margin: "8px 0 0 0",
-                    opacity: 0.8,
-                  }}
-                >
-                  For the sake of accessibility, or just your personal
-                  preference.
-                </p>
-              </div>
+              <Switch
+                label="Wallpaper"
+                checked={backgroundEnabled}
+                onChange={handleBackgroundToggle}
+              />
+              <InfoBubble
+                icon="wallpaper"
+                title="Turn on or off the background image"
+              >
+                For the sake of accessibility, or just your personal preference.
+              </InfoBubble>
             </div>
 
-            <h3 className="card-subtitle mb-2 mt-4">Pick a Wallpaper</h3>
+            <h3 className="card-title mb-3 mt-4">Pick a wallpaper</h3>
             <div className="settings-group">
-              <select
-                className="form-select"
+              <Dropdown
                 value={wallpaperTheme}
-                onChange={(e) => setWallpaperTheme(e.target.value)}
+                onChange={setWallpaperTheme}
+                options={wallpaperOptions}
                 disabled={!backgroundEnabled}
+              />
+              <InfoBubble
+                icon="photo_prints"
+                title="Pick a background. Our backgrounds are stunning."
               >
-                <option value="default">Montenegrin Lake (Default)</option>
-                <option value="dobrota">Dobrota, Montenegro</option>
-                <option value="spain">Montefrío, Spain</option>
-                <option value="france">Terrasson, France</option>
-                <option value="turkey">Tlos, Turkey</option>
-                <option value="morocco">Dades Gorge, Morocco</option>
-                <option value="clouds">Cloudy Sunrise, Liverpool</option>
-                <option value="london">Tower Bridge, London</option>
-                <option value="yorkshire">Keld, Yorkshire</option>
-                <option value="scotland">Knockan Crag, Scotland</option>
-              </select>
-              <div className="infoBubble">
-                <h4>
-                  <span className="material-symbols-rounded helpcenterIcons">
-                    photo_prints
-                  </span>{" "}
-                  Pick a background. Our backgrounds are stunning.
-                </h4>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    margin: "8px 0 0 0",
-                    opacity: 0.8,
-                  }}
-                >
-                  All our background photos were taken by us. We took the light
-                  mode photos, and Google Gemini generated dark mode versions of
-                  them, for HiOSMobile.
-                </p>
-              </div>
+                All our background photos were taken by us. We took the light
+                mode photos, and Google Gemini generated dark mode versions of
+                them, for HiOSMobile.
+              </InfoBubble>
             </div>
 
-            <h3 className="card-subtitle mb-2 mt-4">Theme Mode</h3>
+            <h3 className="card-title mb-3 mt-4">Wallpaper colour</h3>
             <div className="settings-group">
-              <select
-                className="form-select"
+              <Dropdown
                 value={darkModePref}
-                onChange={(e) => setDarkModePref(e.target.value)}
+                onChange={setDarkModePref}
+                options={darkModeOptions}
                 disabled={!backgroundEnabled}
-              >
-                <option value="auto">Auto (Default)</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
-              <div className="infoBubble">
-                <h4>
-                  <span className="material-symbols-rounded helpcenterIcons">
-                    palette
-                  </span>{" "}
-                  Pick a colour of wallpaper.
-                </h4>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    margin: "8px 0 0 0",
-                    opacity: 0.8,
-                  }}
-                >
-                  We have a colour of wallpaper for day or night. And you get
-                  the choice. Have us change the mode automatically with your
-                  device's dark mode settings, or manually set it yourself.
-                  Fully up to you.
-                </p>
-              </div>
+              />
+              <InfoBubble icon="palette" title="Pick a colour of wallpaper.">
+                We have a colour of wallpaper for day or night. And you get the
+                choice. Have us change the mode automatically with your device's
+                dark mode settings, or manually set it yourself. Fully up to
+                you.
+              </InfoBubble>
             </div>
           </Card>
         </div>
 
+        {/*Right column*/}
         <div className="col-12 col-md-6">
-          <Card>
-            <h1 className="card-title">Colours</h1>
-
-            <h3 className="card-subtitle mb-2 mt-4">Auto Colour Palette</h3>
+          <Card title="Colour settings">
             <div className="settings-group">
-              <div className="switchContainer p-3">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <label
-                    className="form-check-label ms-2"
-                    style={{ marginRight: "auto" }}
-                  >
-                    Auto Wallpaper Colours
-                  </label>
-                  <label className="switch" style={{ marginLeft: "auto" }}>
-                    <input
-                      type="checkbox"
-                      checked={effectiveAuto}
-                      onChange={(e) => setAutoColor(e.target.checked)}
-                      disabled={!backgroundEnabled}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
-              </div>
-              <div className="infoBubble">
-                <h4>
-                  <span className="material-symbols-rounded helpcenterIcons">
-                    colors
-                  </span>{" "}
-                  Turn on or off the auto wallpaper colours.
-                </h4>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    margin: "8px 0 0 0",
-                    opacity: 0.8,
-                  }}
-                >
-                  This allows you to use a basic default colour scheme, and
-                  disable the colours which match the wallpapers.
-                </p>
-              </div>
-            </div>
-
-            <h3 className="card-subtitle mb-2 mt-4">Basic Colours</h3>
-            <div className="settings-group">
-              <select
-                className="form-select"
-                value={genericColor}
-                onChange={(e) => setGenericColor(e.target.value)}
-                disabled={effectiveAuto || !backgroundEnabled}
+              <Switch
+                label="Dynamic colour"
+                checked={effectiveAuto}
+                onChange={setAutoColor}
+                disabled={!backgroundEnabled}
+              />
+              <InfoBubble
+                icon="colors"
+                title="Turn on or off the dynamic wallpaper colours."
               >
-                <option value="default-light">Blue (Default)</option>
-                <option value="generic-green">Green</option>
-                <option value="generic-cyan">Cyan</option>
-                <option value="generic-orange">Orange</option>
-              </select>
-              <div className="infoBubble">
-                <h4>
-                  <span className="material-symbols-rounded helpcenterIcons">
-                    colorize
-                  </span>{" "}
-                  Pick a basic colour.
-                </h4>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    margin: "8px 0 0 0",
-                    opacity: 0.8,
-                  }}
-                >
-                  To pick a basic colour, please disable Auto Wallpaper Colours
-                  above.
-                </p>
-              </div>
+                This allows you to use a basic default colour scheme, and
+                disable the colours which match the wallpapers.
+              </InfoBubble>
             </div>
 
-            <h3 className="card-subtitle mb-2 mt-4">Materials</h3>
+            <h3 className="card-title mb-3 mt-4">Basic colours</h3>
             <div className="settings-group">
-              <div className="switchContainer p-3">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <label
-                    className="form-check-label ms-2"
-                    style={{ marginRight: "auto" }}
-                  >
-                    Acrylic Glass
-                  </label>
-                  <label className="switch" style={{ marginLeft: "auto" }}>
-                    <input
-                      type="checkbox"
-                      checked={acrylicEnabled}
-                      onChange={(e) => setAcrylicEnabled(e.target.checked)}
-                      disabled={!backgroundEnabled}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
-              </div>
-              <div className="infoBubble">
-                <h4>
-                  <span className="material-symbols-rounded helpcenterIcons">
-                    colorize
-                  </span>{" "}
-                  Turn on or off the acrylic glass effect.
-                </h4>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    margin: "8px 0 0 0",
-                    opacity: 0.8,
-                  }}
-                >
-                  The acrylic glass effect is the glassy blur effect used
-                  throughout HiOS. You can disable this above for
-                  accessibility's sake, or just personal preference.
-                </p>
-              </div>
+              <Dropdown
+                value={genericColor}
+                onChange={setGenericColor}
+                options={genericColourOptions}
+                disabled={effectiveAuto}
+              />
+              <InfoBubble icon="colorize" title="Pick a basic colour.">
+                To pick a basic colour, please disable dynamic wallpaper colours
+                to enjoy our very boring basic-ahh colours.
+              </InfoBubble>
+            </div>
+
+            <h3 className="card-title mb-3 mt-4">Materials</h3>
+            <div className="settings-group">
+              <Switch
+                label="ZenGlass"
+                checked={acrylicEnabled}
+                onChange={setAcrylicEnabled}
+                disabled={!backgroundEnabled}
+              />
+              <InfoBubble icon="colorize" title="Turn on or off ZenGlass.">
+                ZenGlass is the beautiful glass effect used throughout HiOS.
+                It's our spiritual tribute to beautiful UI designs the '00s, and
+                stands out amoungst the rather dull and plain designs used in
+                today's apps. Find out more on our HiMaterial page.
+                <MenuActionBtn
+                  icon="open_in_new"
+                  text="HiMaterial page"
+                  className="full mt-3"
+                  onClick={() =>
+                    openExternalLink(
+                      "https://hienterprises.github.io/hiosmobile/himaterial",
+                    )
+                  }
+                />
+              </InfoBubble>
             </div>
           </Card>
         </div>

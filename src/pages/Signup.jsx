@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import RippleButton from "../../components/RippleButton";
-import Back from "../../components/Back";
+import {
+  Card,
+  RippleButton,
+  Back,
+  PageHeader,
+  Row,
+  Col,
+} from "../../components/HiMaterial";
 import { useAuth } from "../AuthContext";
 
 export default function Signup() {

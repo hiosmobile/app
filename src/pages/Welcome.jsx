@@ -1,13 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import ProgressWidget from "../../components/ProgressWidget";
+import {
+  Card,
+  ProgressWidget,
+  MenuActionBtn,
+} from "../../components/HiMaterial";
+
 import RewardsCodeWidget from "../../components/RewardsCodeWidget";
 import DateWidget from "../../components/DateWidget";
 import WeatherWidget from "../../components/WeatherWidget";
 import frameImg from "../assets/media/frame.png";
-import MenuActionBtn from "../../components/MenuActionBtn";
-import { Menu } from "lucide-react";
 import { useAuth } from "../AuthContext";
 
 export default function Home() {

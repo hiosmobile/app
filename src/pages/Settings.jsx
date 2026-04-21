@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PageHeader from "../../components/PageHeader";
 import Card from "../../components/Card";
 import MenuActionBtn from "../../components/MenuActionBtn";
 import RippleButton from "../../components/RippleButton";
@@ -121,19 +122,11 @@ export default function Settings() {
         {/* Header Greeting Row */}
         <div className="row mb-2">
           <div className="col-12">
-            <Card>
-              <div className="top-container">
-                <h1 className="blue-h2">
-                  <span className="titleIcon material-symbols-rounded">
-                    settings
-                  </span>
-                  Settings
-                </h1>
-                <p id="para" className="subtitle mb-0">
-                  Choose a settings category from below.
-                </p>
-              </div>
-            </Card>
+            <PageHeader
+              icon="settings"
+              title="Settings"
+              subtitle="Choose a settings category from below."
+            />
           </div>
         </div>
 
@@ -170,19 +163,19 @@ export default function Settings() {
               <div className="text-start">
                 <MenuActionBtn
                   icon="badge"
-                  text="Change Name"
+                  text="Change name"
                   className="joinTop"
                   onClick={() => setActiveModal("name")}
                 />
                 <MenuActionBtn
                   icon="password"
-                  text="Change Password"
+                  text="Change password"
                   className="joinMiddle"
                   onClick={() => setActiveModal("password")}
                 />
                 <MenuActionBtn
                   icon="logout"
-                  text="Log-Out"
+                  text="Log-out"
                   className="joinMiddle"
                   onClick={handleLogout}
                 />
@@ -216,22 +209,28 @@ export default function Settings() {
             <Card className="mt-2" title="General">
               <MenuActionBtn
                 icon="dashboard_customize"
-                text="Apps and Websites"
+                text="Apps and websites"
                 className="full"
                 onClick={() => navigate("/settings/apps")}
               />
             </Card>
 
-            <Card className="mt-2" title="About">
+            <Card className="mt-2" title="Updates and more">
+              <MenuActionBtn
+                icon="system_update"
+                text="Updates"
+                className="joinTop"
+                onClick={() => navigate("/settings/updates")}
+              />
               <MenuActionBtn
                 icon="info"
-                text="About HiOS"
-                className="joinTop"
+                text="About"
+                className="joinMiddle"
                 onClick={() => navigate("/settings/about")}
               />
               <MenuActionBtn
                 icon="security"
-                text="Privacy Policy"
+                text="Privacy policy"
                 className="joinBottom"
                 onClick={() => navigate("/settings/privacy")}
               />

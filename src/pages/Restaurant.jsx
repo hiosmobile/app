@@ -1,62 +1,88 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Card from '../../components/Card';
-import MenuActionBtn from '../../components/MenuActionBtn';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  Row,
+  Col,
+  PageHeader,
+  MenuActionBtn,
+  InfoBubble,
+} from "../../components/HiMaterial";
 
 export default function Restaurant() {
   const navigate = useNavigate();
 
   return (
     <main className="container mt-4 mb-5">
-      
-      <Card>
-        <div className="top-container">
-          <h1 className="blue-h2">
-            <span className="titleIcon material-symbols-rounded">restaurant</span>
-            Food
-          </h1>
-          <p id="para" className="subtitle mb-0">Pick an action from below.</p>
-        </div>
-      </Card>
+      <Row className="mb-2">
+        <Col size={12}>
+          <PageHeader
+            icon="restaurant"
+            title="Eat"
+            subtitle="Pick an action below."
+          />
+        </Col>
+      </Row>
 
-      <Card className="mt-2">
-        <MenuActionBtn
-          icon="local_cafe" 
-          text="Your HiCafe™️ Visit" 
-          className="joinTop" 
-          onClick={() => navigate('/restaurant/hicafe')} 
-        />
-        
-        <MenuActionBtn 
-          icon="egg_alt" 
-          text="Breakfast Check-In" 
-          className="joinTop" 
-          onClick={() => navigate('/restaurant/breakfast')} 
-        />
-        
-        {/* Tonys placeholder (commented out in your original code)
-        <RippleButton 
-          className="full roundedImage button" 
-          style={{ backgroundImage: "url('assets/pics/logos/tonys.png')", backgroundSize: '350px 110px', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundColor: '#100c0c' }} 
-          onClick={() => navigate('/restaurant/tonys')} 
-        />
-        */}
+      <Row className="g-2">
+        {/* Left column */}
+        <Col size={12} md={6}>
+          <Card title="Dining">
+            <MenuActionBtn
+              icon="dining"
+              text="Your HiCafe™ visit"
+              className="joinTop"
+              onClick={() => navigate("/restaurant/hicafe")}
+            />
+            <InfoBubble title="Your new go-to restaurant.">
+              Experience the best meal of your life at The Highland Cafe™. What
+              are you waiting for? Book a table now!
+            </InfoBubble>
+          </Card>
 
-        <MenuActionBtn 
-          icon="coffee_maker" 
-          text="CafeFiesta™️" 
-          className="joinTop" 
-          onClick={() => navigate('/restaurant/cafefiesta')} 
-        />
-        
-        <MenuActionBtn 
-          icon="pin_drop" 
-          text="Locations" 
-          className="joinBottom" 
-          onClick={() => navigate('/restaurant/locations')} 
-        />
-      </Card>
+          <Card className="mt-2" title="Coffee">
+            <MenuActionBtn
+              icon="local_cafe"
+              text="CafeFiesta™"
+              className="joinTop"
+              onClick={() => navigate("/restaurant/cafefiesta")}
+            />
+            <InfoBubble title="The best coffee in the world.">
+              You've never properly tried coffee unless you've been to
+              CafeFiesta™. Go on, see for yourself! Order now!
+            </InfoBubble>
+          </Card>
+        </Col>
 
+        {/* Right column */}
+        <Col size={12} md={6}>
+          <Card title="Breakfast">
+            <MenuActionBtn
+              icon="egg_alt"
+              text="Breakfast check-in"
+              className="joinTop"
+              onClick={() => navigate("/restaurant/breakfast")}
+            />
+            <InfoBubble title="Check-in when you're ready for breakfast.">
+              If you're staying with us at weB&B, click above once you're hungry
+              for breakfast.
+            </InfoBubble>
+          </Card>
+
+          <Card className="mt-2" title="Find us">
+            <MenuActionBtn
+              icon="pin_drop"
+              text="Locations"
+              className="joinBottom"
+              onClick={() => navigate("/restaurant/locations")}
+            />
+            <InfoBubble title="Find out where you can visit us.">
+              Take a look on the page above to see where you can visit our
+              restaurants or hotels.
+            </InfoBubble>
+          </Card>
+        </Col>
+      </Row>
     </main>
   );
 }

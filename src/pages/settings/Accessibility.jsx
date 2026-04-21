@@ -1,5 +1,8 @@
 import React, { useContext } from "react";
+import PageHeader from "../../../components/PageHeader";
+import InfoBubble from "../../../components/InfoBubble";
 import Card from "../../../components/Card";
+import Switch from "../../../components/Switch";
 import { ThemeContext } from "../../../components/ThemeContext";
 
 export default function Accessibility() {
@@ -12,8 +15,7 @@ export default function Accessibility() {
     setAcrylicEnabled,
   } = useContext(ThemeContext);
 
-  const handleHighContrastToggle = (e) => {
-    const isChecked = e.target.checked;
+  const handleHighContrastToggle = (isChecked) => {
     setHighContrastEnabled(isChecked);
 
     if (isChecked) {
@@ -39,69 +41,45 @@ export default function Accessibility() {
     <main className="container mt-4 mb-5">
       <div className="row mb-2">
         <div className="col-12">
-          <Card>
-            <div className="top-container">
-              <h1 className="blue-h2">
-                <span className="titleIcon material-symbols-rounded">
-                  accessibility_new
-                </span>
-                Accessibility
-              </h1>
-              <p id="para">
-                Adjust visual settings to make HiOS easier to use.
-              </p>
-            </div>
-          </Card>
+          <PageHeader
+            icon="accessibility_new"
+            title="Accessibility"
+            subtitle="Adjust the ease of access of HiOS below."
+          />
         </div>
       </div>
 
-      <Card>
-        <h1 className="card-title">Vision</h1>
-        <div className="settings-group mt-3">
-          <div className="switchContainer p-3">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
+      <div className="row g-2">
+        {/* Left column */}
+        <div className="col-12 col-md-6">
+          <Card title="Vision">
+            <Switch
+              label="High-contrast UI"
+              checked={highContrastEnabled}
+              onChange={handleHighContrastToggle}
+            />
+            <InfoBubble
+              icon="contrast"
+              title="Increase legibility across HiOS."
             >
-              <label
-                className="form-check-label ms-2"
-                style={{ marginRight: "auto" }}
-              >
-                High Contrast UI
-              </label>
-              <label className="switch" style={{ marginLeft: "auto" }}>
-                <input
-                  type="checkbox"
-                  checked={highContrastEnabled}
-                  onChange={handleHighContrastToggle}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-          </div>
-          <div className="infoBubble">
-            <h4>
-              <span className="material-symbols-rounded helpcenterIcons">
-                contrast
-              </span>{" "}
-              Increase legibility across the system.
-            </h4>
-            <p
-              style={{
-                fontSize: "14px",
-                margin: "8px 0 0 0",
-                opacity: 0.8,
-              }}
-            >
-              This overrides theme colors with maximum contrast alternatives and
-              disables transparency effects like acrylic glass.
-            </p>
-          </div>
+              This overrides theme colours with high-contrast alternatives and
+              disables materials like ZenGlass.
+            </InfoBubble>
+          </Card>
         </div>
-      </Card>
+
+        {/* Right column */}
+        <div className="col-12 col-md-6">
+          <Card>
+            <h3>At nuggetdev, we like to cater to everyone.</h3>
+            <p>
+              Not everyone has perfect vision. That's why we like to add stuff
+              like a high-contrast UI, so that as many people can use our apps
+              as physically possible.
+            </p>
+          </Card>
+        </div>
+      </div>
     </main>
   );
 }

@@ -9,7 +9,7 @@ export default function TopBarWrapper({ title, children }) {
       {/* Top App Bar */}
       <div className="top-app-bar">
         <button className="back-button" onClick={() => navigate(-1)}>
-          <i className="material-symbols-rounded">arrow_back</i>
+          <i className="material-symbols-rounded">arrow_back_ios</i>
         </button>
         <h1 className="top-bar-title">{title}</h1>
       </div>

@@ -76,7 +76,7 @@ export const ThemeProvider = ({ children }) => {
         window.matchMedia("(prefers-color-scheme: dark)").matches);
     const themeName =
       wallpaperTheme === "default" ? "backgroundimage" : wallpaperTheme;
-    return `url('${basePath}${themeName}${isDark ? "-dark.png" : ".jpg"}')`;
+    return `url('${basePath}${themeName}${isDark ? "-dark.webp" : ".webp"}')`;
   };
 
   return (

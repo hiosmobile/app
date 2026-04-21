@@ -1,50 +1,41 @@
 import React from "react";
+import PageHeader from "../../../components/PageHeader";
 import Card from "../../../components/Card";
 import MenuActionBtn from "../../../components/MenuActionBtn";
+import InfoBubble from "../../../components/InfoBubble";
+import { openExternalLink } from "../../utils/externalLink";
 
 export default function Apps() {
   return (
     <main className="container mt-4 mb-5">
       <div className="row mb-2">
         <div className="col-12">
-          <Card>
-            <div className="top-container">
-              <h1 className="blue-h2">
-                <span className="titleIcon material-symbols-rounded">
-                  dashboard_customize
-                </span>
-                Apps and Websites
-              </h1>
-              <p id="para" className="subtitle mb-0">
-                Take a look at our other great apps, services, and websites
-                below.
-              </p>
-            </div>
-          </Card>
+          <PageHeader
+            icon="dashboard_customize"
+            title="Apps and websites"
+            subtitle="Take a look at our other great apps, services, and websites below."
+          />
         </div>
       </div>
 
       <div className="row g-2">
         {/*Left col*/}
         <div className="col-12 col-md-6">
-          <Card>
-            <h2 className="card-title">Recommended</h2>
+          <Card title="Recommended">
             <MenuActionBtn
               icon="music_note"
               text="HiOSMusic"
               className="full"
-              onClick={() => {
-                window.location.href = "https://github.com/aarjay123/hiosmusic";
-                return null;
-              }}
+              onClick={() =>
+                openExternalLink("https://github.com/aarjay123/hiosmusic")
+              }
             />
-            <div className="infoBubble">
-              <p
-                style={{ fontSize: "14px", margin: "8px 0 0 0", opacity: 0.8 }}
-              >
-                This is our brand new music app. Your Music, Your Vibe.
-              </p>
-            </div>
+            <InfoBubble
+              icon="music_note"
+              title="This is our brand-new music app."
+            >
+              Your Music, Your Vibe.
+            </InfoBubble>
           </Card>
         </div>
 
@@ -52,22 +43,21 @@ export default function Apps() {
           <Card>
             <MenuActionBtn
               icon="code"
-              text="Other software developed by nuggetdev"
+              text="Other apps by nuggetdev"
               className="full"
-              onClick={() => {
-                window.location.href =
-                  "https://hienterprises.github.io/nuggetdev/home";
-                return null;
-              }}
+              onClick={() =>
+                openExternalLink(
+                  "https://hienterprises.github.io/nuggetdev/home",
+                )
+              }
             />
-            <div className="infoBubble">
-              <p
-                style={{ fontSize: "14px", margin: "8px 0 0 0", opacity: 0.8 }}
-              >
-                Take a look at other great apps, software, and services also
-                developed by nuggetdev!
-              </p>
-            </div>
+            <InfoBubble
+              icon="developer_mode"
+              title="Other great software projects."
+            >
+              We've got many other software projects that we've been working on.
+              Go take a look!
+            </InfoBubble>
           </Card>
         </div>
       </div>

@@ -1,7 +1,7 @@
 {
   "name": "core",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "homepage": "https://hiosmobile.github.io/app",
   "type": "module",
   "scripts": {
@@ -14,8 +14,11 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.3.0",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/browser": "^8.0.3",
     "@capacitor/core": "^8.3.0",
     "@capacitor/status-bar": "^8.0.2",
+    "@fontsource-variable/google-sans-flex": "^5.2.3",
     "firebase": "^12.12.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",

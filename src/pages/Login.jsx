@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Card from "../../components/Card";
-import RippleButton from "../../components/RippleButton";
-import Back from "../../components/Back";
+import {
+  Card,
+  RippleButton,
+  Back,
+  PageHeader,
+  Row,
+  Col,
+} from "../../components/HiMaterial";
 import { useAuth } from "../AuthContext";
+import InfoBubble from "../../components/InfoBubble";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -31,93 +37,99 @@ export default function Login() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Back backPath="/" />
-      <Card className="joinBottom" bodyClass="text-start">
-        <div className="top-container">
-          <h1 className="blue-h2">
-            <span className="titleIcon material-symbols-rounded">login</span>
-            Log-in
-          </h1>
-          <p className="subtitle mb-0">
-            Welcome back! Please enter your details below to continue your
-            journey with HiOS.
-          </p>
-        </div>
-      </Card>
-
-      <Card className="mt-2 joinTop">
-        {successMessage && (
-          <div
-            className="infoBubble text-start"
-            style={{
-              backgroundColor: "var(--primaryContainer)",
-              color: "var(--onPrimaryContainer)",
-            }}
-          >
-            {successMessage}
-          </div>
-        )}
-
-        {error && (
-          <div
-            className="infoBubble text-start"
-            style={{
-              backgroundColor: "var(--errorContainer)",
-              color: "var(--onErrorContainer)",
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        <form
-          onSubmit={handleLogin}
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <input
-            type="email"
-            className="form-control mb-2"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: "100%", outline: "none" }}
+      <Row className="mb-2">
+        <Col size={12}>
+          <Back backPath="/" />
+          <PageHeader
+            icon="login"
+            title="Log-in"
+            subtitle="To get started, please enter your login details below."
           />
+        </Col>
+      </Row>
 
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: "100%", outline: "none" }}
-          />
+      <Row className="g-2">
+        <Col size={12} md={6}>
+          <Card title="Your login details">
+            {successMessage && (
+              <InfoBubble icon="check" title={successMessage} />
+            )}
 
-          <RippleButton
-            className="button roundedImage full mt-4"
-            type="submit"
-            disabled={isLoading}
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            <span className="button-text">
-              {isLoading ? "Logging in..." : "Continue"}
-            </span>
-          </RippleButton>
-          <button
-            type="button"
-            className="btn btn-link mt-3 mx-auto"
-            style={{
-              textDecoration: "none",
-              fontWeight: "500",
-              color: "var(--error)",
-            }}
-            onClick={() => navigate("/forgot-password")}
-          >
-            Forgot your password?
-          </button>
-        </form>
-      </Card>
+            {error && <InfoBubble icon="error" title={error} />}
+
+            <form
+              onSubmit={handleLogin}
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+              <input
+                type="email"
+                className="form-control mb-2"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                style={{ width: "100%", outline: "none" }}
+              />
+
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{ width: "100%", outline: "none" }}
+              />
+
+              <RippleButton
+                className="button roundedImage full mt-4"
+                type="submit"
+                disabled={isLoading}
+              >
+                <span className="material-symbols-rounded">arrow_forward</span>
+                <span className="button-text">
+                  {isLoading ? "Logging in..." : "Continue"}
+                </span>
+              </RippleButton>
+              <button
+                type="button"
+                className="btn btn-link mt-3 mx-auto"
+                style={{
+                  textDecoration: "none",
+                  fontWeight: "500",
+                  color: "var(--error)",
+                }}
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot your password?
+              </button>
+            </form>
+          </Card>
+        </Col>
+
+        <Col size={12} md={6}>
+          <Card>
+            <InfoBubble
+              icon="flare"
+              title="Your HiAccount, for all of HiEnterprises™."
+            >
+              You can do so much with your HiAccount. The sky's (almost) your
+              limit!
+            </InfoBubble>
+            <InfoBubble
+              icon="shield_with_heart"
+              title="Your details are safe with us."
+            >
+              Your HiAccount details are kept encrypted, so not even we can see
+              it. Now that's how privacy and security should be.
+            </InfoBubble>
+            <InfoBubble icon="lock_person" title="We don't sell your data.">
+              It's scummy, it's bad for you, it's bad for us, and it's bad
+              practice. So rest assured, your data is in safe hands.
+            </InfoBubble>
+          </Card>
+        </Col>
+      </Row>
     </main>
   );
 }

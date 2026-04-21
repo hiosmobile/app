@@ -1,15 +1,10 @@
 /*STYLES, FONTS, AND COLOURS*/
 
-@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Flex:ital,wght@0,100..700;1,100..700&display=swap");
-
-/*Defining Selawik font*/
 @font-face {
-    font-family: "Selawik";
-    src:
-        url("../fonts/selawk.woff2") format("woff2"),
-        url("../fonts/selawk.ttf") format("truetype");
-    font-weight: normal;
+    font-family: "Material Symbols Rounded";
     font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/icons.woff2") format("woff2");
 }
 
 /*Variables*/
@@ -44,8 +39,8 @@
     --onSurfaceVarient: #43474e;
 
     /*Fonts*/
-    --fontPrimary: "Google Sans Flex", sans-serif;
-    --fontCode: "Google Sans Flex", sans-serif;
+    --fontPrimary: "Google Sans Flex Variable", sans-serif;
+    --fontCode: "Google Sans Flex Variable", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
@@ -600,56 +595,58 @@ body.generic-green {
 }
 
 body.generic-cyan {
-    --primary: rgb(0 106 106);
-    --onPrimary: rgb(255 255 255);
-    --primaryContainer: rgb(156 241 240);
-    --onPrimaryContainer: rgb(0 79 79);
-    --secondary: rgb(74 99 99);
-    --onSecondary: rgb(255 255 255);
-    --secondaryContainer: rgb(204 232 231);
-    --onSecondaryContainer: rgb(50 75 75);
-    --tertiary: rgb(75 96 124);
-    --onTertiary: rgb(255 255 255);
-    --tertiaryContainer: rgb(211 228 255);
-    --onTertiaryContainer: rgb(51 72 99);
-    --error: rgb(186 26 26);
-    --onError: rgb(255 255 255);
-    --errorContainer: rgb(255 218 214);
-    --onErrorContainer: rgb(147 0 10);
-    --background: rgb(244 251 250);
-    --onBackground: rgb(22 29 29);
-    --surface: rgb(244 251 250);
-    --onSurface: rgb(22 29 29);
-    --surfaceVarient: rgb(218 229 228);
-    --onSurfaceVarient: rgb(63 73 72);
-    --outline: rgb(111 121 121);
+    /* Light Mode: Vibrant Teal-Cyan */
+    --primary: #00687a;
+    --onPrimary: #ffffff;
+    --primaryContainer: #adedff;
+    --onPrimaryContainer: #001f25;
+    --secondary: #4b6269;
+    --onSecondary: #ffffff;
+    --secondaryContainer: #cee7ef;
+    --onSecondaryContainer: #061e24;
+    --tertiary: #575c7e;
+    --onTertiary: #ffffff;
+    --tertiaryContainer: #dfe0ff;
+    --onTertiaryContainer: #131937;
+    --error: #ba1a1a;
+    --onError: #ffffff;
+    --errorContainer: #ffdad6;
+    --onErrorContainer: #410002;
+    --background: #fbfcfe;
+    --onBackground: #191c1d;
+    --surface: #fbfcfe;
+    --onSurface: #191c1d;
+    --surfaceVarient: #dbe4e8;
+    --onSurfaceVarient: #40484b;
+    --outline: #70787c;
 }
 
 @media (prefers-color-scheme: dark) {
     body.generic-cyan {
-        --primary: rgb(128 213 212);
-        --onPrimary: rgb(0 55 55);
-        --primaryContainer: rgb(0 79 79);
-        --onPrimaryContainer: rgb(156 241 240);
-        --secondary: rgb(176 204 203);
-        --onSecondary: rgb(27 53 52);
-        --secondaryContainer: rgb(50 75 75);
-        --onSecondaryContainer: rgb(204 232 231);
-        --tertiary: rgb(179 200 232);
-        --onTertiary: rgb(28 49 75);
-        --tertiaryContainer: rgb(51 72 99);
-        --onTertiaryContainer: rgb(211 228 255);
-        --error: rgb(255 180 171);
-        --onError: rgb(105 0 5);
-        --errorContainer: rgb(147 0 10);
-        --onErrorContainer: rgb(255 218 214);
-        --background: rgb(14 21 20);
-        --onBackground: rgb(221 228 227);
-        --surface: rgb(14 21 20);
-        --onSurface: rgb(221 228 227);
-        --surfaceVarient: rgb(63 73 72);
-        --onSurfaceVarient: rgb(190 201 200);
-        --outline: rgb(136 147 146);
+        /* Dark Mode: High-visibility Electric Cyan */
+        --primary: #55d6f3;
+        --onPrimary: #003640;
+        --primaryContainer: #004e5c;
+        --onPrimaryContainer: #adedff;
+        --secondary: #b2cad2;
+        --onSecondary: #1d343a;
+        --secondaryContainer: #344a51;
+        --onSecondaryContainer: #cee7ef;
+        --tertiary: #c0c4eb;
+        --onTertiary: #292e4d;
+        --tertiaryContainer: #3f4565;
+        --onTertiaryContainer: #dfe0ff;
+        --error: #ffb4ab;
+        --onError: #690005;
+        --errorContainer: #93000a;
+        --onErrorContainer: #ffdad6;
+        --background: #191c1d;
+        --onBackground: #e1e3e4;
+        --surface: #191c1d;
+        --onSurface: #e1e3e4;
+        --surfaceVarient: #40484b;
+        --onSurfaceVarient: #bfc8cc;
+        --outline: #899296;
     }
 }
 
@@ -703,7 +700,7 @@ body.generic-orange {
         --onSurface: rgb(238 224 212);
         --surfaceVarient: rgb(80 69 57);
         --onSurfaceVarient: rgb(212 196 181);
-        --outline: rgb(156 142 128);
+        --outline: rgb(158 141 130);
     }
 }
 
@@ -752,7 +749,7 @@ main.container {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("/assets/backgrounds/backgroundimage.png");
+    background-image: url("/assets/backgrounds/backgroundimage.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -788,7 +785,7 @@ main.container {
 .translucentAboutBox {
     background-color: color-mix(
         in srgb,
-        var(--tertiaryContainer) 75%,
+        var(--tertiaryContainer) 60%,
         transparent
     );
     color: var(--onTertiaryContainer);
@@ -867,6 +864,7 @@ main.container {
 }
 
 .material-symbols-rounded {
+    font-family: "Material Symbols Rounded";
     font-size: 30px !important;
     font-variation-settings:
         "FILL" 1,
@@ -889,11 +887,12 @@ main.container {
 
 .gradientHeading {
     font-size: 40px;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .gradientHeadingSmall {
     font-size: 30px;
+    font-weight: 350;
 }
 
 .top-container {
@@ -2086,10 +2085,11 @@ img[src$="scrolltop.bmp"] {
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--surfaceVarient) 70%,
+        var(--tertiaryContainer) 70%,
         transparent
     );
-    color: var(--onPrimaryContainer);
+    color: var(--onTertiaryContainer);
+    border: 1px solid var(--glass-border);
 }
 
 .switchContainer {
@@ -2138,7 +2138,6 @@ img[src$="scrolltop.bmp"] {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-bottom: 24px;
 }
 
 .form-check-label {

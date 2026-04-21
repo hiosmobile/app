@@ -30,6 +30,7 @@ import Settings from "./pages/Settings";
 import Appearance from "./pages/settings/Appearance";
 import Accessibility from "./pages/settings/Accessibility";
 import Apps from "./pages/settings/Apps";
+import Updates from "./pages/settings/Updates.jsx";
 import About from "./pages/settings/About";
 import Privacy from "./pages/settings/Privacy";
 
@@ -142,8 +143,16 @@ function AppRoutes() {
       <Route
         path="/settings/apps"
         element={
-          <TopBarWrapper title="Apps">
+          <TopBarWrapper title="Apps and websites">
             <Apps />
+          </TopBarWrapper>
+        }
+      />
+      <Route
+        path="/settings/updates"
+        element={
+          <TopBarWrapper title="Updates">
+            <Updates />
           </TopBarWrapper>
         }
       />
@@ -158,7 +167,7 @@ function AppRoutes() {
       <Route
         path="/settings/privacy"
         element={
-          <TopBarWrapper title="Privacy">
+          <TopBarWrapper title="Privacy policy">
             <Privacy />
           </TopBarWrapper>
         }
