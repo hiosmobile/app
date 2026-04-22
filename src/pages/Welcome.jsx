@@ -4,6 +4,9 @@ import {
   Card,
   ProgressWidget,
   MenuActionBtn,
+  PageHeader,
+  Row,
+  Col,
 } from "../../components/HiMaterial";
 
 import RewardsCodeWidget from "../../components/RewardsCodeWidget";
@@ -29,93 +32,84 @@ export default function Home() {
     return "Good Evening";
   };
 
+  const getMessage = () => {
+    const hrs = new Date().getHours();
+    if (hrs < 12) return "Have a good day ahead.";
+    if (hrs <= 17) return "Hope you have a nice afternoon.";
+    return "Have a nice night.";
+  };
+
   const greeting = getGreeting();
+
+  const message = getMessage();
 
   return (
     <main className="container mt-4 mb-5">
       {/* Header Row */}
-      <div className="row mb-2">
-        <div className="col-12">
+      <Row className="mb-2">
+        <Col size={12}>
           <Card bodyClass="text-start">
             <p className="gradientHeading mb-0">
               <b>
                 {greeting}, {name}!
               </b>
             </p>
-            <p className="gradientHeadingSmall">Welcome to HiOS!</p>
+            <p className="gradientHeadingSmall">{message}</p>
           </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
       {/* Main Grid */}
-      <div className="row g-2">
+      <Row className="g-2">
         {/* Left Column */}
-        <div className="col-12 col-md-6">
+        <Col size={12} md={6}>
           <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />
 
           <Card title="Your rewards, at a glance" className="mt-2">
-            <div className="row g-2">
-              <div className="col-6">
+            <Row className="g-1">
+              <Col size={6}>
                 <ProgressWidget
                   icon="local_cafe"
                   title="HiCafe™ Rewards"
                   current={4}
                   max={10}
                   subtitle="6 away from a free coffee"
+                  className="joinLeft"
                 />
-              </div>
-              <div className="col-6">
+              </Col>
+              <Col size={6}>
                 <ProgressWidget
                   icon="hotel"
                   title="weB&B Stays"
                   current={6}
                   max={20}
                   subtitle="14 away from a free night"
+                  className="joinRight"
                 />
-              </div>
-            </div>
+              </Col>
+            </Row>
           </Card>
-        </div>
+        </Col>
 
         {/* Right Column */}
-        <div className="col-12 col-md-6">
+        <Col size={12} md={6}>
           <Card title="Weather">
-            <div className="row g-2">
-              <div className="col-12">
+            <Row className="g-2">
+              <Col size={12}>
                 <WeatherWidget />
-              </div>
-            </div>
+              </Col>
+            </Row>
           </Card>
 
           <Card title="Calendar" className="mt-2">
-            <div className="row g-2">
-              <div className="col-12">
+            <Row className="g-2">
+              <Col size={12}>
                 <DateWidget />
-              </div>
-            </div>
+              </Col>
+            </Row>
           </Card>
-
-          <Card className="mt-2">
-            <h2 className="card-title">Welcome to the new HiOS!</h2>
-            <p>
-              This version was built completely from scratch with ReactJS, and a
-              brand new custom UI, featuring the all-new HiMaterial 7.1, with
-              some beautiful new backgrounds to go with it!
-            </p>
-            <p className="mt-2">
-              This version is still in beta, so we'd apprechiate if you'd pass
-              us on some feedback! Ensure to include 'HiOSNext' in the
-              submission somewhere.
-            </p>
-            <MenuActionBtn
-              text="Send Feedback"
-              icon="feedback"
-              className="full"
-              onClick={() => navigate("/help/feedback")}
-            />
-          </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </main>
   );
 }

@@ -6,9 +6,11 @@ import { AuthProvider, useAuth } from "./AuthContext"; // Adjust path if necessa
 // Layouts
 import Layout from "../components/Layout.jsx";
 import TopBarWrapper from "../components/TopBarWrapper.jsx";
-import Card from "../components/Card.jsx";
-import RippleButton from "../components/RippleButton.jsx";
-import MenuActionBtn from "../components/MenuActionBtn.jsx";
+import {
+  Card,
+  RippleButton,
+  MenuActionBtn,
+} from "../components/HiMaterial.jsx";
 
 // Auth Pages
 import Gateway from "./pages/Gateway"; // Adjust path if necessary
@@ -38,7 +40,6 @@ import Help from "./pages/HelpCenter";
 import Tutorial from "./pages/help/Tutorial";
 import RestaurantHelp from "./pages/help/Restaurant.jsx";
 import HotelHelp from "./pages/help/Hotel.jsx";
-import RoomkeyHelp from "./pages/help/Roomkey.jsx";
 import AppFeedback from "./pages/help/AppFeedback.jsx";
 
 import FullscreenViewer from "./pages/FullscreenViewer";
@@ -201,14 +202,6 @@ function AppRoutes() {
         element={
           <TopBarWrapper title="Hotel">
             <HotelHelp />
-          </TopBarWrapper>
-        }
-      />
-      <Route
-        path="/help/roomkey"
-        element={
-          <TopBarWrapper title="Room Key">
-            <RoomkeyHelp />
           </TopBarWrapper>
         }
       />

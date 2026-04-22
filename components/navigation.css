@@ -39,6 +39,10 @@
 /* =========================================
    DESKTOP TOP NAV (Side Rail)
    ========================================= */
+/* =========================================
+      DESKTOP TOP NAV (Side Rail)
+      ========================================= */
+
 .side-rail {
     position: fixed;
     top: calc(4px + var(--statusbar-pad));
@@ -56,16 +60,83 @@
     align-items: center;
     justify-content: center;
 
-    /* Glass Effect matching style.css */
+    /* Glass Effect */
     background-color: var(--glass-tint);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     border-radius: 90px;
-
-    /* Crucial for keeping the sheen contained */
     isolation: isolate;
+}
+
+/* Glass sheen layer */
+.side-rail::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+.side-rail ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 4px; /* Small gap to see the distinct corners */
+}
+
+.side-rail ul li {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+/* Side Rail Link Styling - CONSOLIDATED */
+.side-rail ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    width: 100%;
+    color: var(--onPrimaryContainer);
+    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 2;
+    transition: all 0.3s ease;
+
+    /* Default: Sharp inner corners for middle items */
+    border-radius: 4px;
+}
+
+/* Specific End-Cap Rounding */
+.side-rail ul li:first-child a {
+    border-radius: 60px 15px 15px 60px;
+}
+
+.side-rail ul li:last-child a {
+    border-radius: 15px 60px 60px 15px;
+}
+
+/* States */
+.side-rail ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary);
+}
+
+.side-rail ul li a.active {
+    background-color: var(--primary);
+    color: var(--onPrimary);
+    font-weight: bold;
 }
 
 /* The glass sheen layer */
@@ -88,7 +159,6 @@
     display: flex;
     align-items: center;
     width: 100%; /* Ensures the list spans the entire container */
-    gap: 8px; /* Reduced from 2.5rem so the buttons can expand to touch each other */
 }
 
 .side-rail ul li {
@@ -102,14 +172,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     padding: 0px 16px;
     width: 100%; /* Forces the hover area to stretch to the edges of the fraction */
     /* The max-width rule has been removed so it can expand indefinitely */
     color: var(--onPrimaryContainer);
     text-decoration: none;
     font-weight: 500;
-    border-radius: 90px;
     transition:
         color 0.3s ease,
         background-color 0.3s ease;

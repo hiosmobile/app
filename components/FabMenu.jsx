@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MenuActionBtn from "./MenuActionBtn";
+import { MenuActionBtn } from "./HiMaterial";
 
 export default function FabMenu() {
   const [isOpen, setIsOpen] = useState(false);

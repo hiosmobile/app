@@ -9,8 +9,9 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AuthContext = createContext();
 
@@ -22,8 +23,16 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize Google Provider
+  const googleProvider = new GoogleAuthProvider();
+
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  // New Google Login Function
+  function loginWithGoogle() {
+    return signInWithPopup(auth, googleProvider);
   }
 
   async function signup(email, password, name) {
@@ -32,7 +41,6 @@ export function AuthProvider({ children }) {
       email,
       password,
     );
-    // Immediately attach the user's name to their new account
     await updateProfile(userCredential.user, {
       displayName: name,
     });
@@ -65,6 +73,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     login,
+    loginWithGoogle,
     signup,
     logout,
     changePassword,

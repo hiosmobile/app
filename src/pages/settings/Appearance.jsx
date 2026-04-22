@@ -1,12 +1,16 @@
 import React, { useContext } from "react";
-import PageHeader from "../../../components/PageHeader";
-import InfoBubble from "../../../components/InfoBubble";
-import Card from "../../../components/Card";
-import Switch from "../../../components/Switch";
-import Dropdown from "../../../components/Dropdown";
+import {
+  PageHeader,
+  InfoBubble,
+  Card,
+  Switch,
+  Dropdown,
+  MenuActionBtn,
+  Row,
+  Col,
+} from "../../../components/HiMaterial";
 import { ThemeContext } from "../../../components/ThemeContext";
 import { openExternalLink } from "../../utils/externalLink";
-import MenuActionBtn from "../../../components/MenuActionBtn";
 
 //code lines went from 320 to ~200 after cleanup
 
@@ -64,15 +68,15 @@ export default function Appearance() {
 
   return (
     <main className="container mt-4 mb-5">
-      <div className="row mb-2">
-        <div className="col-12">
+      <Row className="mb-2">
+        <Col size={12}>
           <PageHeader
             icon="palette"
             title="Appearance"
             subtitle="Customise the look and feel of HiOS to your taste below."
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
 
       <div className="row g-2">
         {/* Left Column */}
@@ -83,10 +87,12 @@ export default function Appearance() {
                 label="Wallpaper"
                 checked={backgroundEnabled}
                 onChange={handleBackgroundToggle}
+                className="joinTop"
               />
               <InfoBubble
                 icon="wallpaper"
                 title="Turn on or off the background image"
+                className="joinBottom"
               >
                 For the sake of accessibility, or just your personal preference.
               </InfoBubble>
@@ -99,10 +105,12 @@ export default function Appearance() {
                 onChange={setWallpaperTheme}
                 options={wallpaperOptions}
                 disabled={!backgroundEnabled}
+                className="joinTop"
               />
               <InfoBubble
                 icon="photo_prints"
                 title="Pick a background. Our backgrounds are stunning."
+                className="joinBottom"
               >
                 All our background photos were taken by us. We took the light
                 mode photos, and Google Gemini generated dark mode versions of
@@ -117,8 +125,13 @@ export default function Appearance() {
                 onChange={setDarkModePref}
                 options={darkModeOptions}
                 disabled={!backgroundEnabled}
+                className="joinTop"
               />
-              <InfoBubble icon="palette" title="Pick a colour of wallpaper.">
+              <InfoBubble
+                icon="palette"
+                title="Pick a colour of wallpaper."
+                className="joinBottom"
+              >
                 We have a colour of wallpaper for day or night. And you get the
                 choice. Have us change the mode automatically with your device's
                 dark mode settings, or manually set it yourself. Fully up to
@@ -137,10 +150,12 @@ export default function Appearance() {
                 checked={effectiveAuto}
                 onChange={setAutoColor}
                 disabled={!backgroundEnabled}
+                className="joinTop"
               />
               <InfoBubble
                 icon="colors"
                 title="Turn on or off the dynamic wallpaper colours."
+                className="joinBottom"
               >
                 This allows you to use a basic default colour scheme, and
                 disable the colours which match the wallpapers.
@@ -154,8 +169,13 @@ export default function Appearance() {
                 onChange={setGenericColor}
                 options={genericColourOptions}
                 disabled={effectiveAuto}
+                className="joinTop"
               />
-              <InfoBubble icon="colorize" title="Pick a basic colour.">
+              <InfoBubble
+                icon="colorize"
+                title="Pick a basic colour."
+                className="joinBottom"
+              >
                 To pick a basic colour, please disable dynamic wallpaper colours
                 to enjoy our very boring basic-ahh colours.
               </InfoBubble>
@@ -168,8 +188,13 @@ export default function Appearance() {
                 checked={acrylicEnabled}
                 onChange={setAcrylicEnabled}
                 disabled={!backgroundEnabled}
+                className="joinTop"
               />
-              <InfoBubble icon="colorize" title="Turn on or off ZenGlass.">
+              <InfoBubble
+                icon="colorize"
+                title="Turn on or off ZenGlass."
+                className="joinBottom"
+              >
                 ZenGlass is the beautiful glass effect used throughout HiOS.
                 It's our spiritual tribute to beautiful UI designs the '00s, and
                 stands out amoungst the rather dull and plain designs used in

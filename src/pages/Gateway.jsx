@@ -62,11 +62,13 @@ export default function Gateway() {
             <MenuActionBtn
               icon="login"
               text="Log-in"
+              className="joinTop"
               onClick={() => navigate("/login")}
             />
             <InfoBubble
               icon="waving_hand"
               title="Hello, nice to see you again!"
+              className="joinBottom"
             >
               Welcome back! We're glad to have you here!
             </InfoBubble>
@@ -76,11 +78,13 @@ export default function Gateway() {
             <MenuActionBtn
               icon="person_add"
               text="Sign-up"
+              className="joinTop"
               onClick={() => navigate("/signup")}
             />
             <InfoBubble
               icon="shield_with_heart"
               title="Your details are safe with us."
+              className="joinBottom"
             >
               Your HiAccount details are kept encrypted, so not even we can see
               it. Now that's how privacy and security should be.
@@ -90,7 +94,11 @@ export default function Gateway() {
 
         <Col size={12} md={6}>
           <Card title="What can HiOS do?">
-            <InfoBubble icon="dashboard" title="Your dashboard.">
+            <InfoBubble
+              icon="dashboard"
+              title="Your dashboard."
+              className="joinTop"
+            >
               HiOS has a beautiful dashboard for you to see all your HiCafe™
               info at a glance.
             </InfoBubble>
@@ -98,13 +106,17 @@ export default function Gateway() {
             <InfoBubble
               icon="restaurant"
               title="Your HiCafe™, your way."
-              className="mt-2"
+              className="joinMiddle"
             >
               Browse menus, order ahead, and book tables at The Highland Cafe™
               and CafeFiesta™.
             </InfoBubble>
 
-            <InfoBubble icon="hotel" title="Your weB&B stays" className="mt-2">
+            <InfoBubble
+              icon="hotel"
+              title="Your weB&B stays"
+              className="joinMiddle"
+            >
               Manage your hotel reservations, check in digitally, and access
               your mobile room key.
             </InfoBubble>
@@ -112,7 +124,7 @@ export default function Gateway() {
             <InfoBubble
               icon="award_star"
               title="Rewards with HiRewards™"
-              className="mt-2"
+              className="joinBottom"
             >
               Earn points on every purchase and unlock exclusive discounts
               across all our locations.

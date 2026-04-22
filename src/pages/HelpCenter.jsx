@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import MenuActionBtn from "../../components/MenuActionBtn";
+import { Card, MenuActionBtn } from "../../components/HiMaterial";
 
 export default function HelpCenter() {
   const navigate = useNavigate();

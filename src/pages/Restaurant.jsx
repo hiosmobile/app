@@ -34,7 +34,10 @@ export default function Restaurant() {
               className="joinTop"
               onClick={() => navigate("/restaurant/hicafe")}
             />
-            <InfoBubble title="Your new go-to restaurant.">
+            <InfoBubble
+              className="joinBottom"
+              title="Your new go-to restaurant."
+            >
               Experience the best meal of your life at The Highland Cafe™. What
               are you waiting for? Book a table now!
             </InfoBubble>
@@ -47,7 +50,10 @@ export default function Restaurant() {
               className="joinTop"
               onClick={() => navigate("/restaurant/cafefiesta")}
             />
-            <InfoBubble title="The best coffee in the world.">
+            <InfoBubble
+              className="joinBottom"
+              title="The best coffee in the world."
+            >
               You've never properly tried coffee unless you've been to
               CafeFiesta™. Go on, see for yourself! Order now!
             </InfoBubble>
@@ -63,7 +69,10 @@ export default function Restaurant() {
               className="joinTop"
               onClick={() => navigate("/restaurant/breakfast")}
             />
-            <InfoBubble title="Check-in when you're ready for breakfast.">
+            <InfoBubble
+              className="joinBottom"
+              title="Check-in when you're ready for breakfast."
+            >
               If you're staying with us at weB&B, click above once you're hungry
               for breakfast.
             </InfoBubble>
@@ -73,10 +82,13 @@ export default function Restaurant() {
             <MenuActionBtn
               icon="pin_drop"
               text="Locations"
-              className="joinBottom"
+              className="joinTop"
               onClick={() => navigate("/restaurant/locations")}
             />
-            <InfoBubble title="Find out where you can visit us.">
+            <InfoBubble
+              className="joinBottom"
+              title="Find out where you can visit us."
+            >
               Take a look on the page above to see where you can visit our
               restaurants or hotels.
             </InfoBubble>

@@ -800,19 +800,25 @@ main.container {
 
 /* Stacked section containers */
 .joinTop {
-    border-radius: var(--radius-card) var(--radius-card) var(--radius-inner)
-        var(--radius-inner) !important;
+    border-radius: var(--radius-card) var(--radius-card) 6px 6px !important;
     margin-bottom: 3px !important;
 }
 
 .joinMiddle {
-    border-radius: var(--radius-inner) !important;
+    border-radius: 6px !important;
     margin-bottom: 3px !important;
 }
 
 .joinBottom {
-    border-radius: var(--radius-inner) var(--radius-inner) var(--radius-card)
-        var(--radius-card) !important;
+    border-radius: 6px 6px var(--radius-card) var(--radius-card) !important;
+}
+
+.joinLeft {
+    border-radius: var(--radius-card) 6px 6px var(--radius-card) !important;
+}
+
+.joinRight {
+    border-radius: 6px var(--radius-card) var(--radius-card) 6px !important;
 }
 
 .full {
@@ -835,8 +841,6 @@ main.container {
     font-weight: bold;
     transition: 0.5s;
     float: inline-block;
-
-    border-radius: 600px !important;
 }
 
 /* Glass Cards */
@@ -846,7 +850,7 @@ main.container {
     background: var(--primaryContainer);
     color: var(--onPrimaryContainer);
     border: none;
-    border-radius: var(--radius-card) !important;
+    border-radius: var(--radius-card);
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     z-index: 1;
@@ -1361,18 +1365,29 @@ menu-iframe {
     right: 10px;
 }
 
-.form-control {
-    font-size: 25px !important;
-    border-radius: 40px !important;
-    background-color: var(--secondaryContainer);
+.form-control,
+.loginInput {
+    font-size: 20px !important; /* Slightly smaller for better fit */
+    padding: 12px 18px;
+    background-color: color-mix(
+        in srgb,
+        var(--secondaryContainer) 30%,
+        transparent
+    ) !important;
     color: var(--onSecondaryContainer) !important;
-    padding: 15px;
     border: 1px solid var(--outline) !important;
-    user-select: true;
+    width: 100%;
+    outline: none;
+    transition: all 0.2s ease;
 }
 
-.form-control::placeholder {
-    color: var(--onPrimaryContainer);
+.form-control::placeholder,
+.loginInput::placeholder {
+    color: color-mix(
+        in srgb,
+        var(--onPrimaryContainer) 40%,
+        transparent
+    ) !important;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2080,9 +2095,7 @@ img[src$="scrolltop.bmp"] {
 
 .infoBubble {
     padding: 15px;
-    margin-top: 3px;
     margin-bottom: 8px;
-    border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
         var(--tertiaryContainer) 70%,
@@ -2094,20 +2107,20 @@ img[src$="scrolltop.bmp"] {
 
 .switchContainer {
     padding-right: 20px;
-    border: 0.5px solid var(--outline);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--tertiaryContainer) 65%,
+        var(--secondaryContainer) 70%,
         transparent
-    );
+    ) !important;
 }
 
 /* Refined Selector Styling */
 .form-select {
     padding-left: 15px !important;
     border: 0.5px solid var(--outline) !important;
-    border-radius: var(--radius-card) !important;
+    border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
         var(--secondaryContainer) 70%,
@@ -2137,7 +2150,6 @@ img[src$="scrolltop.bmp"] {
 .settings-group {
     display: flex;
     flex-direction: column;
-    gap: 2px;
 }
 
 .form-check-label {
@@ -2258,4 +2270,112 @@ body.high-contrast .blue-h3 {
     color: var(--primary) !important;
     background: none !important;
     -webkit-text-fill-color: var(--primary) !important;
+}
+
+/* --- GOOGLE AUTH BUTTON --- */
+.gsi-material-button {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-appearance: none;
+    background-color: var(--tertiaryContainer);
+    background-image: none;
+    border: 1px solid #747775;
+    border-radius: 999px; /* Matches your UI */
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: var(--onTertiaryContainer);
+    cursor: pointer;
+    font-family: var(--fontPrimary); /* Matches your UI */
+    font-size: 20px;
+    height: 60px; /* Matches your UI */
+    letter-spacing: 0.25px;
+    outline: none;
+    overflow: hidden;
+    padding: 0 20px;
+    position: relative;
+    text-align: center;
+    -webkit-transition:
+        background-color 0.218s,
+        border-color 0.218s,
+        box-shadow 0.218s;
+    transition:
+        background-color 0.218s,
+        border-color 0.218s,
+        box-shadow 0.218s;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 100%; /* Matches your UI */
+    max-width: 100%;
+    min-width: min-content;
+}
+
+.gsi-material-button .gsi-material-button-icon {
+    height: 24px;
+    margin-right: 14px;
+    min-width: 24px;
+    width: 24px;
+}
+
+.gsi-material-button .gsi-material-button-content-wrapper {
+    -webkit-align-items: center;
+    align-items: center;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    height: 100%;
+    justify-content: center; /* Centers the whole block */
+    position: relative;
+    width: 100%;
+}
+
+.gsi-material-button .gsi-material-button-contents {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+}
+
+.gsi-material-button .gsi-material-button-state {
+    -webkit-transition: opacity 0.218s;
+    transition: opacity 0.218s;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.gsi-material-button:disabled {
+    cursor: default;
+    background-color: #ffffff61;
+    border-color: #1f1f1f1f;
+}
+
+.gsi-material-button:disabled .gsi-material-button-contents,
+.gsi-material-button:disabled .gsi-material-button-icon {
+    opacity: 38%;
+}
+
+.gsi-material-button:not(:disabled):active .gsi-material-button-state,
+.gsi-material-button:not(:disabled):focus .gsi-material-button-state {
+    background-color: #303030;
+    opacity: 12%;
+}
+
+.gsi-material-button:not(:disabled):hover {
+    -webkit-box-shadow:
+        0 1px 2px 0 rgba(60, 64, 67, 0.3),
+        0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    box-shadow:
+        0 1px 2px 0 rgba(60, 64, 67, 0.3),
+        0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.gsi-material-button:not(:disabled):hover .gsi-material-button-state {
+    background-color: #303030;
+    opacity: 8%;
 }

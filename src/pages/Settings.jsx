@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PageHeader from "../../components/PageHeader";
-import Card from "../../components/Card";
-import MenuActionBtn from "../../components/MenuActionBtn";
-import RippleButton from "../../components/RippleButton";
+import {
+  PageHeader,
+  Card,
+  MenuActionBtn,
+  RippleButton,
+  Row,
+  Col,
+} from "../../components/HiMaterial";
 import { useAuth } from "../AuthContext";
 import {
   EmailAuthProvider,
@@ -120,19 +124,19 @@ export default function Settings() {
     <>
       <main className="container mt-4 mb-5">
         {/* Header Greeting Row */}
-        <div className="row mb-2">
-          <div className="col-12">
+        <Row className="mb-2">
+          <Col size={12}>
             <PageHeader
               icon="settings"
               title="Settings"
               subtitle="Choose a settings category from below."
             />
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="row g-2">
+        <Row className="g-2">
           {/* Left Column: Account Profile */}
-          <div className="col-12 col-md-6">
+          <Col size={12} md={6}>
             <Card bodyClass="text-center py-4">
               <div
                 style={{
@@ -187,10 +191,10 @@ export default function Settings() {
                 />
               </div>
             </Card>
-          </div>
+          </Col>
 
           {/* Right Column: Settings Categories */}
-          <div className="col-12 col-md-6">
+          <Col size={12} md={6}>
             <Card title="Customisation">
               <MenuActionBtn
                 icon="palette"
@@ -235,8 +239,8 @@ export default function Settings() {
                 onClick={() => navigate("/settings/privacy")}
               />
             </Card>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </main>
 
       {/* Dynamic Modal Overlay */}

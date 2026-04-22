@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../../../components/Card";
+import { Card } from "../../../components/HiMaterial";
 import tutorialGif from "../../assets/media/tutorial.gif";
 
 export default function TutorialHelp() {

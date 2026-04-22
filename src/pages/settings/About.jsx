@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
-import PageHeader from "../../../components/PageHeader";
-import Card from "../../../components/Card";
+import { PageHeader, Card } from "../../../components/HiMaterial";
 import logoNew from "../../assets/pics/logos/logo_hiosunified3.png";
 import pkg from "../../../package.json";
 
@@ -44,7 +43,7 @@ export default function About() {
               className="img-fluid roundedImage"
               alt="New Logo"
             />
-            <div className="text-start card mt-4 translucentAboutBox">
+            <div className="text-start mt-4 translucentAboutBox">
               <div className="card-body">
                 <h2>HiOS by The Highland Cafe™</h2>
                 <h5 className="card-title mt-4">Version</h5>

@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../../../components/Card";
+import { Card } from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
 
 export default function PrivacyPolicy() {

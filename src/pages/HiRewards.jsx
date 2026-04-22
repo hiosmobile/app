@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import RippleButton from "../../components/RippleButton";
+import {
+  Card,
+  RippleButton,
+  PageHeader,
+  Row,
+  Col,
+} from "../../components/HiMaterial";
+
 import RewardsCodeWidget from "../../components/RewardsCodeWidget";
 import frameImg from "../assets/media/frame.png";
 import { useAuth } from "../AuthContext";
@@ -16,7 +22,6 @@ export default function Rewards() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  // Extract first name and generate a membership code from UID
   const firstName = currentUser?.displayName?.split(" ")[0] || "Member";
   const membershipCode = currentUser?.uid
     ? currentUser.uid.slice(0, 10).toUpperCase()
@@ -127,7 +132,9 @@ export default function Rewards() {
     const formattedDate = offer.postedDate
       ? offer.postedDate.toLocaleDateString("en-GB")
       : "";
-    const cardClass = `mt-2 ${isLast ? "joinBottom" : ""}`;
+
+    // Join Middle for everything except the last item, which caps the list
+    const cardClass = isLast ? "joinBottom" : "joinMiddle";
 
     return (
       <Card key={offer.id} className={cardClass} bodyClass="p-3 text-start">
@@ -167,7 +174,7 @@ export default function Rewards() {
               className="form-button m-0 px-4 py-2"
               onClick={() => handleRedeem(offer)}
             >
-              Redeem
+              Redem
             </RippleButton>
           </div>
         )}
@@ -177,131 +184,129 @@ export default function Rewards() {
 
   return (
     <main className="container mt-4 mb-5">
-      {/* Header Row - Matches Welcome Page Style */}
-      <div className="row mb-2">
-        <div className="col-12">
-          <Card bodyClass="text-start">
-            <h1 className="blue-h2">
-              <span className="titleIcon material-symbols-rounded">
-                award_star
-              </span>
-              HiRewards
-            </h1>
-            <p id="para" className="subtitle mb-0">
-              The more money you spend at our brands, the more money we make,
-              and eventually the more money you save. Time to dig deep in that
-              wallet of yours, {firstName}.
-            </p>
-          </Card>
-        </div>
-      </div>
+      <Row className="mb-2">
+        <Col size={12}>
+          <PageHeader
+            icon="award_star"
+            title="HiRewards"
+            subtitle={`The more money you spend at our brands, the more money we make,
+          and eventually the more money you save. Time to dig deep in that
+          wallet of yours, ${firstName}.`}
+          />
+        </Col>
+      </Row>
 
-      {/* Persistent Membership Card - Now Above the Tabs */}
-      <div className="mb-2">
-        <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />
-      </div>
+      <Row className="mb-2">
+        <Col size={12}>
+          <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />
+        </Col>
+      </Row>
 
-      {/* Local Navigation Bar (Tabs) */}
-      <Card className="mt-2 joinTop" bodyClass="p-2">
-        <div className="sub-nav-pills-header">
-          <button
-            className={`sub-header-tab ripple-button ${activeTab === "active" ? "active" : ""}`}
-            onClick={() => setActiveTab("active")}
-          >
-            Active Offers
-          </button>
-          <button
-            className={`sub-header-tab ripple-button ${activeTab === "expired" ? "active" : ""}`}
-            onClick={() => setActiveTab("expired")}
-          >
-            Expired Offers
-          </button>
-        </div>
-      </Card>
-
-      {/* Offers List */}
-      <div className="tab-content mt-2">
-        {isLoading ? (
-          <Card className="joinBottom text-center py-5">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
+      <Row className="g-2">
+        <Col size={12}>
+          {/* Header is now joinTop */}
+          <Card className="mt-2 joinTop" bodyClass="p-2">
+            <div className="sub-nav-pills-header">
+              <button
+                className={`sub-header-tab ripple-button ${activeTab === "active" ? "active" : ""}`}
+                onClick={() => setActiveTab("active")}
+              >
+                Active Offers
+              </button>
+              <button
+                className={`sub-header-tab ripple-button ${activeTab === "expired" ? "active" : ""}`}
+                onClick={() => setActiveTab("expired")}
+              >
+                Expired Offers
+              </button>
             </div>
           </Card>
-        ) : error ? (
-          <Card className="joinBottom text-center py-5">
-            <span
-              className="material-symbols-rounded"
-              style={{ fontSize: "48px" }}
-            >
-              cloud_off
-            </span>
-            <h2 className="card-title mt-3">Connection Error</h2>
-            <p className="card-text mx-4">{error}</p>
-            <RippleButton
-              className="form-button mx-auto mt-3"
-              onClick={fetchOffers}
-            >
-              Retry
-            </RippleButton>
-          </Card>
-        ) : (
-          <>
-            {activeTab === "active" && (
-              <div className="fade show active">
-                {activeOffers.length === 0 ? (
-                  <Card className="mt-2 joinBottom text-center py-5">
-                    <span
-                      className="material-symbols-rounded"
-                      style={{ fontSize: "48px" }}
-                    >
-                      local_offer
-                    </span>
-                    <h2 className="card-title mt-3">No active offers</h2>
-                    <p className="card-text">
-                      Check back later for new rewards!
-                    </p>
-                  </Card>
-                ) : (
-                  activeOffers.map((offer, index) =>
-                    renderOfferCard(
-                      offer,
-                      false,
-                      index === activeOffers.length - 1,
-                    ),
-                  )
-                )}
-              </div>
-            )}
 
-            {activeTab === "expired" && (
-              <div className="fade show active">
-                {expiredOffers.length === 0 ? (
-                  <Card className="joinBottom text-center py-5">
-                    <span
-                      className="material-symbols-rounded"
-                      style={{ fontSize: "48px" }}
-                    >
-                      local_offer
-                    </span>
-                    <h2 className="card-title mt-3">No expired offers</h2>
-                    <p className="card-text">
-                      You have no expired offers to display.
-                    </p>
-                  </Card>
-                ) : (
-                  expiredOffers.map((offer, index) =>
-                    renderOfferCard(
-                      offer,
-                      true,
-                      index === expiredOffers.length - 1,
-                    ),
-                  )
+          {/* Offers List */}
+          <div className="tab-content">
+            {isLoading ? (
+              <Card className="joinBottom text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </Card>
+            ) : error ? (
+              <Card className="joinBottom text-center py-5">
+                <span
+                  className="material-symbols-rounded"
+                  style={{ fontSize: "48px" }}
+                >
+                  cloud_off
+                </span>
+                <h2 className="card-title mt-3">Connection Error</h2>
+                <p className="card-text mx-4">{error}</p>
+                <RippleButton
+                  className="form-button mx-auto mt-3"
+                  onClick={fetchOffers}
+                >
+                  Retry
+                </RippleButton>
+              </Card>
+            ) : (
+              <>
+                {activeTab === "active" && (
+                  <div className="fade show active">
+                    {activeOffers.length === 0 ? (
+                      <Card className="joinBottom text-center py-5">
+                        <span
+                          className="material-symbols-rounded"
+                          style={{ fontSize: "48px" }}
+                        >
+                          local_offer
+                        </span>
+                        <h2 className="card-title mt-3">No active offers</h2>
+                        <p className="card-text">
+                          Check back later for new rewards!
+                        </p>
+                      </Card>
+                    ) : (
+                      activeOffers.map((offer, index) =>
+                        renderOfferCard(
+                          offer,
+                          false,
+                          index === activeOffers.length - 1,
+                        ),
+                      )
+                    )}
+                  </div>
                 )}
-              </div>
+
+                {activeTab === "expired" && (
+                  <div className="fade show active">
+                    {expiredOffers.length === 0 ? (
+                      <Card className="joinBottom text-center py-5">
+                        <span
+                          className="material-symbols-rounded"
+                          style={{ fontSize: "48px" }}
+                        >
+                          local_offer
+                        </span>
+                        <h2 className="card-title mt-3">No expired offers</h2>
+                        <p className="card-text">
+                          You have no expired offers to display.
+                        </p>
+                      </Card>
+                    ) : (
+                      expiredOffers.map((offer, index) =>
+                        renderOfferCard(
+                          offer,
+                          true,
+                          index === expiredOffers.length - 1,
+                        ),
+                      )
+                    )}
+                  </div>
+                )}
+              </>
             )}
-          </>
-        )}
-      </div>
+          </div>
+        </Col>
+      </Row>
     </main>
   );
 }

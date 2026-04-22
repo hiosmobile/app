@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import RippleButton from "../../components/RippleButton";
-import Back from "../../components/Back";
+import {
+  Card,
+  RippleButton,
+  Back,
+  PageHeader,
+  Row,
+  Col,
+  TextInput,
+  InfoBubble,
+} from "../../components/HiMaterial";
 import { useAuth } from "../AuthContext";
 
 export default function ForgotPassword() {
@@ -34,72 +41,86 @@ export default function ForgotPassword() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Back backPath="/login" />
-      <Card className="joinBottom" bodyClass="text-start">
-        <div className="top-container">
-          <h1 className="blue-h2">
-            <span className="titleIcon material-symbols-rounded">
-              lock_reset
-            </span>
-            Reset Password
-          </h1>
-          <p className="subtitle mb-0">
-            Enter your email and we'll send you a recovery link.
-          </p>
-        </div>
-      </Card>
-
-      <Card className="mt-2 joinTop">
-        {message && (
-          <div
-            className="infoBubble text-start"
-            style={{
-              backgroundColor: "var(--primaryContainer)",
-              color: "var(--onPrimaryContainer)",
-            }}
-          >
-            {message}
-          </div>
-        )}
-
-        {error && (
-          <div
-            className="infoBubble text-start"
-            style={{
-              backgroundColor: "var(--errorContainer)",
-              color: "var(--onErrorContainer)",
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        <form
-          onSubmit={handleReset}
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <input
-            type="email"
-            className="form-control mb-4"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: "100%", border: "none", outline: "none" }}
+      <Row className="mb-2">
+        <Col size={12}>
+          <Back backPath="/login" />
+          <PageHeader
+            icon="lock_reset"
+            title="Reset your password"
+            subtitle="Enter your email address and we'll send you a recovery link if the
+            account exists."
+            className="joinBottom"
           />
+        </Col>
+      </Row>
 
-          <RippleButton
-            className="button roundedImage full"
-            type="submit"
-            disabled={isLoading}
-          >
-            <span className="material-symbols-rounded">send</span>
-            <span className="button-text">
-              {isLoading ? "Sending..." : "Send Reset Link"}
-            </span>
-          </RippleButton>
-        </form>
-      </Card>
+      <Row className="g-2">
+        <Col size={12} md={6}>
+          <Card>
+            {message && (
+              <div
+                className="infoBubble text-start"
+                style={{
+                  backgroundColor: "var(--primaryContainer)",
+                  color: "var(--onPrimaryContainer)",
+                }}
+              >
+                {message}
+              </div>
+            )}
+
+            {error && (
+              <div
+                className="infoBubble text-start"
+                style={{
+                  backgroundColor: "var(--errorContainer)",
+                  color: "var(--onErrorContainer)",
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            <form
+              onSubmit={handleReset}
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+              <TextInput
+                type="email"
+                className="joinTop"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+
+              <RippleButton
+                className="button roundedImage joinBottom"
+                type="submit"
+                disabled={isLoading}
+              >
+                <span className="material-symbols-rounded">send</span>
+                <span className="button-text">
+                  {isLoading ? "Sending..." : "Send Reset Link"}
+                </span>
+              </RippleButton>
+            </form>
+          </Card>
+        </Col>
+
+        <Col size={12} md={6}>
+          <Card>
+            <InfoBubble
+              icon="digital_wellbeing"
+              title="We've got your back."
+              className="full"
+            >
+              We'll help you get your account back, and you'll be up and running
+              again in no time.
+            </InfoBubble>
+          </Card>
+        </Col>
+      </Row>
     </main>
   );
 }

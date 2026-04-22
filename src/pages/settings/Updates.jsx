@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
-import PageHeader from "../../../components/PageHeader";
-import Card from "../../../components/Card";
-import MenuActionBtn from "../../../components/MenuActionBtn";
+import {
+  PageHeader,
+  Card,
+  MenuActionBtn,
+  Row,
+  Col,
+} from "../../../components/HiMaterial";
 import { openExternalLink } from "../../utils/externalLink";
 
 export default function Updates() {

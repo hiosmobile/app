@@ -1,8 +1,12 @@
 import React, { useContext } from "react";
-import PageHeader from "../../../components/PageHeader";
-import InfoBubble from "../../../components/InfoBubble";
-import Card from "../../../components/Card";
-import Switch from "../../../components/Switch";
+import {
+  PageHeader,
+  InfoBubble,
+  Card,
+  Switch,
+  Row,
+  Col,
+} from "../../../components/HiMaterial";
 import { ThemeContext } from "../../../components/ThemeContext";
 
 export default function Accessibility() {
@@ -39,47 +43,52 @@ export default function Accessibility() {
 
   return (
     <main className="container mt-4 mb-5">
-      <div className="row mb-2">
-        <div className="col-12">
+      <Row className="mb-2">
+        <Col size={12}>
           <PageHeader
             icon="accessibility_new"
             title="Accessibility"
             subtitle="Adjust the ease of access of HiOS below."
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="row g-2">
+      <Row className="g-2">
         {/* Left column */}
-        <div className="col-12 col-md-6">
+        <Col size={12} md={6}>
           <Card title="Vision">
             <Switch
               label="High-contrast UI"
               checked={highContrastEnabled}
               onChange={handleHighContrastToggle}
+              className="joinTop"
             />
             <InfoBubble
               icon="contrast"
               title="Increase legibility across HiOS."
+              className="joinBottom"
             >
               This overrides theme colours with high-contrast alternatives and
               disables materials like ZenGlass.
             </InfoBubble>
           </Card>
-        </div>
+        </Col>
 
         {/* Right column */}
         <div className="col-12 col-md-6">
           <Card>
-            <h3>At nuggetdev, we like to cater to everyone.</h3>
-            <p>
-              Not everyone has perfect vision. That's why we like to add stuff
+            <InfoBubble
+              icon="accessible_forward"
+              title="At nuggetdev, we like to cater for everyone."
+              className="full"
+            >
+              Not everyone has top notch vision. That's why we like to add stuff
               like a high-contrast UI, so that as many people can use our apps
               as physically possible.
-            </p>
+            </InfoBubble>
           </Card>
         </div>
-      </div>
+      </Row>
     </main>
   );
 }

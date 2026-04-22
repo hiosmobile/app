@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../../components/Card";
-import Back from "../../../components/Back";
-import RippleButton from "../../../components/RippleButton";
+import {
+  Card,
+  Back,
+  RippleButton,
+  PageHeader,
+  Row,
+  Col,
+} from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
 
 export default function AppFeedback() {
