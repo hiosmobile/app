@@ -12,8 +12,6 @@ import {
 import { ThemeContext } from "../../../components/ThemeContext";
 import { openExternalLink } from "../../utils/externalLink";
 
-//code lines went from 320 to ~200 after cleanup
-
 export default function Appearance() {
   const {
     backgroundEnabled,
@@ -26,6 +24,8 @@ export default function Appearance() {
     setWallpaperTheme,
     genericColor,
     setGenericColor,
+    appThemeMode,
+    setAppThemeMode,
     darkModePref,
     setDarkModePref,
     syncEnabled,
@@ -55,10 +55,16 @@ export default function Appearance() {
     { value: "scotland", label: "Knockan Crag, Scotland" },
   ];
 
-  const darkModeOptions = [
-    { value: "auto", label: "Auto (Default)" },
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
+  const appThemeOptions = [
+    { value: "auto", label: "Auto (Match Device)" },
+    { value: "light", label: "Light Mode" },
+    { value: "dark", label: "Dark Mode" },
+  ];
+
+  const wallpaperModeOptions = [
+    { value: "auto", label: "Auto (Match App Theme)" },
+    { value: "light", label: "Daytime (Light)" },
+    { value: "dark", label: "Nighttime (Dark)" },
   ];
 
   const genericColourOptions = [
@@ -83,22 +89,23 @@ export default function Appearance() {
       <div className="row g-2">
         {/* Left Column */}
         <div className="col-12 col-md-6">
-          <Card title="Cloud sync">
+          <Card title="Global theme">
             <div className="settings-group">
-              <Switch
-                label="Sync with HiAccount"
-                checked={syncEnabled}
-                onChange={setSyncEnabled}
+              <Dropdown
+                value={appThemeMode}
+                onChange={setAppThemeMode}
+                options={appThemeOptions}
                 className="joinTop"
               />
               <InfoBubble
-                icon="cloud_sync"
-                title="Backup and sync."
+                icon="contrast"
+                title="Global App Theme"
                 className="joinBottom"
               >
-                Save your HiOS appearance preferences with your HiAccount so
-                they auto-apply on all your devices with HiOS installed. How
-                fancy is that?!
+                Force the entire app interface into Light Mode, Dark Mode, or
+                let it match your device automatically. Don't worry, we won't be
+                judgy if you use light mode -- we're not orthodontist
+                receptionists, we're app developers.
               </InfoBubble>
             </div>
           </Card>
@@ -140,24 +147,23 @@ export default function Appearance() {
               </InfoBubble>
             </div>
 
-            <h3 className="card-title mb-3 mt-4">Wallpaper colour</h3>
+            <h3 className="card-title mb-3 mt-4">Wallpaper Time of Day</h3>
             <div className="settings-group">
               <Dropdown
                 value={darkModePref}
                 onChange={setDarkModePref}
-                options={darkModeOptions}
+                options={wallpaperModeOptions}
                 disabled={!backgroundEnabled}
                 className="joinTop"
               />
               <InfoBubble
-                icon="palette"
+                icon="brightness_4"
                 title="Pick a colour of wallpaper."
                 className="joinBottom"
               >
                 We have a colour of wallpaper for day or night. And you get the
-                choice. Have us change the mode automatically with your device's
-                dark mode settings, or manually set it yourself. Fully up to
-                you.
+                choice. Have us change the mode automatically with your app
+                theme, or manually set it yourself. Fully up to you.
               </InfoBubble>
             </div>
           </Card>
@@ -165,7 +171,7 @@ export default function Appearance() {
 
         {/*Right column*/}
         <div className="col-12 col-md-6">
-          <Card title="Colour settings">
+          <Card title="Dynamic colour">
             <div className="settings-group">
               <Switch
                 label="Dynamic colour"
@@ -213,7 +219,7 @@ export default function Appearance() {
                 className="joinTop"
               />
               <InfoBubble
-                icon="colorize"
+                icon="blur_on"
                 title="Turn on or off ZenGlass."
                 className="joinBottom"
               >

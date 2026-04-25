@@ -24,9 +24,17 @@ export const ThemeProvider = ({ children }) => {
   const [genericColor, setGenericColor] = useState(
     localStorage.getItem("hiosGenericColor") || "default-light",
   );
+
+  // Global App Theme (UI)
+  const [appThemeMode, setAppThemeMode] = useState(
+    localStorage.getItem("hiosAppThemeMode") || "auto",
+  );
+
+  // Wallpaper Time of Day
   const [darkModePref, setDarkModePref] = useState(
     localStorage.getItem("hiosDarkModePreference") || "auto",
   );
+
   const [highContrastEnabled, setHighContrastEnabled] = useState(
     localStorage.getItem("hiosHighContrastEnabled") === "true",
   );
@@ -56,6 +64,8 @@ export const ThemeProvider = ({ children }) => {
               setWallpaperTheme(cloudTheme.wallpaperTheme);
             if (cloudTheme.genericColor !== undefined)
               setGenericColor(cloudTheme.genericColor);
+            if (cloudTheme.appThemeMode !== undefined)
+              setAppThemeMode(cloudTheme.appThemeMode);
             if (cloudTheme.darkModePref !== undefined)
               setDarkModePref(cloudTheme.darkModePref);
             if (cloudTheme.highContrastEnabled !== undefined)
@@ -92,17 +102,26 @@ export const ThemeProvider = ({ children }) => {
       document.body.classList.remove("acrylic-on");
     }
 
+    // Apply Global Light/Dark Mode override classes to the body
+    document.body.classList.remove("theme-dark", "theme-light");
+    if (appThemeMode === "dark") {
+      document.body.classList.add("theme-dark");
+    } else if (appThemeMode === "light") {
+      document.body.classList.add("theme-light");
+    }
+
     localStorage.setItem("hiosBackgroundEnabled", backgroundEnabled);
     localStorage.setItem("hiosAcrylicEnabled", acrylicEnabled);
     localStorage.setItem("hiosAutoColor", autoColor);
     localStorage.setItem("hiosWallpaperTheme", wallpaperTheme);
     localStorage.setItem("hiosGenericColor", genericColor);
     localStorage.setItem("hiosColorTheme", activeColorTheme);
+    localStorage.setItem("hiosAppThemeMode", appThemeMode);
     localStorage.setItem("hiosDarkModePreference", darkModePref);
     localStorage.setItem("hiosHighContrastEnabled", highContrastEnabled);
     localStorage.setItem("hiosSyncEnabled", syncEnabled);
 
-    //save to cloud (background sync)
+    // Save to cloud
     if (isCloudLoaded && currentUser && syncEnabled) {
       const userDoc = doc(db, "users", currentUser.uid);
       setDoc(
@@ -114,6 +133,7 @@ export const ThemeProvider = ({ children }) => {
             autoColor,
             wallpaperTheme,
             genericColor,
+            appThemeMode,
             darkModePref,
             highContrastEnabled,
           },
@@ -127,6 +147,7 @@ export const ThemeProvider = ({ children }) => {
     autoColor,
     wallpaperTheme,
     genericColor,
+    appThemeMode,
     darkModePref,
     activeColorTheme,
     highContrastEnabled,
@@ -137,11 +158,29 @@ export const ThemeProvider = ({ children }) => {
 
   const getWallpaperUrl = () => {
     const basePath = "assets/backgrounds/";
-    let isDark =
-      darkModePref === "dark" ||
-      (darkModePref === "auto" &&
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    let isDark = false;
+    const prefersDarkOS =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    // 1. Check Wallpaper Specific Setting
+    if (darkModePref === "dark") {
+      isDark = true;
+    } else if (darkModePref === "light") {
+      isDark = false;
+    } else {
+      // 2. If Wallpaper is 'Auto', check Global App Theme
+      if (appThemeMode === "dark") {
+        isDark = true;
+      } else if (appThemeMode === "light") {
+        isDark = false;
+      } else {
+        // 3. If Both are 'Auto', check OS Settings
+        isDark = prefersDarkOS;
+      }
+    }
+
     const themeName =
       wallpaperTheme === "default" ? "backgroundimage" : wallpaperTheme;
     return `url('${basePath}${themeName}${isDark ? "-dark.webp" : ".webp"}')`;
@@ -160,6 +199,8 @@ export const ThemeProvider = ({ children }) => {
         setWallpaperTheme,
         genericColor,
         setGenericColor,
+        appThemeMode,
+        setAppThemeMode,
         darkModePref,
         setDarkModePref,
         highContrastEnabled,

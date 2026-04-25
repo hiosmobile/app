@@ -39,22 +39,17 @@
 /* =========================================
    DESKTOP TOP NAV (Side Rail)
    ========================================= */
-/* =========================================
-      DESKTOP TOP NAV (Side Rail)
-      ========================================= */
 
 .side-rail {
     position: fixed;
-    top: calc(4px + var(--statusbar-pad));
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+    top: calc(12px + var(--statusbar-pad));
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1000;
-    height: auto;
-    min-height: 44px;
+    height: 60px;
     width: calc(100% - 32px);
     max-width: 1108px;
-    padding: 8px 10px;
+    padding: 6px 8px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -87,25 +82,27 @@
     margin: 0;
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: center; /* Changed from 'stretch' to 'center' */
     width: 100%;
-    gap: 4px; /* Small gap to see the distinct corners */
+    height: 100%;
+    gap: 4px;
 }
 
 .side-rail ul li {
     flex: 1;
     display: flex;
+    align-items: center;
     justify-content: center;
 }
 
-/* Side Rail Link Styling - CONSOLIDATED */
 .side-rail ul li a {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 16px;
+    padding: 8px 16px; /* Let the padding dictate the natural height */
     width: 100%;
+    /* REMOVED: height: 100% */
     color: var(--onPrimaryContainer);
     background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
     text-decoration: none;
@@ -113,8 +110,6 @@
     white-space: nowrap;
     z-index: 2;
     transition: all 0.3s ease;
-
-    /* Default: Sharp inner corners for middle items */
     border-radius: 4px;
 }
 
@@ -150,49 +145,6 @@
     opacity: 0.3;
     z-index: -1;
     border-radius: inherit;
-}
-
-.side-rail ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    width: 100%; /* Ensures the list spans the entire container */
-}
-
-.side-rail ul li {
-    flex: 1; /* Forces each item to take an equal fraction of the total width */
-    display: flex;
-    justify-content: center;
-}
-
-/* Side Rail Link Styling */
-.side-rail ul li a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 16px;
-    width: 100%; /* Forces the hover area to stretch to the edges of the fraction */
-    /* The max-width rule has been removed so it can expand indefinitely */
-    color: var(--onPrimaryContainer);
-    text-decoration: none;
-    font-weight: 500;
-    transition:
-        color 0.3s ease,
-        background-color 0.3s ease;
-    white-space: nowrap;
-    z-index: 2;
-}
-
-.side-rail a:hover {
-    color: var(--secondary);
-}
-
-.side-rail ul li a.active {
-    background-color: var(--primary);
-    color: var(--onPrimary);
-    font-weight: bold;
 }
 
 /* =========================================

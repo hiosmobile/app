@@ -10,7 +10,7 @@ import {
   Modal, // <-- Imported the new Modal component
 } from "../../components/HiMaterial";
 
-import RewardsCodeWidget from "../../components/RewardsCodeWidget";
+import { RewardsCodeWidget } from "../../components/Widgets";
 import frameImg from "../assets/media/frame.png";
 import { useAuth } from "../AuthContext";
 
