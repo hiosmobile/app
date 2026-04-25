@@ -145,7 +145,7 @@ export default function Settings() {
               email={currentUser?.email}
               className="joinTop"
             />
-            <Card className="joinBottom">
+            <Card className="joinMiddle">
               <div className="text-start mt-1">
                 <MenuActionBtn
                   icon="badge"
@@ -172,6 +172,14 @@ export default function Settings() {
                   onClick={() => setActiveModal("delete")}
                 />
               </div>
+            </Card>
+
+            <Card className="joinBottom" title="Sync your settings">
+              <MenuActionBtn
+                icon="cloud_sync"
+                text="Backup and sync"
+                onClick={() => navigate("/settings/sync")}
+              />
             </Card>
           </Col>
 

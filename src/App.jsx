@@ -36,6 +36,7 @@ import HotelActivities from "./pages/HotelActivities";
 import HiRewards from "./pages/HiRewards.jsx";
 
 import Settings from "./pages/Settings";
+import Sync from "./pages/settings/Sync.jsx";
 import Appearance from "./pages/settings/Appearance";
 import Accessibility from "./pages/settings/Accessibility";
 import Apps from "./pages/settings/Apps";
@@ -129,6 +130,14 @@ function AppRoutes() {
         element={
           <TopBarWrapper title="Settings">
             <Settings />
+          </TopBarWrapper>
+        }
+      />
+      <Route
+        path="/settings/sync"
+        element={
+          <TopBarWrapper title="Backup and sync">
+            <Sync />
           </TopBarWrapper>
         }
       />

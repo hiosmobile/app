@@ -1,6 +1,214 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, MenuActionBtn, RippleButton, Modal, Switch } from "./HiMaterial";
+import { useAuth } from "../src/AuthContext";
+import { db } from "../src/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
-export default function WeatherWidget() {
+// =========================================
+// QUICK ACTIONS WIDGET
+// =========================================
+const APP_PAGES = [
+  {
+    id: "restaurant",
+    label: "Restaurant",
+    icon: "restaurant",
+    path: "/restaurant",
+  },
+  {
+    id: "hicafe",
+    label: "HiCafe™",
+    icon: "local_cafe",
+    path: "/restaurant/hicafe",
+  },
+  {
+    id: "breakfast",
+    label: "Breakfast",
+    icon: "bakery_dining",
+    path: "/restaurant/breakfast",
+  },
+  {
+    id: "cafefiesta",
+    label: "Cafe Fiesta",
+    icon: "local_pizza",
+    path: "/restaurant/cafefiesta",
+  },
+  {
+    id: "locations",
+    label: "Locations",
+    icon: "location_on",
+    path: "/restaurant/locations",
+  },
+  {
+    id: "hotel",
+    label: "Hotel Activities",
+    icon: "pool",
+    path: "/hotelactivities",
+  },
+  { id: "rewards", label: "HiRewards", icon: "award_star", path: "/hirewards" },
+  { id: "settings", label: "Settings", icon: "settings", path: "/settings" },
+  { id: "help", label: "Help Center", icon: "help", path: "/help" },
+];
+
+const DEFAULT_QUICK_ACTIONS = ["hicafe", "hotel"];
+
+export function QuickActionsWidget({ isEditing }) {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeActions, setActiveActions] = useState(() => {
+    const cached = localStorage.getItem("hiosQuickActions");
+    return cached ? JSON.parse(cached) : DEFAULT_QUICK_ACTIONS;
+  });
+
+  useEffect(() => {
+    const fetchActions = async () => {
+      if (currentUser) {
+        try {
+          const docRef = doc(db, "users", currentUser.uid);
+          const snap = await getDoc(docRef);
+          if (snap.exists() && snap.data().quickActions) {
+            const cloudActions = snap.data().quickActions;
+            setActiveActions(cloudActions);
+            localStorage.setItem(
+              "hiosQuickActions",
+              JSON.stringify(cloudActions),
+            );
+          }
+        } catch (error) {
+          console.error("Failed to load quick actions:", error);
+        }
+      }
+    };
+    fetchActions();
+  }, [currentUser]);
+
+  const toggleAction = (id) => {
+    let newActions;
+    if (activeActions.includes(id)) {
+      newActions = activeActions.filter((a) => a !== id);
+    } else {
+      newActions = [...activeActions, id];
+    }
+
+    setActiveActions(newActions);
+    localStorage.setItem("hiosQuickActions", JSON.stringify(newActions));
+
+    if (currentUser) {
+      const docRef = doc(db, "users", currentUser.uid);
+      setDoc(docRef, { quickActions: newActions }, { merge: true });
+    }
+  };
+
+  const visiblePages = APP_PAGES.filter((page) =>
+    activeActions.includes(page.id),
+  );
+
+  return (
+    <>
+      <Card title="Quick Actions">
+        <div className="mt-3">
+          {visiblePages.length === 0 && !isEditing ? (
+            <p className="text-muted small mb-0">No shortcuts selected.</p>
+          ) : (
+            visiblePages.map((page, index) => {
+              const isFirst = index === 0;
+              const isLast = index === visiblePages.length - 1;
+              const joinClass =
+                isFirst && isLast
+                  ? "full"
+                  : isFirst
+                    ? "joinTop"
+                    : isLast
+                      ? "joinBottom"
+                      : "joinMiddle";
+
+              return (
+                <MenuActionBtn
+                  key={page.id}
+                  icon={page.icon}
+                  text={page.label}
+                  className={isEditing ? `${joinClass} opacity-50` : joinClass}
+                  onClick={() => !isEditing && navigate(page.path)}
+                />
+              );
+            })
+          )}
+
+          {isEditing && (
+            <RippleButton
+              className="button full mt-3 d-flex align-items-center justify-content-center"
+              style={{
+                border: "2px dashed var(--primary)",
+                backgroundColor: "transparent",
+                color: "var(--primary)",
+              }}
+              onClick={() => setIsModalOpen(true)}
+            >
+              <span className="material-symbols-rounded me-2">edit_square</span>
+              Customize Shortcuts
+            </RippleButton>
+          )}
+        </div>
+      </Card>
+
+      <Modal isOpen={isModalOpen} title="Select Shortcuts">
+        <p className="text-start mb-3">
+          Choose which pages appear in your Quick Actions widget.
+        </p>
+
+        <div
+          className="d-flex flex-column"
+          style={{
+            maxHeight: "300px",
+            overflowY: "auto",
+            borderRadius: "var(--radius-card)",
+            border: "1px solid var(--outline)",
+          }}
+        >
+          {APP_PAGES.map((page, index) => {
+            const isFirst = index === 0;
+            const isLast = index === APP_PAGES.length - 1;
+            const joinClass =
+              isFirst && isLast
+                ? "full"
+                : isFirst
+                  ? "joinTop"
+                  : isLast
+                    ? "joinBottom"
+                    : "joinMiddle";
+
+            return (
+              <Switch
+                key={page.id}
+                label={page.label}
+                checked={activeActions.includes(page.id)}
+                onChange={() => toggleAction(page.id)}
+                className={joinClass}
+              />
+            );
+          })}
+        </div>
+
+        <div className="mt-4">
+          <RippleButton
+            type="button"
+            className="form-button w-100 m-0"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Done
+          </RippleButton>
+        </div>
+      </Modal>
+    </>
+  );
+}
+
+// =========================================
+// WEATHER WIDGET
+// =========================================
+export function WeatherWidget() {
   const [weather, setWeather] = useState(null);
   const [locationName, setLocationName] = useState("Loading...");
   const [loading, setLoading] = useState(true);
@@ -79,7 +287,6 @@ export default function WeatherWidget() {
         ? `${nameParts[0]}, ${nameParts[nameParts.length - 1]}`
         : nameParts[0];
 
-    // Save to local storage
     localStorage.setItem(
       "hios_weather_pref",
       JSON.stringify({ lat, lon, name: shortName }),
@@ -108,20 +315,18 @@ export default function WeatherWidget() {
               data.address.village ||
               "Current Location";
 
-            // Save current location to local storage
             localStorage.setItem(
               "hios_weather_pref",
               JSON.stringify({ lat: latitude, lon: longitude, name: city }),
             );
 
             fetchWeather(latitude, longitude, city);
-            setIsEditing(false); // Close edit menu if opened
+            setIsEditing(false);
           } catch {
             fetchWeather(latitude, longitude, "Current Location");
           }
         },
         (err) => {
-          // Default fallback
           fetchWeather(51.5085, -0.1257, "London, United Kingdom");
         },
       );
@@ -138,13 +343,11 @@ export default function WeatherWidget() {
   };
 
   useEffect(() => {
-    // Check if a location was previously saved
     const savedLocation = localStorage.getItem("hios_weather_pref");
     if (savedLocation) {
       const { lat, lon, name } = JSON.parse(savedLocation);
       fetchWeather(lat, lon, name);
     } else {
-      // Only prompt for GPS if there's no saved location
       getUserLocation();
     }
   }, []);
@@ -350,5 +553,167 @@ export default function WeatherWidget() {
         </div>
       ) : null}
     </div>
+  );
+}
+
+// =========================================
+// DATE WIDGET
+// =========================================
+export function DateWidget() {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const today = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+  const resetToToday = () => setCurrentDate(new Date());
+
+  const blanks = Array(firstDayOfMonth).fill(null);
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const totalCells = [...blanks, ...days];
+
+  return (
+    <div
+      className="translucentAboutBox p-3 d-flex flex-column mt-2"
+      style={{ width: "100%", boxSizing: "border-box" }}
+    >
+      {/* Header Controls */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <button
+          onClick={prevMonth}
+          className="nav-icon-btn"
+          style={{ padding: "4px", color: "var(--onTertiaryContainer)" }}
+        >
+          <i className="material-symbols-rounded" style={{ fontSize: "24px" }}>
+            chevron_left
+          </i>
+        </button>
+
+        <button
+          onClick={resetToToday}
+          style={{
+            background: "none",
+            border: "none",
+            fontSize: "1.2rem",
+            fontWeight: "700",
+            color: "var(--onTertiaryContainer)",
+            cursor: "pointer",
+          }}
+        >
+          {monthNames[month]} {year}
+        </button>
+
+        <button
+          onClick={nextMonth}
+          className="nav-icon-btn"
+          style={{ padding: "4px", color: "var(--onTertiaryContainer)" }}
+        >
+          <i className="material-symbols-rounded" style={{ fontSize: "24px" }}>
+            chevron_right
+          </i>
+        </button>
+      </div>
+
+      {/* Days of the Week Row */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          gap: "4px",
+          marginBottom: "8px",
+          textAlign: "center",
+        }}
+      >
+        {dayNames.map((day) => (
+          <div
+            key={day}
+            style={{
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "var(--onTertiaryContainer)",
+              opacity: 0.7,
+            }}
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Calendar Grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          gap: "4px",
+        }}
+      >
+        {totalCells.map((day, index) => {
+          const isToday =
+            day === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear();
+
+          return (
+            <div
+              key={index}
+              className="d-flex justify-content-center align-items-center"
+              style={{
+                height: "36px",
+                borderRadius: "50%",
+                fontSize: "14px",
+                fontWeight: isToday ? "700" : "500",
+                backgroundColor: isToday ? "var(--primary)" : "transparent",
+                color: isToday
+                  ? "var(--onPrimary)"
+                  : "var(--onTertiaryContainer)",
+                opacity: day ? 1 : 0,
+              }}
+            >
+              {day}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// =========================================
+// RewardsCodeWidget
+// =========================================
+export function RewardsCodeWidget({ code, imageSrc }) {
+  return (
+    <Card title="Your rewards code">
+      <img
+        src={imageSrc}
+        alt="Rewards QR/Barcode"
+        className="img-fluid roundedImage"
+      />
+      <p className="mb-0">
+        <i>{code}</i>
+      </p>
+    </Card>
   );
 }
