@@ -50,6 +50,7 @@
 
 * {
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 /*HiOSCore Wallpapers -- Auto Wallpaper Colours*/
@@ -720,6 +721,7 @@ body {
     -moz-user-select: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
 }
 
 @media (min-width: 768px) {
@@ -972,10 +974,6 @@ main.container {
     margin-left: 10px;
 }
 
-.form-select {
-    font-size: 25px;
-}
-
 .nav-pills {
     display: flex;
     justify-content: space-around;
@@ -1223,32 +1221,6 @@ main.container {
     color: white;
 }
 
-.inputBox,
-.captchaBox {
-    border-radius: 4px;
-    background-color: var(--surface);
-    border: 1px solid var(--outline);
-    outline: none;
-    color: var(--onSurface);
-    height: 50px;
-    width: 200px;
-    text-align: center;
-    font-size: 16pt;
-}
-
-.inputBox,
-.captchaBox:focus {
-    border: 1px solid var(--primary);
-}
-
-.inputBox {
-    font-family: var(--fontPrimary);
-}
-
-.captchaBox {
-    font-family: var(--fontCode);
-}
-
 #nfccheck {
     display: block;
 }
@@ -1262,40 +1234,6 @@ main.container {
     background-color: #a1cce3;
     width: 250px;
     height: 50px;
-}
-
-#usernameBox,
-#passwordBox,
-#codeBox {
-    border-radius: 4px;
-    background-color: var(--surface);
-    border: 1px solid var(--outline);
-    outline: none;
-    color: var(--onSurface);
-    height: 50px;
-    width: 200px;
-    text-align: center;
-    font-size: 16pt;
-}
-
-#usernameBox,
-#passwordBox,
-#codeBox:focus {
-    border: 1px solid var(--primary);
-}
-
-#usernameBox {
-    font-family: var(--fontPrimary);
-}
-
-#passwordBox,
-#codeBox {
-    font-family: var(--fontCode);
-}
-
-#codeBox {
-    width: 100px;
-    font-size: 25px;
 }
 
 .loginText {
@@ -1365,6 +1303,10 @@ menu-iframe {
     right: 10px;
 }
 
+/* =========================================
+   FORM CONTROLS & INPUTS
+   ========================================= */
+
 .form-control,
 .loginInput {
     font-size: 20px !important; /* Slightly smaller for better fit */
@@ -1379,6 +1321,40 @@ menu-iframe {
     width: 100%;
     outline: none;
     transition: all 0.2s ease;
+    border-radius: var(--radius-inner);
+}
+
+.form-control.joinTop,
+.loginInput.joinTop {
+    border-radius: var(--radius-inner) var(--radius-inner) 4px 4px !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.form-control.joinMiddle,
+.loginInput.joinMiddle {
+    border-radius: 4px !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+
+.form-control.joinBottom,
+.loginInput.joinBottom {
+    border-radius: 4px 4px var(--radius-inner) var(--radius-inner) !important;
+    margin-top: 0 !important;
+}
+
+.form-control:focus,
+.loginInput:focus {
+    border: 1.5px solid var(--primary) !important;
+    background-color: color-mix(
+        in srgb,
+        var(--secondaryContainer) 50%,
+        transparent
+    ) !important;
+    z-index: 5;
+    position: relative;
 }
 
 .form-control::placeholder,
@@ -2007,23 +1983,28 @@ img[src$="scrolltop.bmp"] {
     cursor: pointer;
 }
 
+/* =========================================
+   SUB NAV PILLS (Segmented logic)
+   ========================================= */
 .nav-pills-header {
     display: flex;
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 4px;
-    border: 1px solid var(--outline);
+    padding: 3px;
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-card) !important;
+    gap: 3px;
 }
 
+/* 1. The Container - Mirrored to .side-rail */
 .sub-nav-pills-header {
     display: flex;
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 4px;
-    border: 1px solid var(--outline);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 8px 10px; /* Matched to side-rail */
     overflow-x: auto;
     white-space: nowrap;
     scrollbar-width: none;
-    border-radius: var(--radius-card) !important;
+    border-radius: 90px !important; /* Fully rounded pill shape */
+    gap: 4px;
 }
 
 .sub-nav-pills-header::-webkit-scrollbar {
@@ -2031,14 +2012,18 @@ img[src$="scrolltop.bmp"] {
 }
 
 @media (prefers-color-scheme: dark) {
-    .nav-pills-header,
-    .sub-nav-pills-header {
-        background-color: rgba(255, 255, 255, 0.05);
+    .nav-pills-header {
+        background-color: color-mix(
+            in srgb,
+            var(--glass-tint) 40%,
+            transparent
+        );
     }
+    /* sub-nav-pills-header inherits glass variables automatically in dark mode */
 }
 
 .header-tab {
-    background: none;
+    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
     border: none;
     color: var(--onSurface);
     padding: 6px 12px;
@@ -2047,18 +2032,37 @@ img[src$="scrolltop.bmp"] {
     font-weight: 500;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
     transition: all 0.3s ease;
     cursor: pointer;
     opacity: 0.8;
-    border-radius: var(--radius-card) !important;
+    border-radius: 4px;
+    flex-grow: 1;
 }
 
+.header-tab:first-child {
+    border-radius: 60px 10px 10px 60px !important;
+}
+
+.header-tab:last-child {
+    border-radius: 10px 60px 60px 10px !important;
+}
+
+.header-tab:first-child:last-child {
+    border-radius: 60px !important;
+}
+
+.header-rab .material-symbols-rounded {
+    font-size: 16px !important;
+}
+
+/* 2. The Inner Tabs - Mirrored to side-rail links */
 .sub-header-tab {
-    background: none;
+    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
     border: none;
-    color: var(--onSurface);
-    padding: 8px 16px;
+    color: var(--onPrimaryContainer); /* Changed to match side-rail text */
+    padding: 10px 16px; /* Matched to side-rail */
     font-family: var(--fontPrimary);
     font-size: 14px;
     font-weight: 500;
@@ -2068,18 +2072,37 @@ img[src$="scrolltop.bmp"] {
     flex-grow: 1;
     transition: all 0.3s ease;
     cursor: pointer;
-    opacity: 0.8;
     flex-shrink: 0;
-    border-radius: var(--radius-card) !important;
+    border-radius: 4px !important;
+}
+
+/* Hover state matching side-rail */
+.sub-header-tab:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary);
+}
+
+.sub-header-tab:first-child {
+    border-radius: 60px 15px 15px 60px !important;
+}
+
+.sub-header-tab:last-child {
+    border-radius: 15px 60px 60px 15px !important;
+}
+
+.sub-header-tab:first-child:last-child {
+    border-radius: 60px !important;
 }
 
 .header-tab .material-symbols-rounded {
     font-size: 18px !important;
 }
+
 .header-tab.active,
 .sub-header-tab.active {
     background-color: var(--primary);
     color: var(--onPrimary);
+    font-weight: bold;
     opacity: 1;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -2089,7 +2112,7 @@ img[src$="scrolltop.bmp"] {
         display: none;
     }
     .header-tab {
-        padding: 8px;
+        padding: 6px 8px;
     }
 }
 
@@ -2105,6 +2128,9 @@ img[src$="scrolltop.bmp"] {
     border: 1px solid var(--glass-border);
 }
 
+/* =========================================
+   SWITCH & SELECT CONTAINERS
+   ========================================= */
 .switchContainer {
     padding-right: 20px;
     border: 1px solid var(--glass-border);
@@ -2116,14 +2142,13 @@ img[src$="scrolltop.bmp"] {
     ) !important;
 }
 
-/* Refined Selector Styling */
 .form-select {
     padding-left: 15px !important;
     border: 0.5px solid var(--outline) !important;
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
-        var(--secondaryContainer) 70%,
+        var(--secondaryContainer) 90%,
         transparent
     ) !important;
     color: var(--onSecondaryContainer) !important;

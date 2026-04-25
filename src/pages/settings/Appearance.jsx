@@ -28,6 +28,8 @@ export default function Appearance() {
     setGenericColor,
     darkModePref,
     setDarkModePref,
+    syncEnabled,
+    setSyncEnabled,
   } = useContext(ThemeContext);
 
   const effectiveAuto = backgroundEnabled ? autoColor : false;
@@ -81,7 +83,27 @@ export default function Appearance() {
       <div className="row g-2">
         {/* Left Column */}
         <div className="col-12 col-md-6">
-          <Card title="Wallpaper settings">
+          <Card title="Cloud sync">
+            <div className="settings-group">
+              <Switch
+                label="Sync with HiAccount"
+                checked={syncEnabled}
+                onChange={setSyncEnabled}
+                className="joinTop"
+              />
+              <InfoBubble
+                icon="cloud_sync"
+                title="Backup and sync."
+                className="joinBottom"
+              >
+                Save your HiOS appearance preferences with your HiAccount so
+                they auto-apply on all your devices with HiOS installed. How
+                fancy is that?!
+              </InfoBubble>
+            </div>
+          </Card>
+
+          <Card title="Wallpaper settings" className="mt-2">
             <div className="settings-group mt-3">
               <Switch
                 label="Wallpaper"

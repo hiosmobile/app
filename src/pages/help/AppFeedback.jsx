@@ -29,7 +29,7 @@ export default function AppFeedback() {
             <span className="titleIcon material-symbols-rounded">
               rate_review
             </span>
-            Send Feedback
+            Send feedback
           </h1>
           <p id="para" className="subtitle mb-0">
             Use this page to send feedback to us.

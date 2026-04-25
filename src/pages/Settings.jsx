@@ -7,6 +7,8 @@ import {
   RippleButton,
   Row,
   Col,
+  Modal,
+  ProfileHeader,
 } from "../../components/HiMaterial";
 import { useAuth } from "../AuthContext";
 import {
@@ -136,35 +138,15 @@ export default function Settings() {
 
         <Row className="g-2">
           {/* Left Column: Account Profile */}
+          {/* Left Column: Account Profile */}
           <Col size={12} md={6}>
-            <Card bodyClass="text-center py-4">
-              <div
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--primaryContainer)",
-                  color: "var(--primary)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  border: "3px solid var(--primary)",
-                  margin: "0 auto 15px",
-                }}
-              >
-                <span
-                  className="material-symbols-rounded"
-                  style={{ fontSize: "50px" }}
-                >
-                  person
-                </span>
-              </div>
-              <h2 className="card-title mb-0" style={{ fontSize: "1.5rem" }}>
-                {currentUser?.displayName || "HiOS User"}
-              </h2>
-              <p className="mb-4">{currentUser?.email}</p>
-
-              <div className="text-start">
+            <ProfileHeader
+              name={currentUser?.displayName}
+              email={currentUser?.email}
+              className="joinTop"
+            />
+            <Card className="joinBottom">
+              <div className="text-start mt-1">
                 <MenuActionBtn
                   icon="badge"
                   text="Change name"
@@ -244,146 +226,124 @@ export default function Settings() {
       </main>
 
       {/* Dynamic Modal Overlay */}
-      {activeModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.4)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "15px",
-          }}
-        >
-          <Card
-            className="full p-4"
-            style={{ maxWidth: "450px", width: "100%" }}
+      <Modal
+        isOpen={!!activeModal}
+        title={
+          activeModal === "name"
+            ? "Change Name"
+            : activeModal === "password"
+              ? "Change Password"
+              : activeModal === "delete"
+                ? "Delete Account"
+                : ""
+        }
+      >
+        {modalStatus.message && (
+          <div
+            className="infoBubble text-start mb-3"
+            style={{
+              backgroundColor:
+                modalStatus.type === "success"
+                  ? "var(--primaryContainer)"
+                  : "var(--errorContainer)",
+              color:
+                modalStatus.type === "success"
+                  ? "var(--onPrimaryContainer)"
+                  : "var(--onErrorContainer)",
+            }}
           >
-            <h2
-              className="card-title mb-3"
-              style={{ fontSize: "1.5rem", textAlign: "left" }}
+            {modalStatus.message}
+          </div>
+        )}
+
+        <form
+          onSubmit={
+            activeModal === "name"
+              ? handleNameChange
+              : activeModal === "password"
+                ? handlePasswordChange
+                : handleDeleteAccount
+          }
+          style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+        >
+          {activeModal === "name" && (
+            <input
+              type="text"
+              className="form-control"
+              placeholder="New Full Name"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              required
+            />
+          )}
+
+          {activeModal === "password" && (
+            <>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Current Password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                className="form-control"
+                placeholder="New Password"
+                value={newPasswordInput}
+                onChange={(e) => setNewPasswordInput(e.target.value)}
+                required
+                minLength="6"
+              />
+            </>
+          )}
+
+          {activeModal === "delete" && (
+            <>
+              <p className="text-start text-muted mb-2">
+                This is permanent. Enter your password to confirm deletion.
+              </p>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Confirm Password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                required
+              />
+            </>
+          )}
+
+          <div className="d-flex gap-1 mt-4">
+            <button
+              type="button"
+              className="joinLeft navButtonInactive flex-grow-1"
+              onClick={closeModal}
+              disabled={isLoading}
+              style={{ width: "100px" }}
             >
-              {activeModal === "name" && "Change Name"}
-              {activeModal === "password" && "Change Password"}
-              {activeModal === "delete" && "Delete Account"}
-            </h2>
-
-            {modalStatus.message && (
-              <div
-                className="infoBubble text-start mb-3"
-                style={{
-                  backgroundColor:
-                    modalStatus.type === "success"
-                      ? "var(--primaryContainer)"
-                      : "var(--errorContainer)",
-                  color:
-                    modalStatus.type === "success"
-                      ? "var(--onPrimaryContainer)"
-                      : "var(--onErrorContainer)",
-                }}
-              >
-                {modalStatus.message}
-              </div>
-            )}
-
-            <form
-              onSubmit={
-                activeModal === "name"
-                  ? handleNameChange
-                  : activeModal === "password"
-                    ? handlePasswordChange
-                    : handleDeleteAccount
-              }
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+              Cancel
+            </button>
+            <RippleButton
+              type="submit"
+              className="joinRight form-button m-0 flex-grow-1"
+              style={{
+                backgroundColor:
+                  activeModal === "delete" ? "var(--error)" : "var(--primary)",
+                color: "var(--onPrimary)",
+              }}
+              disabled={isLoading}
             >
-              {activeModal === "name" && (
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="New Full Name"
-                  value={nameInput}
-                  onChange={(e) => setNameInput(e.target.value)}
-                  required
-                />
-              )}
-
-              {activeModal === "password" && (
-                <>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Current Password"
-                    value={passwordInput}
-                    onChange={(e) => setPasswordInput(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="New Password"
-                    value={newPasswordInput}
-                    onChange={(e) => setNewPasswordInput(e.target.value)}
-                    required
-                    minLength="6"
-                  />
-                </>
-              )}
-
-              {activeModal === "delete" && (
-                <>
-                  <p className="text-start text-muted mb-2">
-                    This is permanent. Enter your password to confirm deletion.
-                  </p>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Confirm Password"
-                    value={passwordInput}
-                    onChange={(e) => setPasswordInput(e.target.value)}
-                    required
-                  />
-                </>
-              )}
-
-              <div className="d-flex gap-2 mt-4">
-                <button
-                  type="button"
-                  className="navButtonInactive flex-grow-1"
-                  onClick={closeModal}
-                  disabled={isLoading}
-                >
-                  Cancel
-                </button>
-                <RippleButton
-                  type="submit"
-                  className="form-button m-0 flex-grow-1"
-                  style={{
-                    backgroundColor:
-                      activeModal === "delete"
-                        ? "var(--error)"
-                        : "var(--primary)",
-                    color: "var(--onPrimary)",
-                  }}
-                  disabled={isLoading}
-                >
-                  {isLoading
-                    ? "Processing..."
-                    : activeModal === "delete"
-                      ? "Delete Forever"
-                      : "Save Changes"}
-                </RippleButton>
-              </div>
-            </form>
-          </Card>
-        </div>
-      )}
+              {isLoading
+                ? "Processing..."
+                : activeModal === "delete"
+                  ? "Delete Forever"
+                  : "Save Changes"}
+            </RippleButton>
+          </div>
+        </form>
+      </Modal>
     </>
   );
 }

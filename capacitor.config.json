@@ -6,6 +6,14 @@
   "plugins": {
     "StatusBar": {
       "overlaysWebView": true
+    },
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "144612262854-06feulrdc0hadpuiqf7saf0q37fg2ca2.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
+    },
+    "Keyboard": {
+      "resize": "none"
     }
   },
   "server": {

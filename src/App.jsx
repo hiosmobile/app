@@ -1,7 +1,14 @@
-import React from "react";
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  HashRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import { ThemeProvider } from "../components/ThemeContext";
-import { AuthProvider, useAuth } from "./AuthContext"; // Adjust path if necessary
+import { AuthProvider, useAuth } from "./AuthContext";
+import { App as CapacitorApp } from "@capacitor/app";
 
 // Layouts
 import Layout from "../components/Layout.jsx";
@@ -13,9 +20,9 @@ import {
 } from "../components/HiMaterial.jsx";
 
 // Auth Pages
-import Gateway from "./pages/Gateway"; // Adjust path if necessary
-import Login from "./pages/Login"; // Adjust path if necessary
-import Signup from "./pages/Signup"; // Adjust path if necessary
+import Gateway from "./pages/Gateway";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 // Pages
@@ -220,14 +227,41 @@ function AppRoutes() {
   );
 }
 
+// =========================================
+// ANDROID NATIVE BACK BUTTON HANDLER
+// =========================================
+function NativeBackButtonHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleBackButton = CapacitorApp.addListener(
+      "backButton",
+      ({ canGoBack }) => {
+        if (canGoBack) {
+          navigate(-1); // Tell React Router to go back one page
+        } else {
+          CapacitorApp.exitApp(); // If there is no history left, close the app natively
+        }
+      },
+    );
+
+    return () => {
+      handleBackButton.then((listener) => listener.remove());
+    };
+  }, [navigate]);
+
+  return null; // This component renders nothing visually
+}
+
 export default function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <ThemeProvider>
         <HashRouter>
+          <NativeBackButtonHandler />
           <AppRoutes />
         </HashRouter>
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

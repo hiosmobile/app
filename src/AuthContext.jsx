@@ -11,7 +11,10 @@ import {
   sendEmailVerification,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithCredential,
 } from "firebase/auth";
+import { Capacitor } from "@capacitor/core";
+import { GoogleSignIn } from "@capawesome/capacitor-google-sign-in";
 
 const AuthContext = createContext();
 
@@ -23,16 +26,26 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Initialize Google Provider
   const googleProvider = new GoogleAuthProvider();
 
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // New Google Login Function
-  function loginWithGoogle() {
-    return signInWithPopup(auth, googleProvider);
+  async function loginWithGoogle() {
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const googleUser = await GoogleSignIn.signIn();
+        const idToken = googleUser.idToken;
+        const credential = GoogleAuthProvider.credential(idToken);
+        return await signInWithCredential(auth, credential);
+      } catch (error) {
+        console.error("Native Google Sign-In Error:", error);
+        throw error;
+      }
+    } else {
+      return signInWithPopup(auth, googleProvider);
+    }
   }
 
   async function signup(email, password, name) {
@@ -63,6 +76,12 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      GoogleSignIn.initialize({
+        clientId: "YOUR_WEB_CLIENT_ID_GOES_HERE.apps.googleusercontent.com",
+      });
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);

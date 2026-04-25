@@ -41,32 +41,42 @@ export default function FabMenu() {
 
         <div className="sheet-content">
           <MenuActionBtn
-            icon="download_for_offline"
-            text="Download Menus"
-            className="joinTop"
-            onClick={() =>
-              window.open(
-                "https://www.dropbox.com/scl/fo/7gmlnnjcau1np91ee83ht/h?rlkey=ifj506k3aal7ko7tfecy8oqyq&dl=0",
-                "_blank",
-              )
-            }
-          />
-
-          <MenuActionBtn
             icon="settings"
             text="Settings"
-            className="joinMiddle"
+            className="joinTop"
             onClick={() => handleNavigation("/settings")}
           />
 
           <MenuActionBtn
             icon="help"
             text="Help"
-            className="joinBottom"
+            className="joinMiddle"
             onClick={() => handleNavigation("/help")}
+          />
+
+          <MenuActionBtn
+            icon="feedback"
+            text="Send feedback"
+            className="joinBottom"
+            onClick={() => handleNavigation("/help/feedback")}
           />
         </div>
       </div>
     </>
   );
 }
+
+/**
+ *
+ <MenuActionBtn
+   icon="download_for_offline"
+   text="Download Menus"
+   className="joinTop"
+   onClick={() =>
+     window.open(
+       "https://www.dropbox.com/scl/fo/7gmlnnjcau1np91ee83ht/h?rlkey=ifj506k3aal7ko7tfecy8oqyq&dl=0",
+       "_blank",
+     )
+   }
+ />
+ */

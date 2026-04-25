@@ -1,46 +1,114 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { App } from "@capacitor/app";
-import { Browser } from "@capacitor/browser";
 import {
   PageHeader,
   Card,
   MenuActionBtn,
   Row,
   Col,
+  InfoBubble,
 } from "../../../components/HiMaterial";
 import { openExternalLink } from "../../utils/externalLink";
 
 export default function Updates() {
-  const navigate = useNavigate();
   const [appVersion, setAppVersion] = useState("Loading...");
+  const [latestVersion, setLatestVersion] = useState("Checking...");
+  const [releaseUrl, setReleaseUrl] = useState("");
 
-  //get current app version from bundle
   useEffect(() => {
-    const getVersion = async () => {
-      const info = await App.getInfo();
-      setAppVersion(`${info.version} (${info.build})`);
+    const fetchVersions = async () => {
+      // 1. Get current local app version
+      try {
+        const info = await App.getInfo();
+        setAppVersion(`${info.version} (${info.build})`);
+      } catch (error) {
+        setAppVersion("Web/Dev Mode");
+      }
+
+      // 2. Fetch the latest release from GitHub
+      try {
+        const response = await fetch(
+          "https://api.github.com/repos/hiosmobile/app/releases/latest",
+        );
+        if (response.ok) {
+          const data = await response.json();
+          // GitHub tags usually look like "v1.2.3", this grabs that string
+          setLatestVersion(data.tag_name || "Unknown");
+          setReleaseUrl(data.html_url);
+        } else {
+          setLatestVersion("Failed to fetch");
+        }
+      } catch (error) {
+        setLatestVersion("Offline");
+      }
     };
-    getVersion();
+
+    fetchVersions();
   }, []);
 
   return (
     <main className="container mt-4 mb-5">
-      <div className="row mb-2">
-        <div className="col-12">
+      <Row className="mb-2">
+        <Col size={12}>
           <PageHeader
             icon="system_update"
             title="Updates"
-            subtitle="Take a look at our updates options for HiOS below."
+            subtitle="Check your current app version and find the latest releases."
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="row g-2">
-        <div className="col-12 col-md-6">
-          <Card title="Update sources"></Card>
-        </div>
-      </div>
+      <Row className="g-2">
+        {/* Left Column: Version Information */}
+        <Col size={12} md={6}>
+          <Card title="Version Status">
+            <div className="mt-3">
+              <InfoBubble
+                icon="smartphone"
+                title="Current Version"
+                className="joinTop m-0"
+              >
+                {appVersion}
+              </InfoBubble>
+              <InfoBubble
+                icon="cloud_download"
+                title="Latest Available"
+                className="joinBottom m-0"
+              >
+                {latestVersion}
+              </InfoBubble>
+            </div>
+          </Card>
+        </Col>
+
+        {/* Right Column: Update Actions */}
+        <Col size={12} md={6}>
+          <Card title="Update Sources">
+            <div className="mt-3">
+              <MenuActionBtn
+                icon="open_in_new"
+                text="Download Latest Release"
+                className="joinTop"
+                onClick={() => {
+                  if (releaseUrl) {
+                    openExternalLink(releaseUrl);
+                  } else {
+                    alert("Release link is not available yet.");
+                  }
+                }}
+              />
+              <InfoBubble
+                icon="system_update"
+                title="Go ahead, download our update."
+                className="joinBottom"
+              >
+                What are you waiting for? We pour love and heart into updating
+                this app, and adding tonnes of beautiful new features!
+              </InfoBubble>
+            </div>
+          </Card>
+        </Col>
+      </Row>
     </main>
   );
 }

@@ -465,3 +465,105 @@ export const GoogleAuthButton = ({
     </button>
   );
 };
+
+/**
+ * Modal
+ */
+export const Modal = ({ isOpen, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0,0,0,0.4)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "15px",
+      }}
+    >
+      <Card className="full p-4" style={{ maxWidth: "450px", width: "100%" }}>
+        {title && (
+          <h2
+            className="card-title mb-3"
+            style={{ fontSize: "1.5rem", textAlign: "left" }}
+          >
+            {title}
+          </h2>
+        )}
+        {children}
+      </Card>
+    </div>
+  );
+};
+
+/**
+ * ProfileHeader
+ */
+export const ProfileHeader = ({ name, email, className = "" }) => {
+  return (
+    <Card
+      className={`text-center ${className}`.trim()}
+      bodyClass="p-0"
+      style={{ overflow: "hidden" }}
+    >
+      {/* Decorative top background */}
+      <div
+        style={{
+          height: "80px",
+          backgroundColor: "var(--primary)",
+          opacity: 0.15,
+          width: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 0,
+        }}
+      ></div>
+
+      <div className="card-body position-relative z-1 pt-4 pb-4">
+        <div
+          style={{
+            width: "90px",
+            height: "90px",
+            borderRadius: "50%",
+            backgroundColor: "var(--surface)",
+            color: "var(--primary)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "4px solid var(--primaryContainer)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            margin: "0 auto 15px",
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          <span
+            className="material-symbols-rounded"
+            style={{ fontSize: "45px" }}
+          >
+            person
+          </span>
+        </div>
+        <h2
+          className="card-title mb-1"
+          style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+        >
+          {name || "HiOS User"}
+        </h2>
+        <p className="mb-0" style={{ opacity: 0.7, fontSize: "0.95rem" }}>
+          {email}
+        </p>
+      </div>
+    </Card>
+  );
+};

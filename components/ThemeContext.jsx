@@ -1,8 +1,14 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useAuth } from "../src/AuthContext";
+import { db } from "../src/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+  const { currentUser } = useAuth();
+  const [isCloudLoaded, setIsCloudLoaded] = useState(false);
+
   const [backgroundEnabled, setBackgroundEnabled] = useState(
     localStorage.getItem("hiosBackgroundEnabled") !== "false",
   );
@@ -24,8 +30,46 @@ export const ThemeProvider = ({ children }) => {
   const [highContrastEnabled, setHighContrastEnabled] = useState(
     localStorage.getItem("hiosHighContrastEnabled") === "true",
   );
+  const [syncEnabled, setSyncEnabled] = useState(
+    localStorage.getItem("hiosSyncEnabled") !== "false",
+  );
 
   const activeColorTheme = autoColor ? wallpaperTheme : genericColor;
+
+  useEffect(() => {
+    async function syncFromCloud() {
+      if (currentUser) {
+        try {
+          const userDoc = doc(db, "users", currentUser.uid);
+          const snap = await getDoc(userDoc);
+
+          if (snap.exists() && snap.data().theme) {
+            const cloudTheme = snap.data().theme;
+
+            if (cloudTheme.backgroundEnabled !== undefined)
+              setBackgroundEnabled(cloudTheme.backgroundEnabled);
+            if (cloudTheme.acrylicEnabled !== undefined)
+              setAcrylicEnabled(cloudTheme.acrylicEnabled);
+            if (cloudTheme.autoColor !== undefined)
+              setAutoColor(cloudTheme.autoColor);
+            if (cloudTheme.wallpaperTheme !== undefined)
+              setWallpaperTheme(cloudTheme.wallpaperTheme);
+            if (cloudTheme.genericColor !== undefined)
+              setGenericColor(cloudTheme.genericColor);
+            if (cloudTheme.darkModePref !== undefined)
+              setDarkModePref(cloudTheme.darkModePref);
+            if (cloudTheme.highContrastEnabled !== undefined)
+              setHighContrastEnabled(cloudTheme.highContrastEnabled);
+          }
+        } catch (error) {
+          console.error("Failed to sync theme from cloud:", error);
+        }
+      }
+      setIsCloudLoaded(true);
+    }
+
+    syncFromCloud();
+  }, [currentUser]);
 
   useEffect(() => {
     document.body.className = activeColorTheme;
@@ -56,6 +100,27 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem("hiosColorTheme", activeColorTheme);
     localStorage.setItem("hiosDarkModePreference", darkModePref);
     localStorage.setItem("hiosHighContrastEnabled", highContrastEnabled);
+    localStorage.setItem("hiosSyncEnabled", syncEnabled);
+
+    //save to cloud (background sync)
+    if (isCloudLoaded && currentUser && syncEnabled) {
+      const userDoc = doc(db, "users", currentUser.uid);
+      setDoc(
+        userDoc,
+        {
+          theme: {
+            backgroundEnabled,
+            acrylicEnabled,
+            autoColor,
+            wallpaperTheme,
+            genericColor,
+            darkModePref,
+            highContrastEnabled,
+          },
+        },
+        { merge: true },
+      ).catch((err) => console.error("Failed to save theme to cloud", err));
+    }
   }, [
     backgroundEnabled,
     acrylicEnabled,
@@ -65,6 +130,9 @@ export const ThemeProvider = ({ children }) => {
     darkModePref,
     activeColorTheme,
     highContrastEnabled,
+    isCloudLoaded,
+    currentUser,
+    syncEnabled,
   ]);
 
   const getWallpaperUrl = () => {
@@ -96,6 +164,8 @@ export const ThemeProvider = ({ children }) => {
         setDarkModePref,
         highContrastEnabled,
         setHighContrastEnabled,
+        syncEnabled,
+        setSyncEnabled,
       }}
     >
       {backgroundEnabled && !highContrastEnabled && (
