@@ -2029,31 +2029,29 @@ menu-iframe {
         transparent
     ) !important;
     color: var(--onSecondaryContainer) !important;
-    border: 1px solid var(--outline) !important;
+    border: 0.5px solid var(--outline) !important;
     width: 100%;
     outline: none;
     transition: all 0.2s ease;
-    border-radius: var(--radius-inner);
+    border-radius: 25px;
 }
 
 .form-control.joinTop,
 .loginInput.joinTop {
-    border-radius: var(--radius-inner) var(--radius-inner) 4px 4px !important;
-    border-bottom: none !important;
-    margin-bottom: 0 !important;
+    border-radius: 25px 25px 4px 4px !important;
+    margin-bottom: 3px;
 }
 
 .form-control.joinMiddle,
 .loginInput.joinMiddle {
     border-radius: 4px !important;
-    border-bottom: none !important;
-    margin-bottom: 0 !important;
+    margin-bottom: 3px;
     margin-top: 0 !important;
 }
 
 .form-control.joinBottom,
 .loginInput.joinBottom {
-    border-radius: 4px 4px var(--radius-inner) var(--radius-inner) !important;
+    border-radius: 4px 4px 25px 25px !important;
     margin-top: 0 !important;
 }
 
@@ -2837,7 +2835,7 @@ img[src$="scrolltop.bmp"] {
         transparent
     );
     color: var(--onTertiaryContainer);
-    border: 1px solid var(--glass-border);
+    border: 0.5px solid var(--outline);
 }
 
 /* =========================================
