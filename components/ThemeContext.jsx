@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import { useAuth } from "../src/AuthContext";
 import { db } from "../src/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -25,11 +25,6 @@ export const ThemeProvider = ({ children }) => {
     localStorage.getItem("hiosGenericColor") || "default-light",
   );
 
-  // Global App Theme (UI)
-  const [appThemeMode, setAppThemeMode] = useState(
-    localStorage.getItem("hiosAppThemeMode") || "auto",
-  );
-
   // Wallpaper Time of Day
   const [darkModePref, setDarkModePref] = useState(
     localStorage.getItem("hiosDarkModePreference") || "auto",
@@ -42,47 +37,78 @@ export const ThemeProvider = ({ children }) => {
     localStorage.getItem("hiosSyncEnabled") !== "false",
   );
 
+  // Track OS theme preference dynamically for wallpapers
+  const [systemPrefersDark, setSystemPrefersDark] = useState(
+    window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+
   const activeColorTheme = autoColor ? wallpaperTheme : genericColor;
 
+  // Keep track of the previous theme class to safely remove it later
+  const prevThemeRef = useRef(activeColorTheme);
+
+  // Listen for OS dark mode changes in real-time
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e) => setSystemPrefersDark(e.matches);
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  // Sync from Firebase
   useEffect(() => {
     async function syncFromCloud() {
-      if (currentUser) {
-        try {
-          const userDoc = doc(db, "users", currentUser.uid);
-          const snap = await getDoc(userDoc);
-
-          if (snap.exists() && snap.data().theme) {
-            const cloudTheme = snap.data().theme;
-
-            if (cloudTheme.backgroundEnabled !== undefined)
-              setBackgroundEnabled(cloudTheme.backgroundEnabled);
-            if (cloudTheme.acrylicEnabled !== undefined)
-              setAcrylicEnabled(cloudTheme.acrylicEnabled);
-            if (cloudTheme.autoColor !== undefined)
-              setAutoColor(cloudTheme.autoColor);
-            if (cloudTheme.wallpaperTheme !== undefined)
-              setWallpaperTheme(cloudTheme.wallpaperTheme);
-            if (cloudTheme.genericColor !== undefined)
-              setGenericColor(cloudTheme.genericColor);
-            if (cloudTheme.appThemeMode !== undefined)
-              setAppThemeMode(cloudTheme.appThemeMode);
-            if (cloudTheme.darkModePref !== undefined)
-              setDarkModePref(cloudTheme.darkModePref);
-            if (cloudTheme.highContrastEnabled !== undefined)
-              setHighContrastEnabled(cloudTheme.highContrastEnabled);
-          }
-        } catch (error) {
-          console.error("Failed to sync theme from cloud:", error);
-        }
+      // 1. If auth is still loading or user is logged out, reset the lock and abort
+      if (!currentUser) {
+        setIsCloudLoaded(false);
+        return;
       }
-      setIsCloudLoaded(true);
+
+      try {
+        const userDoc = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(userDoc);
+
+        if (snap.exists() && snap.data().theme) {
+          const cloudTheme = snap.data().theme;
+
+          if (cloudTheme.backgroundEnabled !== undefined)
+            setBackgroundEnabled(cloudTheme.backgroundEnabled);
+          if (cloudTheme.acrylicEnabled !== undefined)
+            setAcrylicEnabled(cloudTheme.acrylicEnabled);
+          if (cloudTheme.autoColor !== undefined)
+            setAutoColor(cloudTheme.autoColor);
+          if (cloudTheme.wallpaperTheme !== undefined)
+            setWallpaperTheme(cloudTheme.wallpaperTheme);
+          if (cloudTheme.genericColor !== undefined)
+            setGenericColor(cloudTheme.genericColor);
+          if (cloudTheme.darkModePref !== undefined)
+            setDarkModePref(cloudTheme.darkModePref);
+          if (cloudTheme.highContrastEnabled !== undefined)
+            setHighContrastEnabled(cloudTheme.highContrastEnabled);
+        }
+      } catch (error) {
+        console.error("Failed to sync theme from cloud:", error);
+      } finally {
+        // 2. Only unlock the ability to save to the cloud AFTER the fetch completes
+        setIsCloudLoaded(true);
+      }
     }
 
     syncFromCloud();
   }, [currentUser]);
 
+  // Apply classes and save to local/cloud
   useEffect(() => {
-    document.body.className = activeColorTheme;
+    // Safely update the theme class without destroying other classes on the body
+    if (prevThemeRef.current) {
+      document.body.classList.remove(prevThemeRef.current);
+    }
+    if (activeColorTheme) {
+      document.body.classList.add(activeColorTheme);
+    }
+    prevThemeRef.current = activeColorTheme;
 
     if (highContrastEnabled) {
       document.body.classList.add("high-contrast");
@@ -102,21 +128,12 @@ export const ThemeProvider = ({ children }) => {
       document.body.classList.remove("acrylic-on");
     }
 
-    // Apply Global Light/Dark Mode override classes to the body
-    document.body.classList.remove("theme-dark", "theme-light");
-    if (appThemeMode === "dark") {
-      document.body.classList.add("theme-dark");
-    } else if (appThemeMode === "light") {
-      document.body.classList.add("theme-light");
-    }
-
     localStorage.setItem("hiosBackgroundEnabled", backgroundEnabled);
     localStorage.setItem("hiosAcrylicEnabled", acrylicEnabled);
     localStorage.setItem("hiosAutoColor", autoColor);
     localStorage.setItem("hiosWallpaperTheme", wallpaperTheme);
     localStorage.setItem("hiosGenericColor", genericColor);
     localStorage.setItem("hiosColorTheme", activeColorTheme);
-    localStorage.setItem("hiosAppThemeMode", appThemeMode);
     localStorage.setItem("hiosDarkModePreference", darkModePref);
     localStorage.setItem("hiosHighContrastEnabled", highContrastEnabled);
     localStorage.setItem("hiosSyncEnabled", syncEnabled);
@@ -133,7 +150,6 @@ export const ThemeProvider = ({ children }) => {
             autoColor,
             wallpaperTheme,
             genericColor,
-            appThemeMode,
             darkModePref,
             highContrastEnabled,
           },
@@ -147,7 +163,6 @@ export const ThemeProvider = ({ children }) => {
     autoColor,
     wallpaperTheme,
     genericColor,
-    appThemeMode,
     darkModePref,
     activeColorTheme,
     highContrastEnabled,
@@ -158,11 +173,7 @@ export const ThemeProvider = ({ children }) => {
 
   const getWallpaperUrl = () => {
     const basePath = "assets/backgrounds/";
-
     let isDark = false;
-    const prefersDarkOS =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     // 1. Check Wallpaper Specific Setting
     if (darkModePref === "dark") {
@@ -170,15 +181,8 @@ export const ThemeProvider = ({ children }) => {
     } else if (darkModePref === "light") {
       isDark = false;
     } else {
-      // 2. If Wallpaper is 'Auto', check Global App Theme
-      if (appThemeMode === "dark") {
-        isDark = true;
-      } else if (appThemeMode === "light") {
-        isDark = false;
-      } else {
-        // 3. If Both are 'Auto', check OS Settings
-        isDark = prefersDarkOS;
-      }
+      // 2. If Auto, fall back to reactive system preference
+      isDark = systemPrefersDark;
     }
 
     const themeName =
@@ -199,8 +203,6 @@ export const ThemeProvider = ({ children }) => {
         setWallpaperTheme,
         genericColor,
         setGenericColor,
-        appThemeMode,
-        setAppThemeMode,
         darkModePref,
         setDarkModePref,
         highContrastEnabled,
