@@ -24,8 +24,6 @@ export default function Appearance() {
     setWallpaperTheme,
     genericColor,
     setGenericColor,
-    appThemeMode,
-    setAppThemeMode,
     darkModePref,
     setDarkModePref,
     syncEnabled,
@@ -55,14 +53,8 @@ export default function Appearance() {
     { value: "scotland", label: "Knockan Crag, Scotland" },
   ];
 
-  const appThemeOptions = [
-    { value: "auto", label: "Auto (Match Device)" },
-    { value: "light", label: "Light Mode" },
-    { value: "dark", label: "Dark Mode" },
-  ];
-
   const wallpaperModeOptions = [
-    { value: "auto", label: "Auto (Match App Theme)" },
+    { value: "auto", label: "Auto (Match device)" },
     { value: "light", label: "Daytime (Light)" },
     { value: "dark", label: "Nighttime (Dark)" },
   ];
@@ -86,31 +78,9 @@ export default function Appearance() {
         </Col>
       </Row>
 
-      <div className="row g-2">
-        {/* Left Column */}
-        <div className="col-12 col-md-6">
-          <Card title="Global theme">
-            <div className="settings-group">
-              <Dropdown
-                value={appThemeMode}
-                onChange={setAppThemeMode}
-                options={appThemeOptions}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="contrast"
-                title="Global App Theme"
-                className="joinBottom"
-              >
-                Force the entire app interface into Light Mode, Dark Mode, or
-                let it match your device automatically. Don't worry, we won't be
-                judgy if you use light mode -- we're not orthodontist
-                receptionists, we're app developers.
-              </InfoBubble>
-            </div>
-          </Card>
-
-          <Card title="Wallpaper settings" className="mt-2">
+      <Row className="g-2">
+        <Col size={12} md={6}>
+          <Card title="Wallpaper settings">
             <div className="settings-group mt-3">
               <Switch
                 label="Wallpaper"
@@ -167,10 +137,10 @@ export default function Appearance() {
               </InfoBubble>
             </div>
           </Card>
-        </div>
+        </Col>
 
         {/*Right column*/}
-        <div className="col-12 col-md-6">
+        <Col size={12} md={6}>
           <Card title="Dynamic colour">
             <div className="settings-group">
               <Switch
@@ -240,8 +210,8 @@ export default function Appearance() {
               </InfoBubble>
             </div>
           </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </main>
   );
 }

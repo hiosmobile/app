@@ -62,50 +62,46 @@ export default function Updates() {
         {/* Left Column: Version Information */}
         <Col size={12} md={6}>
           <Card title="Version Status">
-            <div className="mt-3">
-              <InfoBubble
-                icon="smartphone"
-                title="Current Version"
-                className="joinTop m-0"
-              >
-                {appVersion}
-              </InfoBubble>
-              <InfoBubble
-                icon="cloud_download"
-                title="Latest Available"
-                className="joinBottom m-0"
-              >
-                {latestVersion}
-              </InfoBubble>
-            </div>
+            <InfoBubble
+              icon="smartphone"
+              title="Current Version"
+              className="joinTop"
+            >
+              {appVersion}
+            </InfoBubble>
+            <InfoBubble
+              icon="cloud_download"
+              title="Latest Available"
+              className="joinBottom m-0"
+            >
+              {latestVersion}
+            </InfoBubble>
           </Card>
         </Col>
 
         {/* Right Column: Update Actions */}
         <Col size={12} md={6}>
           <Card title="Update Sources">
-            <div className="mt-3">
-              <MenuActionBtn
-                icon="open_in_new"
-                text="Download Latest Release"
-                className="joinTop"
-                onClick={() => {
-                  if (releaseUrl) {
-                    openExternalLink(releaseUrl);
-                  } else {
-                    alert("Release link is not available yet.");
-                  }
-                }}
-              />
-              <InfoBubble
-                icon="system_update"
-                title="Go ahead, download our update."
-                className="joinBottom"
-              >
-                What are you waiting for? We pour love and heart into updating
-                this app, and adding tonnes of beautiful new features!
-              </InfoBubble>
-            </div>
+            <MenuActionBtn
+              icon="open_in_new"
+              text="Download .apk"
+              className="joinTop"
+              onClick={() => {
+                if (releaseUrl) {
+                  openExternalLink(releaseUrl);
+                } else {
+                  alert("Release link is not available yet.");
+                }
+              }}
+            />
+            <InfoBubble
+              icon="system_update"
+              title="Go ahead, download our update."
+              className="joinBottom"
+            >
+              What are you waiting for? We pour love and heart into updating
+              this app, and adding tonnes of beautiful new features!
+            </InfoBubble>
           </Card>
         </Col>
       </Row>

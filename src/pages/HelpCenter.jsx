@@ -1,14 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, MenuActionBtn } from "../../components/HiMaterial";
+import {
+  Card,
+  MenuActionBtn,
+  Row,
+  Col,
+  InfoBubble,
+} from "../../components/HiMaterial";
 
 export default function HelpCenter() {
   const navigate = useNavigate();
 
   return (
     <main className="container mt-4 mb-5">
-      <div className="row mb-2">
-        <div className="col-12">
+      <Row className="mb-2">
+        <Col size={12}>
           <Card>
             <div className="top-container">
               <h1 className="blue-h2">
@@ -20,20 +26,29 @@ export default function HelpCenter() {
               </p>
             </div>
           </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="row g-2">
+      <Row className="g-2">
         {/*Left col*/}
-        <div className="col-12 col-md-6">
+        <Col size={12} md={6}>
           <Card>
             <h1 className="card-title">How to use HiOS</h1>
             <MenuActionBtn
               icon="developer_guide"
               text="Navigation tutorial"
-              className="full"
+              className="joinTop"
               onClick={() => navigate("/help/tutorial")}
             />
+            <InfoBubble
+              icon="school"
+              title="Learn how to navigate HiOS."
+              className="joinBottom"
+            >
+              Are you a little lost or baffled by how beautiful this app is?
+              Take a look here to find out how to actually use this thing to its
+              fullest potential.
+            </InfoBubble>
           </Card>
 
           <Card className="mt-2">
@@ -66,10 +81,10 @@ export default function HelpCenter() {
               onClick={() => navigate("/help/internet")}
             />
           </Card>
-        </div>
+        </Col>
 
         {/*Right col*/}
-        <div className="col-12 col-md-6">
+        <Col className="col-12 col-md-6">
           <Card>
             <h1 className="card-title">More</h1>
             <MenuActionBtn
@@ -86,8 +101,8 @@ export default function HelpCenter() {
               onClick={() => navigate("/help/feedback")}
             />
           </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </main>
   );
 }
