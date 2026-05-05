@@ -175,7 +175,7 @@
 
 .bottom-sheet {
     position: fixed;
-    bottom: 20px;
+    bottom: calc(var(--nav-pad-bottom) + 20px);
     left: 16px;
     right: 16px;
     border: 1px solid var(--glass-border);

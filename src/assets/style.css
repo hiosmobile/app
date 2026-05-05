@@ -1036,7 +1036,7 @@ body {
 /* Inside your React project */
 main.container {
     /* Guarantees your 'Good Afternoon' text is pushed below the transparent status bar */
-    padding-top: max(env(safe-area-inset-top), 45px) !important;
+    padding-top: max(env(safe-area-inset-top), 35px) !important;
     padding-bottom: calc(var(--nav-pad-bottom) + 40px) !important;
 }
 
