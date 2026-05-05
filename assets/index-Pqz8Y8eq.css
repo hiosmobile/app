@@ -195,7 +195,7 @@
 
 .bottom-sheet {
     position: fixed;
-    bottom: 20px;
+    bottom: calc(var(--nav-pad-bottom) + 20px);
     left: 16px;
     right: 16px;
     border: 1px solid var(--glass-border);
@@ -1196,7 +1196,7 @@ body.clouds {
     }
 }
 
-.body.clouds.theme-dark {
+body.clouds.theme-dark {
     --primary: rgb(171 199 255);
     --onPrimary: rgb(13 47 95);
     --primaryContainer: rgb(41 70 119);
@@ -1276,7 +1276,7 @@ body.london {
     }
 }
 
-.body.london.theme-dark {
+body.london.theme-dark {
     --primary: rgb(136 208 236);
     --onPrimary: rgb(0 53 68);
     --primaryContainer: rgb(0 77 97);
@@ -1721,8 +1721,11 @@ body {
     overscroll-behavior-y: none;
 }
 
+/* Inside your React project */
 main.container {
-    padding-top: var(--statusbar-pad);
+    /* Guarantees your 'Good Afternoon' text is pushed below the transparent status bar */
+    padding-top: max(env(safe-area-inset-top), 35px) !important;
+    padding-bottom: calc(var(--nav-pad-bottom) + 40px) !important;
 }
 
 .background-wrapper {
@@ -1789,6 +1792,7 @@ main.container {
     margin-right: auto;
     z-index: 1;
     border-radius: var(--radius-card) !important;
+    border: 0.5px solid var(--outline);
 }
 
 /* Stacked section containers */
