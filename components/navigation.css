@@ -1,187 +1,134 @@
-/* Navigation Items (Shared) */
-.nav-item {
+/* =========================================
+   METRO NAVIGATION (WP7 APP BAR STYLES)
+   ========================================= */
+
+/* MOBILE WP7 APP BAR (Bottom) */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--background);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-bottom: var(--nav-pad-bottom, 12px);
+    height: calc(75px + var(--nav-pad-bottom, 12px));
+    z-index: 1000;
+    border-top: 1px solid var(--surface);
+    box-sizing: border-box;
+}
+
+.bottom-nav .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    color: var(--subtext);
     text-decoration: none;
-    color: var(--onPrimaryContainer);
-    cursor: pointer;
-    transition: color 0.3s ease;
-    z-index: 2; /* Keeps links above the glass sheen */
-    flex: 1; /* Distributes items equally to fix the off-center margin */
+    font-size: 11px;
+    text-transform: lowercase;
+    gap: 4px;
+    font-family: var(--fontPrimary);
 }
 
-.activeIcon {
-    background-color: var(--primary);
-    color: var(--onPrimary);
-    width: 64px;
-    height: 32px;
-    border-radius: var(--radius-card);
+.bottom-nav .icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--subtext);
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
+    transition: all 0.2s;
 }
 
-.inactiveIcon {
-    width: 64px;
-    height: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--onPrimaryContainer);
-    transition: color 0.3s ease;
+.bottom-nav .nav-item .material-symbols-rounded,
+.bottom-nav .nav-item .material-symbols-sharp {
+    font-size: 24px;
 }
 
-/* =========================================
-   DESKTOP TOP NAV (Side Rail)
-   ========================================= */
+.bottom-nav .nav-item:active .icon-wrapper {
+    transform: perspective(400px) scale(0.85);
+}
+.bottom-nav .nav-item.active {
+    color: var(--onBackground);
+}
+.bottom-nav .nav-item.active .icon-wrapper {
+    border-color: var(--onBackground);
+    background-color: var(--onBackground);
+    color: var(--background);
+}
 
+@media (min-width: 768px) {
+    .bottom-nav {
+        display: none;
+    }
+}
+
+/* DESKTOP WP7 SIDE RAIL (Left Anchored) */
 .side-rail {
     position: fixed;
-    top: calc(12px + var(--statusbar-pad));
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: max(env(safe-area-inset-top), 40px);
+    gap: 35px;
     z-index: 1000;
-    height: 60px;
-    width: calc(100% - 32px);
-    max-width: 1108px;
-    padding: 6px 8px;
-    box-sizing: border-box;
+    border-right: 1px solid var(--surface);
+}
+
+.side-rail .nav-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-
-    /* Glass Effect */
-    background-color: var(--glass-tint);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    border-radius: 90px;
-    isolation: isolate;
-}
-
-/* Glass sheen layer */
-.side-rail::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: var(--glass-sheen);
-    opacity: 0.3;
-    z-index: -1;
-    border-radius: inherit;
-}
-
-.side-rail ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center; /* Changed from 'stretch' to 'center' */
-    width: 100%;
-    height: 100%;
-    gap: 4px;
-}
-
-.side-rail ul li {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.side-rail ul li a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 8px 16px; /* Let the padding dictate the natural height */
-    width: 100%;
-    /* REMOVED: height: 100% */
-    color: var(--onPrimaryContainer);
-    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
+    color: var(--subtext);
     text-decoration: none;
-    font-weight: 500;
-    white-space: nowrap;
-    z-index: 2;
-    transition: all 0.3s ease;
-    border-radius: 5px;
+    font-family: var(--fontPrimary);
+    font-size: 12px;
+    text-transform: lowercase;
+    transition: all 0.2s;
+    gap: 6px;
 }
 
-/* Specific End-Cap Rounding */
-.side-rail ul li:first-child a {
-    border-radius: 60px 15px 15px 60px;
-}
-
-.side-rail ul li:last-child a {
-    border-radius: 15px 60px 60px 15px;
-}
-
-/* States */
-.side-rail ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--secondary);
-}
-
-.side-rail ul li a.active {
-    background-color: var(--primary);
-    color: var(--onPrimary);
-    font-weight: bold;
-}
-
-/* The glass sheen layer */
-.side-rail::after,
-.bottom-nav::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: var(--glass-sheen);
-    opacity: 0.3;
-    z-index: -1;
-    border-radius: inherit;
-}
-
-/* =========================================
-   MOBILE BOTTOM NAV
-   ========================================= */
-.bottom-nav {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    height: 60px;
-    border-radius: 600px;
+.side-rail .icon-wrapper {
+    width: 54px;
+    height: 54px;
+    border: 2px solid var(--subtext);
+    border-radius: 50%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    z-index: 1000;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-
-    /* Glass Effect matching style.css */
-    background-color: var(--glass-tint);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    will-change: transform, backdrop-filter;
-
-    /* Crucial for keeping the sheen contained */
-    isolation: isolate;
-    bottom: calc(10px + var(--nav-pad-bottom));
+    transition: all 0.2s;
 }
 
-/* =========================================
-   RESPONSIVE TOGGLES
-   ========================================= */
+.side-rail .nav-item .material-symbols-rounded,
+.side-rail .nav-item .material-symbols-sharp {
+    font-size: 28px;
+}
+
+.side-rail .nav-item:hover {
+    color: var(--onBackground);
+}
+.side-rail .nav-item:hover .icon-wrapper {
+    border-color: var(--onBackground);
+}
+.side-rail .nav-item:active .icon-wrapper {
+    transform: perspective(400px) scale(0.85);
+}
+
+.side-rail .nav-item.active {
+    color: var(--onBackground);
+}
+.side-rail .nav-item.active .icon-wrapper {
+    border-color: var(--onBackground);
+    background-color: var(--onBackground);
+    color: var(--background);
+}
 
 @media (max-width: 767px) {
     .side-rail {
@@ -189,8 +136,82 @@
     }
 }
 
+/* =========================================
+   FAB MENU (WP7 Ellipsis Menu)
+   ========================================= */
+
+.fab-trigger {
+    position: fixed;
+    /* Keeps the trigger securely above the 75px Mobile App Bar */
+    bottom: calc(90px + var(--nav-pad-bottom, 12px));
+    right: 15px;
+    background-color: var(--surface);
+    border: 2px solid var(--subtext);
+    color: var(--onBackground);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1001;
+    transition: transform 0.15s cubic-bezier(0.1, 0.9, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.fab-trigger:active {
+    transform: perspective(400px) scale(0.85);
+    background-color: var(--onBackground);
+    color: var(--background);
+    border-color: var(--onBackground);
+}
+
+.fab-trigger .material-symbols-sharp {
+    font-size: 28px;
+}
+
+.fab-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1005;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+}
+
+.fab-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.fab-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--background);
+    border-top: 4px solid var(--accent);
+    padding: 24px 24px calc(var(--nav-pad-bottom, 12px) + 24px);
+    z-index: 1010;
+    transform: translateY(100%);
+    transition: transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
+}
+
+.fab-sheet.open {
+    transform: translateY(0);
+}
+
 @media (min-width: 768px) {
-    .bottom-nav {
-        display: none;
+    .fab-trigger {
+        bottom: 20px; /* Moves to bottom corner since there is no mobile nav */
+        right: 20px;
+    }
+    .fab-sheet {
+        left: 100px; /* Respects the desktop Side Rail width */
     }
 }

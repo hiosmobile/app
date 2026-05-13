@@ -1,415 +1,1074 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  ProgressWidget,
-  MenuActionBtn,
-  PageHeader,
-  RippleButton,
-  Row,
-  Col,
-  Modal,
-  Switch, // Re-using your switch for the settings modal
-} from "../../components/HiMaterial";
-import {
-  RewardsCodeWidget,
-  DateWidget,
-  WeatherWidget,
-  QuickActionsWidget,
-} from "../../components/Widgets";
-import frameImg from "../assets/media/frame.png";
 import { useAuth } from "../AuthContext";
 import { db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { Switch, MenuActionBtn } from "../../components/HiMaterial"; // Using the Metro versions we built
 
-// Define all possible widgets
 const WIDGET_REGISTRY = {
   rewardsCode: {
     id: "rewardsCode",
-    label: "Rewards QR Code",
-    icon: "qr_code_2",
+    label: "rewards qr",
+    color: "var(--metro-magenta)",
+    appName: "hirewards",
   },
-  progress: { id: "progress", label: "Rewards Progress", icon: "donut_large" },
-  weather: { id: "weather", label: "Local Weather", icon: "partly_cloudy_day" },
-  calendar: { id: "calendar", label: "Calendar", icon: "calendar_month" },
-  quickActions: { id: "quickActions", label: "Quick Actions", icon: "bolt" },
+  progress: {
+    id: "progress",
+    label: "progress",
+    color: "var(--metro-red)",
+    appName: "hirewards",
+  },
+  weather: {
+    id: "weather",
+    label: "weather",
+    color: "var(--metro-cyan)",
+    appName: "weather",
+  },
+  calendar: {
+    id: "calendar",
+    label: "calendar",
+    color: "var(--metro-green)",
+    appName: "calendar",
+  },
+  quickActions: {
+    id: "quickActions",
+    label: "shortcuts",
+    color: "var(--metro-mango)",
+    appName: "settings",
+  },
 };
 
-const DEFAULT_LAYOUT = {
-  left: ["rewardsCode", "progress"],
-  right: ["weather", "calendar", "quickActions"],
-};
+const DEFAULT_LAYOUT = [
+  "rewardsCode",
+  "progress",
+  "weather",
+  "calendar",
+  "quickActions",
+];
 
-// =========================================
-// MAIN HOME COMPONENT
-// =========================================
+const APP_PAGES = [
+  { id: "restaurant", label: "eat", icon: "restaurant", path: "/restaurant" },
+  {
+    id: "hicafe",
+    label: "hicafe™",
+    icon: "local_cafe",
+    path: "/restaurant/hicafe",
+  },
+  {
+    id: "breakfast",
+    label: "breakfast",
+    icon: "bakery_dining",
+    path: "/restaurant/breakfast",
+  },
+  {
+    id: "cafefiesta",
+    label: "cafe fiesta",
+    icon: "local_pizza",
+    path: "/restaurant/cafefiesta",
+  },
+  {
+    id: "locations",
+    label: "locations",
+    icon: "location_on",
+    path: "/restaurant/locations",
+  },
+  {
+    id: "hotel",
+    label: "hotel activities",
+    icon: "pool",
+    path: "/hotelactivities",
+  },
+  { id: "rewards", label: "hirewards", icon: "award_star", path: "/hirewards" },
+];
+
 export default function Home() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // 1. Instantly load from localStorage to prevent the visual delay
+  // --- CORE STATE ---
   const [layout, setLayout] = useState(() => {
     const cached = localStorage.getItem("hiosDashboardLayout");
-    return cached ? JSON.parse(cached) : DEFAULT_LAYOUT;
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed.left || parsed.right)
+          return [...(parsed.left || []), ...(parsed.right || [])];
+        return Array.isArray(parsed) ? parsed : DEFAULT_LAYOUT;
+      } catch {
+        return DEFAULT_LAYOUT;
+      }
+    }
+    return DEFAULT_LAYOUT;
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [addModalTarget, setAddModalTarget] = useState(null); // 'left' or 'right'
+  const [activeApp, setActiveApp] = useState(null);
 
-  const name = currentUser?.displayName?.split(" ")[0] || "HiOS User";
+  // --- WEATHER STATE ---
+  const [weather, setWeather] = useState(null);
+  const [locationName, setLocationName] = useState("Loading...");
+  const [isWeatherLoading, setIsWeatherLoading] = useState(true);
+  const [isWeatherEditing, setIsWeatherEditing] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  // --- CALENDAR STATE ---
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  // --- QUICK ACTIONS STATE ---
+  const [activeActions, setActiveActions] = useState(() => {
+    const cached = localStorage.getItem("hiosQuickActions");
+    return cached ? JSON.parse(cached) : ["hicafe", "hotel"];
+  });
+  const [isActionsEditing, setIsActionsEditing] = useState(false);
+
+  const name = currentUser?.displayName?.split(" ")[0] || "User";
   const membershipCode = currentUser?.uid
     ? currentUser.uid.slice(0, 10).toUpperCase()
-    : "490020-384380-3842992-9";
+    : "490020-38";
 
   const getGreeting = () => {
     const hrs = new Date().getHours();
-    if (hrs < 12) return "Good Morning";
-    if (hrs <= 17) return "Good Afternoon";
-    return "Good Evening";
+    if (hrs < 12) return "good morning";
+    if (hrs <= 17) return "good afternoon";
+    return "good evening";
   };
 
-  const getMessage = () => {
-    const hrs = new Date().getHours();
-    if (hrs < 12) return "Have a good day ahead.";
-    if (hrs <= 17) return "Hope you have a nice afternoon.";
-    return "Have a nice night.";
-  };
-
-  // 2. Silently sync from Firebase in the background
+  // --- INITIAL DATA FETCH ---
   useEffect(() => {
-    const fetchDashboard = async () => {
+    const fetchData = async () => {
       if (currentUser) {
         try {
           const docRef = doc(db, "users", currentUser.uid);
           const snap = await getDoc(docRef);
-          if (snap.exists() && snap.data().dashboardLayout) {
-            const cloudLayout = snap.data().dashboardLayout;
-            setLayout(cloudLayout);
-            localStorage.setItem(
-              "hiosDashboardLayout",
-              JSON.stringify(cloudLayout),
-            );
+          if (snap.exists()) {
+            const data = snap.data();
+            if (data.dashboardLayout) {
+              const cloudLayout = data.dashboardLayout;
+              setLayout(
+                cloudLayout.left || cloudLayout.right
+                  ? [...(cloudLayout.left || []), ...(cloudLayout.right || [])]
+                  : cloudLayout,
+              );
+            }
+            if (data.quickActions) {
+              setActiveActions(data.quickActions);
+              localStorage.setItem(
+                "hiosQuickActions",
+                JSON.stringify(data.quickActions),
+              );
+            }
           }
         } catch (error) {
-          console.error("Failed to load dashboard config:", error);
+          console.error("Failed to load config:", error);
         }
       }
     };
-    fetchDashboard();
+    fetchData();
+
+    // Init Weather
+    const savedLocation = localStorage.getItem("hios_weather_pref");
+    if (savedLocation) {
+      const { lat, lon, name } = JSON.parse(savedLocation);
+      fetchWeather(lat, lon, name);
+    } else {
+      fetchWeather(51.5085, -0.1257, "London, United Kingdom"); // Default fallback
+    }
   }, [currentUser]);
 
-  // 3. Save to both local storage (instant) and Firebase (permanent)
   const saveLayout = (newLayout) => {
     setLayout(newLayout);
     localStorage.setItem("hiosDashboardLayout", JSON.stringify(newLayout));
-    if (currentUser) {
-      const docRef = doc(db, "users", currentUser.uid);
-      setDoc(docRef, { dashboardLayout: newLayout }, { merge: true }).catch(
-        (err) => console.error("Failed to save dashboard config:", err),
+    if (currentUser)
+      setDoc(
+        doc(db, "users", currentUser.uid),
+        { dashboardLayout: newLayout },
+        { merge: true },
       );
+  };
+
+  const openApp = (id) => {
+    if (!isEditing) setActiveApp(id);
+  };
+  const closeApp = () => {
+    setActiveApp(null);
+    setIsWeatherEditing(false);
+    setIsActionsEditing(false);
+  };
+
+  // --- WEATHER LOGIC ---
+  const getWeatherDetails = (code, isDay) => {
+    if (code === 0)
+      return { icon: isDay ? "light_mode" : "dark_mode", text: "clear sky" };
+    if (code >= 1 && code <= 3)
+      return {
+        icon: isDay ? "partly_cloudy_day" : "partly_cloudy_night",
+        text: "partly cloudy",
+      };
+    if (code === 45 || code === 48) return { icon: "foggy", text: "fog" };
+    if (code >= 51 && code <= 65) return { icon: "rainy", text: "rain" };
+    if (code >= 71 && code <= 77)
+      return { icon: "cloudy_snowing", text: "snow" };
+    if (code >= 80 && code <= 82)
+      return { icon: "rainy", text: "rain showers" };
+    if (code >= 95 && code <= 99)
+      return { icon: "thunderstorm", text: "thunderstorm" };
+    return { icon: "cloud", text: "unknown" };
+  };
+
+  const fetchWeather = async (lat, lon, name) => {
+    try {
+      setIsWeatherLoading(true);
+      const res = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`,
+      );
+      const data = await res.json();
+      setWeather(data.current_weather);
+      setLocationName(name);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsWeatherLoading(false);
     }
   };
 
-  // --- Edit Mode Functions ---
-  const moveUp = (colName, index) => {
-    if (index === 0) return;
-    const newLayout = { left: [...layout.left], right: [...layout.right] };
-    const arr = newLayout[colName];
-    [arr[index - 1], arr[index]] = [arr[index], arr[index - 1]];
-    saveLayout(newLayout);
-  };
-
-  const moveDown = (colName, index) => {
-    const newLayout = { left: [...layout.left], right: [...layout.right] };
-    const arr = newLayout[colName];
-    if (index === arr.length - 1) return;
-    [arr[index + 1], arr[index]] = [arr[index], arr[index + 1]];
-    saveLayout(newLayout);
-  };
-
-  const moveToOtherColumn = (colName, index) => {
-    const newLayout = { left: [...layout.left], right: [...layout.right] };
-    const targetCol = colName === "left" ? "right" : "left";
-    const [item] = newLayout[colName].splice(index, 1);
-    newLayout[targetCol].push(item);
-    saveLayout(newLayout);
-  };
-
-  const removeWidget = (colName, index) => {
-    const newLayout = { left: [...layout.left], right: [...layout.right] };
-    newLayout[colName].splice(index, 1);
-    saveLayout(newLayout);
-  };
-
-  const addWidget = (idToAdd) => {
-    if (!addModalTarget) return;
-    const newLayout = { left: [...layout.left], right: [...layout.right] };
-    newLayout[addModalTarget].push(idToAdd);
-    saveLayout(newLayout);
-    setAddModalTarget(null);
-  };
-
-  // Find unused widgets for the Add Modal
-  const usedWidgets = [...layout.left, ...layout.right];
-  const availableToAdd = Object.values(WIDGET_REGISTRY).filter(
-    (w) => !usedWidgets.includes(w.id),
-  );
-
-  // --- Widget Render Map ---
-  const renderWidgetContent = (id) => {
-    switch (id) {
-      case "rewardsCode":
-        return <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />;
-
-      case "progress":
-        return (
-          <Card title="Your rewards, at a glance">
-            <Row className="g-1 mt-2">
-              <Col size={6}>
-                <ProgressWidget
-                  icon="local_cafe"
-                  title="HiCafe™ Rewards"
-                  current={4}
-                  max={10}
-                  subtitle="6 away from a free coffee"
-                  className="joinLeft"
-                />
-              </Col>
-              <Col size={6}>
-                <ProgressWidget
-                  icon="hotel"
-                  title="weB&B Stays"
-                  current={6}
-                  max={20}
-                  subtitle="14 away from a free night"
-                  className="joinRight"
-                />
-              </Col>
-            </Row>
-          </Card>
-        );
-
-      case "weather":
-        return (
-          <Card title="Weather">
-            <Row className="g-2 mt-2">
-              <Col size={12}>
-                <WeatherWidget />
-              </Col>
-            </Row>
-          </Card>
-        );
-
-      case "calendar":
-        return (
-          <Card title="Calendar">
-            <Row className="g-2 mt-2">
-              <Col size={12}>
-                <DateWidget />
-              </Col>
-            </Row>
-          </Card>
-        );
-
-      case "quickActions":
-        return (
-          <QuickActionsWidget isEditing={isEditing} currentUser={currentUser} />
-        );
-
-      default:
-        return null;
+  const handleWeatherSearch = async (e) => {
+    e.preventDefault();
+    if (!searchInput.trim()) return;
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchInput)}&format=json&limit=5`,
+      );
+      const data = await res.json();
+      setSearchResults(data || []);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const renderColumn = (colName) => {
+  const selectLocation = async (lat, lon, displayName) => {
+    const nameParts = displayName.split(", ");
+    const shortName =
+      nameParts.length > 1
+        ? `${nameParts[0]}, ${nameParts[nameParts.length - 1]}`
+        : nameParts[0];
+    localStorage.setItem(
+      "hios_weather_pref",
+      JSON.stringify({ lat, lon, name: shortName }),
+    );
+    setSearchResults([]);
+    setSearchInput("");
+    setIsWeatherEditing(false);
+    await fetchWeather(lat, lon, shortName);
+  };
+
+  // --- CALENDAR LOGIC ---
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const monthNames = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+  const dayNames = ["su", "mo", "tu", "we", "th", "fr", "sa"];
+  const calendarCells = [
+    ...Array(firstDayOfMonth).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+
+  // --- QUICK ACTIONS LOGIC ---
+  const toggleAction = (id) => {
+    const newActions = activeActions.includes(id)
+      ? activeActions.filter((a) => a !== id)
+      : [...activeActions, id];
+    setActiveActions(newActions);
+    localStorage.setItem("hiosQuickActions", JSON.stringify(newActions));
+    if (currentUser)
+      setDoc(
+        doc(db, "users", currentUser.uid),
+        { quickActions: newActions },
+        { merge: true },
+      );
+  };
+
+  // --- MODAL POPUP RENDERER ---
+  const renderModal = () => {
+    if (!activeApp) return null;
+    const data = WIDGET_REGISTRY[activeApp];
+
     return (
-      <Col size={12} md={6}>
-        {/* Add Button for this specific column */}
-        {isEditing && (
-          <RippleButton
-            className="button full mb-3 d-flex align-items-center justify-content-center"
+      <div className="metro-modal-overlay" onClick={closeApp}>
+        <div
+          className="metro-modal-content"
+          onClick={(e) => e.stopPropagation()}
+          style={{ borderTopColor: data?.color || "var(--subtext)" }}
+        >
+          {data && (
+            <p className="wp7-app-title" style={{ color: data.color }}>
+              {data.appName}
+            </p>
+          )}
+          <h2
+            className="wp7-app-header"
             style={{
-              border: "2px dashed var(--primary)",
-              backgroundColor: "transparent",
-              color: "var(--primary)",
+              fontSize: "3rem",
+              marginBottom: "20px",
+              whiteSpace: "normal",
             }}
-            onClick={() => setAddModalTarget(colName)}
           >
-            <span className="material-symbols-rounded me-2">add_circle</span>
-            Add to this column
-          </RippleButton>
-        )}
+            {data?.label || (activeApp === "addMenu" ? "pin to start" : "")}
+          </h2>
 
-        {layout[colName].map((widgetId, index) => (
-          <div key={widgetId} className={index > 0 && !isEditing ? "mt-2" : ""}>
-            {/* Edit Controls */}
-            {isEditing && (
-              <div
-                className="d-flex justify-content-between align-items-center mb-1 px-2 py-1 mt-3"
-                style={{
-                  backgroundColor: "var(--secondaryContainer)",
-                  borderRadius: "var(--radius-card)",
-                  color: "var(--onSecondaryContainer)",
-                }}
-              >
-                <span className="fw-bold ms-2" style={{ fontSize: "0.85rem" }}>
-                  {WIDGET_REGISTRY[widgetId]?.label}
-                </span>
-                <div className="d-flex gap-1">
-                  <button
-                    className="nav-icon-btn p-1"
-                    onClick={() => moveUp(colName, index)}
-                    disabled={index === 0}
-                    style={{ opacity: index === 0 ? 0.3 : 1 }}
-                  >
-                    <span className="material-symbols-rounded fs-5">
-                      arrow_upward
-                    </span>
-                  </button>
-                  <button
-                    className="nav-icon-btn p-1"
-                    onClick={() => moveDown(colName, index)}
-                    disabled={index === layout[colName].length - 1}
-                    style={{
-                      opacity: index === layout[colName].length - 1 ? 0.3 : 1,
-                    }}
-                  >
-                    <span className="material-symbols-rounded fs-5">
-                      arrow_downward
-                    </span>
-                  </button>
-                  <button
-                    className="nav-icon-btn p-1"
-                    onClick={() => moveToOtherColumn(colName, index)}
-                  >
-                    <span className="material-symbols-rounded fs-5">
-                      swap_horiz
-                    </span>
-                  </button>
-                  <button
-                    className="nav-icon-btn p-1 text-danger"
-                    onClick={() => removeWidget(colName, index)}
-                  >
-                    <span className="material-symbols-rounded fs-5">
-                      delete
-                    </span>
-                  </button>
+          <div
+            style={{
+              color: "var(--onBackground)",
+              fontSize: "1.2rem",
+              fontWeight: 300,
+              maxHeight: "60vh",
+              overflowY: "auto",
+            }}
+          >
+            {/* --- ADD MENU --- */}
+            {activeApp === "addMenu" && (
+              <div>
+                <p style={{ marginBottom: "20px", color: "var(--subtext)" }}>
+                  {availableToAdd.length === 0
+                    ? "all apps are already pinned."
+                    : "tap an app to pin it to your start screen."}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {availableToAdd.map((widget) => (
+                    <button
+                      key={widget.id}
+                      className="button"
+                      onClick={() => {
+                        saveLayout([...layout, widget.id]);
+                        closeApp();
+                      }}
+                    >
+                      {widget.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
 
-            {/* Widget Itself */}
-            <div style={{ transition: "opacity 0.2s" }}>
-              {renderWidgetContent(widgetId)}
-            </div>
+            {/* --- REWARDS QR --- */}
+            {activeApp === "rewardsCode" && (
+              <div
+                style={{
+                  textAlign: "center",
+                  background: "var(--onBackground)",
+                  color: "var(--background)",
+                  padding: "40px 20px",
+                  margin: "20px 0",
+                }}
+              >
+                <span
+                  className="material-symbols-sharp"
+                  style={{ fontSize: "160px" }}
+                >
+                  qr_code_2
+                </span>
+                <p
+                  style={{
+                    margin: 0,
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    letterSpacing: "2px",
+                  }}
+                >
+                  {membershipCode}
+                </p>
+              </div>
+            )}
+
+            {/* --- REWARDS PROGRESS --- */}
+            {activeApp === "progress" && (
+              <div>
+                <p
+                  style={{
+                    fontSize: "4rem",
+                    fontWeight: 200,
+                    margin: "0 0 10px 0",
+                    color: data.color,
+                  }}
+                >
+                  4/10
+                </p>
+                <p>
+                  stars collected. buy 6 more coffees to unlock a free reward.
+                </p>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "8px",
+                    backgroundColor: "var(--surface)",
+                    marginTop: "20px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `40%`,
+                      height: "100%",
+                      backgroundColor: data.color,
+                    }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
+            {/* --- WEATHER EXPANDED --- */}
+            {activeApp === "weather" && (
+              <div>
+                {isWeatherEditing ? (
+                  <div>
+                    <form
+                      onSubmit={handleWeatherSearch}
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        placeholder="search city..."
+                        style={{
+                          flex: 1,
+                          padding: "10px",
+                          border: "2px solid var(--subtext)",
+                          background: "transparent",
+                          color: "var(--onBackground)",
+                          textTransform: "lowercase",
+                        }}
+                        autoFocus
+                      />
+                      <button
+                        type="submit"
+                        className="button"
+                        style={{ width: "auto", margin: 0 }}
+                      >
+                        search
+                      </button>
+                    </form>
+                    {searchResults.map((res) => (
+                      <button
+                        key={res.place_id}
+                        onClick={() =>
+                          selectLocation(res.lat, res.lon, res.display_name)
+                        }
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          padding: "15px",
+                          background: "transparent",
+                          border: "none",
+                          borderBottom: "1px solid var(--surface)",
+                          color: "var(--onBackground)",
+                          fontSize: "16px",
+                          textTransform: "lowercase",
+                        }}
+                      >
+                        {res.display_name}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        borderBottom: "1px solid var(--surface)",
+                        paddingBottom: "10px",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <p style={{ margin: 0, fontWeight: 600 }}>
+                        {locationName.toLowerCase()}
+                      </p>
+                      <button
+                        onClick={() => setIsWeatherEditing(true)}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: data.color,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span className="material-symbols-sharp">
+                          edit_location
+                        </span>
+                      </button>
+                    </div>
+                    {isWeatherLoading ? (
+                      <p>loading weather...</p>
+                    ) : weather ? (
+                      <>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "20px",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          <span
+                            className="material-symbols-sharp"
+                            style={{ fontSize: "80px", color: data.color }}
+                          >
+                            {
+                              getWeatherDetails(
+                                weather.weathercode,
+                                weather.is_day,
+                              ).icon
+                            }
+                          </span>
+                          <h1
+                            style={{
+                              fontSize: "5rem",
+                              fontWeight: 200,
+                              margin: 0,
+                            }}
+                          >
+                            {Math.round(weather.temperature)}°
+                          </h1>
+                        </div>
+                        <p style={{ fontWeight: 600 }}>
+                          {
+                            getWeatherDetails(
+                              weather.weathercode,
+                              weather.is_day,
+                            ).text
+                          }
+                        </p>
+                        <p
+                          style={{ color: "var(--subtext)", fontSize: "1rem" }}
+                        >
+                          wind speed: {weather.windspeed} km/h
+                        </p>
+                      </>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* --- CALENDAR EXPANDED --- */}
+            {activeApp === "calendar" && (
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <button
+                    onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "var(--onBackground)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <span
+                      className="material-symbols-sharp"
+                      style={{ fontSize: "32px" }}
+                    >
+                      chevron_left
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setCurrentDate(new Date())}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: data.color,
+                      fontSize: "1.5rem",
+                      fontWeight: "300",
+                      textTransform: "lowercase",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {monthNames[month]} {year}
+                  </button>
+                  <button
+                    onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "var(--onBackground)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <span
+                      className="material-symbols-sharp"
+                      style={{ fontSize: "32px" }}
+                    >
+                      chevron_right
+                    </span>
+                  </button>
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(7, 1fr)",
+                    gap: "4px",
+                    marginBottom: "8px",
+                    textAlign: "center",
+                    color: "var(--subtext)",
+                    fontSize: "14px",
+                  }}
+                >
+                  {dayNames.map((day) => (
+                    <div key={day}>{day}</div>
+                  ))}
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(7, 1fr)",
+                    gap: "4px",
+                  }}
+                >
+                  {calendarCells.map((day, idx) => {
+                    const isToday =
+                      day === new Date().getDate() &&
+                      month === new Date().getMonth() &&
+                      year === new Date().getFullYear();
+                    return (
+                      <div
+                        key={idx}
+                        style={{
+                          aspectRatio: "1/1",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: isToday
+                            ? data.color
+                            : day
+                              ? "var(--surface)"
+                              : "transparent",
+                          color: isToday ? "#fff" : "var(--onBackground)",
+                          fontWeight: isToday ? "bold" : "normal",
+                          fontSize: "18px",
+                        }}
+                      >
+                        {day || ""}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* --- QUICK ACTIONS EXPANDED --- */}
+            {activeApp === "quickActions" && (
+              <div>
+                {isActionsEditing ? (
+                  <div>
+                    <p
+                      style={{ color: "var(--subtext)", marginBottom: "20px" }}
+                    >
+                      choose which apps appear in your shortcuts list.
+                    </p>
+                    {APP_PAGES.map((page) => (
+                      <Switch
+                        key={page.id}
+                        label={page.label}
+                        checked={activeActions.includes(page.id)}
+                        onChange={() => toggleAction(page.id)}
+                      />
+                    ))}
+                    <button
+                      className="button mt-4"
+                      onClick={() => setIsActionsEditing(false)}
+                    >
+                      done
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "20px",
+                        borderBottom: "1px solid var(--surface)",
+                        paddingBottom: "10px",
+                      }}
+                    >
+                      <p style={{ margin: 0, fontWeight: 600 }}>
+                        your pinned shortcuts
+                      </p>
+                      <button
+                        onClick={() => setIsActionsEditing(true)}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: data.color,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span className="material-symbols-sharp">edit</span>
+                      </button>
+                    </div>
+
+                    {APP_PAGES.filter((p) => activeActions.includes(p.id))
+                      .length === 0 ? (
+                      <p style={{ color: "var(--subtext)" }}>
+                        no shortcuts pinned.
+                      </p>
+                    ) : (
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        {APP_PAGES.filter((p) =>
+                          activeActions.includes(p.id),
+                        ).map((page) => (
+                          <MenuActionBtn
+                            key={page.id}
+                            icon={page.icon}
+                            text={page.label}
+                            onClick={() => navigate(page.path)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        ))}
-      </Col>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "30px",
+            }}
+          >
+            <button
+              className="button"
+              style={{
+                width: "auto",
+                margin: 0,
+                backgroundColor: "transparent",
+                border: "none",
+              }}
+              onClick={closeApp}
+            >
+              close
+            </button>
+          </div>
+        </div>
+      </div>
     );
   };
 
   return (
     <>
-      <main className="container mt-4 mb-5">
-        {/* Header Row with Edit Toggle */}
-        <Row className="mb-2">
-          <Col size={12}>
-            <Card bodyClass="text-start d-flex justify-content-between align-items-center p-3">
-              <div>
-                <p
-                  className="gradientHeading mb-0"
-                  style={{ fontSize: "2rem" }}
-                >
-                  <b>
-                    {getGreeting()}, {name}!
-                  </b>
-                </p>
-                <p
-                  className="gradientHeadingSmall mb-0"
-                  style={{ fontSize: "1.2rem", opacity: 0.8 }}
-                >
-                  {getMessage()}
-                </p>
-              </div>
-
-              <RippleButton
-                className="nav-icon-btn"
-                onClick={() => setIsEditing(!isEditing)}
-                style={{
-                  backgroundColor: isEditing ? "var(--primary)" : "transparent",
-                  color: isEditing ? "var(--onPrimary)" : "var(--primary)",
-                  border: "none",
-                  width: "50px",
-                  height: "50px",
-                }}
-              >
-                <span className="material-symbols-rounded">
-                  {isEditing ? "check" : "edit"}
-                </span>
-              </RippleButton>
-            </Card>
-          </Col>
-        </Row>
-
-        {/* Dynamic Staggered Grid */}
-        <Row className="g-2">
-          {renderColumn("left")}
-          {renderColumn("right")}
-        </Row>
-      </main>
-
-      {/* Add Widget Modal */}
-      <Modal isOpen={!!addModalTarget} title="Add Widget">
-        <p className="text-start mb-3">
-          Select a widget to add to the dashboard.
-        </p>
-
-        {availableToAdd.length === 0 ? (
-          <div className="p-4 text-center" style={{ opacity: 0.6 }}>
-            <span className="material-symbols-rounded fs-1 mb-2">
-              dashboard_customize
-            </span>
-            <p>You have already added all available widgets!</p>
-          </div>
-        ) : (
-          <div className="d-flex flex-column">
-            {" "}
-            {/* Removed gap-1 to fix spacing */}
-            {availableToAdd.map((widget, index) => {
-              const isFirst = index === 0;
-              const isLast = index === availableToAdd.length - 1;
-              const joinClass =
-                isFirst && isLast
-                  ? "full"
-                  : isFirst
-                    ? "joinTop"
-                    : isLast
-                      ? "joinBottom"
-                      : "joinMiddle";
-
-              return (
-                <MenuActionBtn
-                  key={widget.id}
-                  icon={widget.icon}
-                  text={widget.label}
-                  className={joinClass}
-                  onClick={() => addWidget(widget.id)}
-                />
-              );
-            })}
-          </div>
-        )}
-
-        <div className="mt-4">
+      <main className={`container wp-screen wp-anim-in`}>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button
-            type="button"
-            className="navButtonInactive w-100"
-            onClick={() => setAddModalTarget(null)}
+            onClick={() => setIsEditing(!isEditing)}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "var(--subtext)",
+              cursor: "pointer",
+            }}
           >
-            Cancel
+            <span
+              className="material-symbols-sharp"
+              style={{ fontSize: "28px" }}
+            >
+              {isEditing ? "check" : "edit"}
+            </span>
           </button>
         </div>
-      </Modal>
+
+        <div>
+          <h1 className="metro-page-header">
+            {getGreeting()},<br />
+            {name.toLowerCase()}
+          </h1>
+        </div>
+
+        {/* --- LIVE TILES GRID --- */}
+        <div className="metro-grid">
+          {layout.map((widgetId, index) => {
+            const widgetData = WIDGET_REGISTRY[widgetId];
+
+            return (
+              <React.Fragment key={widgetId}>
+                <div
+                  className={`metro-tile ${widgetId === "progress" || widgetId === "calendar" ? "tile-wide" : "tile-medium"} ${isEditing ? "is-editing" : ""}`}
+                  style={{
+                    backgroundColor: widgetData.color,
+                    overflow: "hidden",
+                  }}
+                  onClick={() => openApp(widgetId)}
+                >
+                  {isEditing && (
+                    <div
+                      className="edit-overlay"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        className="unpin-btn"
+                        onClick={() => unpinWidget(index)}
+                      >
+                        ✕
+                      </button>
+                      <div className="edit-row">
+                        <button
+                          className="edit-btn"
+                          onClick={() => moveItem(index, -1)}
+                          disabled={index === 0}
+                        >
+                          <span className="material-symbols-sharp">
+                            arrow_back
+                          </span>
+                        </button>
+                        <button
+                          className="edit-btn"
+                          onClick={() => moveItem(index, 1)}
+                          disabled={index === layout.length - 1}
+                        >
+                          <span className="material-symbols-sharp">
+                            arrow_forward
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {widgetId === "rewardsCode" && (
+                    <>
+                      <span className="material-symbols-sharp tile-watermark">
+                        qr_code_2
+                      </span>
+                      <span
+                        className="material-symbols-sharp metro-tile-icon"
+                        style={{ zIndex: 1 }}
+                      >
+                        qr_code_2
+                      </span>
+                      <p className="metro-tile-title" style={{ zIndex: 1 }}>
+                        membership
+                      </p>
+                    </>
+                  )}
+
+                  {widgetId === "progress" && (
+                    <div className="live-tile-container">
+                      <div className="live-tile-inner delay-flip-1">
+                        <div className="live-tile-front">
+                          <span className="material-symbols-sharp tile-watermark">
+                            star
+                          </span>
+                          <div
+                            className="metro-tile-content"
+                            style={{ zIndex: 1, textAlign: "left" }}
+                          >
+                            6 away from <br />
+                            free coffee
+                          </div>
+                          <p
+                            className="metro-tile-title"
+                            style={{ zIndex: 1, textAlign: "left" }}
+                          >
+                            rewards
+                          </p>
+                        </div>
+                        <div className="live-tile-back">
+                          <div
+                            className="metro-tile-content"
+                            style={{
+                              fontSize: "3rem",
+                              textAlign: "center",
+                              marginTop: "10px",
+                            }}
+                          >
+                            4 / 10
+                          </div>
+                          <p
+                            className="metro-tile-title"
+                            style={{ textAlign: "center" }}
+                          >
+                            current stars
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {widgetId === "weather" && (
+                    <div className="live-tile-container">
+                      <div className="live-tile-inner delay-flip-2">
+                        <div className="live-tile-front">
+                          <span className="material-symbols-sharp tile-watermark">
+                            partly_cloudy_day
+                          </span>
+                          <span
+                            className="material-symbols-sharp metro-tile-icon"
+                            style={{ zIndex: 1 }}
+                          >
+                            {weather
+                              ? getWeatherDetails(
+                                  weather.weathercode,
+                                  weather.is_day,
+                                ).icon
+                              : "partly_cloudy_day"}
+                          </span>
+                          <div style={{ alignSelf: "flex-start", zIndex: 1 }}>
+                            <span className="metro-tile-content">
+                              {weather
+                                ? `${Math.round(weather.temperature)}°`
+                                : "--"}
+                            </span>
+                            <p className="metro-tile-title">
+                              {locationName.split(",")[0]}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="live-tile-back">
+                          <span className="material-symbols-sharp metro-tile-icon">
+                            cloud
+                          </span>
+                          <p
+                            className="metro-tile-title"
+                            style={{ alignSelf: "center", textAlign: "center" }}
+                          >
+                            {weather
+                              ? getWeatherDetails(
+                                  weather.weathercode,
+                                  weather.is_day,
+                                ).text
+                              : "loading..."}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {widgetId === "calendar" && (
+                    <div className="live-tile-container">
+                      <div className="live-tile-inner delay-flip-3">
+                        <div className="live-tile-front">
+                          <span className="material-symbols-sharp tile-watermark">
+                            calendar_today
+                          </span>
+                          <div
+                            className="metro-tile-content"
+                            style={{ zIndex: 1 }}
+                          >
+                            {new Date()
+                              .toLocaleDateString("en-US", { weekday: "long" })
+                              .toLowerCase()}
+                            <br />
+                            {new Date()
+                              .toLocaleDateString("en-US", {
+                                month: "long",
+                                day: "numeric",
+                              })
+                              .toLowerCase()}
+                          </div>
+                          <p className="metro-tile-title" style={{ zIndex: 1 }}>
+                            calendar
+                          </p>
+                        </div>
+                        <div className="live-tile-back">
+                          <div
+                            className="metro-tile-content"
+                            style={{
+                              textAlign: "left",
+                              fontSize: "1.2rem",
+                              marginTop: "5px",
+                            }}
+                          >
+                            no upcoming reservations for today.
+                          </div>
+                          <p
+                            className="metro-tile-title"
+                            style={{ textAlign: "left" }}
+                          >
+                            agenda
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {widgetId === "quickActions" && (
+                    <>
+                      <span className="material-symbols-sharp tile-watermark">
+                        bolt
+                      </span>
+                      <span
+                        className="material-symbols-sharp metro-tile-icon"
+                        style={{ zIndex: 1 }}
+                      >
+                        bolt
+                      </span>
+                      <p className="metro-tile-title" style={{ zIndex: 1 }}>
+                        shortcuts
+                      </p>
+                    </>
+                  )}
+                </div>
+              </React.Fragment>
+            );
+          })}
+
+          {isEditing && (
+            <div
+              className="metro-tile tile-medium"
+              style={{
+                border: "3px dashed var(--subtext)",
+                backgroundColor: "transparent",
+              }}
+              onClick={() => openApp("addMenu")}
+            >
+              <span
+                className="material-symbols-sharp metro-tile-icon"
+                style={{ color: "var(--subtext)" }}
+              >
+                add
+              </span>
+              <p
+                className="metro-tile-title"
+                style={{ color: "var(--subtext)" }}
+              >
+                pin
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {renderModal()}
     </>
   );
 }

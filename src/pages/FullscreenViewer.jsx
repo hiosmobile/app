@@ -1,85 +1,69 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RippleButton, MenuActionBtn, Card } from "../../components/HiMaterial";
+import { MenuActionBtn, PageHeader, Back } from "../../components/HiMaterial";
 
 export default function FullscreenViewer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Grab the URL passed from the previous page
   const { src, title } = location.state || { src: "", title: "Viewer" };
 
-  // Fallback if accessed directly without a URL
   if (!src) {
     return (
-      <main className="container mt-4 mb-5">
-        <Card bodyClass="text-center p-4">
-          <span
-            className="material-symbols-rounded"
-            style={{ fontSize: "48px", color: "var(--error)" }}
-          >
-            error
-          </span>
-          <h2 className="mt-2">No document found</h2>
-          <MenuActionBtn
-            icon="arrow_back"
-            text="Go back"
-            className="joinTop"
-            onClick={() => navigate(-1)}
-          />
-        </Card>
+      <main className="container wp-screen wp-anim-in mt-4 mb-5">
+        <PageHeader title="error" subtitle="no document found." />
+        <MenuActionBtn
+          icon="arrow_back"
+          text="go back"
+          subtitle="return to the previous screen"
+          onClick={() => navigate(-1)}
+        />
       </main>
     );
   }
 
   return (
-    // Fixed container breaks out of the normal DOM flow to fill the entire screen
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999, // Ensures it sits above any bottom tabs or navigation bars
-        backgroundColor: "var(--background)",
-      }}
-    >
-      {/* Floating Back Button */}
-      <RippleButton
-        onClick={() => navigate(-1)}
+    <div className="wp7-app-page wp-screen wp-anim-in" style={{ zIndex: 9999 }}>
+      {/* The top bar containing the new consistent back button.
+        It sits naturally inside the standard layout padding.
+      */}
+      <div
+        style={{ padding: "calc(var(--statusbar-pad) + 20px) 20px 10px 20px" }}
+      >
+        <Back backPath={-1} />
+        <h2
+          className="wp7-app-title"
+          style={{
+            margin: 0,
+            paddingBottom: "10px",
+            color: "var(--onBackground)",
+          }}
+        >
+          {title}
+        </h2>
+      </div>
+
+      <div
         style={{
-          position: "absolute",
-          top: "max(env(safe-area-inset-top, 20px), 20px)", // Respects mobile notches
-          left: "20px",
-          zIndex: 10000,
-          width: "48px",
-          height: "48px",
-          borderRadius: "50%",
-          backgroundColor: "rgba(0, 0, 0, 0.6)", // Translucent dark background
-          color: "#ffffff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "none",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          padding: 0,
+          flex: 1,
+          width: "100%",
+          backgroundColor: "#ffffff",
+          boxSizing: "border-box",
         }}
       >
-        <span className="material-symbols-rounded">arrow_back</span>
-      </RippleButton>
-
-      {/* Immersive Iframe */}
-      <iframe
-        src={src}
-        title={title}
-        frameBorder="0"
-        allow="autoplay"
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "block",
-          border: "none",
-        }}
-      />
+        <iframe
+          src={src}
+          title={title}
+          frameBorder="0"
+          allow="autoplay"
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "block",
+            border: "none",
+          }}
+        />
+      </div>
     </div>
   );
 }

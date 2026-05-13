@@ -1,21 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Back } from "./HiMaterial";
 
 export default function TopBarWrapper({ title, children }) {
-  const navigate = useNavigate();
-
   return (
-    <div className="top-bar-wrapper-container">
-      {/* Top App Bar */}
-      <div className="top-app-bar">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <i className="material-symbols-rounded">arrow_back_ios</i>
-        </button>
-        <h1 className="top-bar-title">{title}</h1>
-      </div>
+    <div className="metro-wrapper">
+      {/* Fixed Metro Header:
+          Replaces the floating pill with a stark, flat, typography-driven header.
+      */}
+      <header className="metro-top-header">
+        <div className="metro-header-content">
+          <Back backPath={-1} />
+          <p className="metro-system-subtitle">hios settings</p>
+          <h1 className="metro-page-title">{title?.toLowerCase()}</h1>
+        </div>
+      </header>
 
-      {/* Your React Page Content goes here */}
-      <div className="main-content">{children}</div>
+      {/* Main Content Area */}
+      <div className="metro-wrapper-content">{children}</div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MenuActionBtn } from "./HiMaterial";
+import { PageHeader, Back } from "./HiMaterial";
 
 export default function FabMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,73 +10,36 @@ export default function FabMenu() {
     setIsOpen(false);
     setTimeout(() => {
       navigate(path);
-    }, 300);
+    }, 250);
   };
 
   return (
     <>
-      <button className="fab" onClick={() => setIsOpen(true)}>
-        <i className="material-symbols-rounded">menu</i>
+      {/* 1. Icon updated to dashboard_customize */}
+      <button className="metro-system-trigger" onClick={() => setIsOpen(true)}>
+        <span className="material-symbols-sharp">dashboard_customize</span>
       </button>
 
-      <div
-        className={`bottom-sheet-overlay ${isOpen ? "open" : ""}`}
-        onClick={() => setIsOpen(false)}
-      ></div>
+      <div className={`metro-system-menu ${isOpen ? "open" : ""}`}>
+        <div className="metro-system-content">
+          <Back onClick={() => setIsOpen(false)} />
 
-      <div className={`bottom-sheet ${isOpen ? "open" : ""}`}>
-        <div className="bottom-sheet-drag-handle"></div>
+          {/* 2. Title updated to "more" */}
+          <PageHeader title="more" subtitle="application settings and help" />
 
-        <div className="bottom-sheet-header">
-          <h2 className="blue-h2">Menu</h2>
-          <button className="close-button" onClick={() => setIsOpen(false)}>
-            <i
-              className="material-symbols-rounded"
-              style={{ color: "var(--primary)" }}
-            >
-              close
-            </i>
-          </button>
-        </div>
-
-        <div className="sheet-content">
-          <MenuActionBtn
-            icon="settings"
-            text="Settings"
-            className="joinTop"
-            onClick={() => handleNavigation("/settings")}
-          />
-
-          <MenuActionBtn
-            icon="help"
-            text="Help"
-            className="joinMiddle"
-            onClick={() => handleNavigation("/help")}
-          />
-
-          <MenuActionBtn
-            icon="feedback"
-            text="Send feedback"
-            className="joinBottom"
-            onClick={() => handleNavigation("/help/feedback")}
-          />
+          <div className="metro-system-list">
+            <button onClick={() => handleNavigation("/settings")}>
+              settings
+            </button>
+            <button onClick={() => handleNavigation("/help")}>
+              help center
+            </button>
+            <button onClick={() => handleNavigation("/help/feedback")}>
+              send feedback
+            </button>
+          </div>
         </div>
       </div>
     </>
   );
 }
-
-/**
- *
- <MenuActionBtn
-   icon="download_for_offline"
-   text="Download Menus"
-   className="joinTop"
-   onClick={() =>
-     window.open(
-       "https://www.dropbox.com/scl/fo/7gmlnnjcau1np91ee83ht/h?rlkey=ifj506k3aal7ko7tfecy8oqyq&dl=0",
-       "_blank",
-     )
-   }
- />
- */

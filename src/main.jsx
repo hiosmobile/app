@@ -6,7 +6,9 @@ import App from "./App.jsx";
 import "../components/navigation.css";
 import "../components/layout.css";
 import "./assets/style.css"; // style.css loads last, ensuring its theme/glass variables overrule everything else
-import "@fontsource-variable/google-sans-flex/wght.css";
+import "@fontsource-variable/noto-sans/wght.css";
+// Supports weights 100-700
+import "@fontsource-variable/material-symbols-sharp/fill.css";
 
 // Fix for Android safe areas where env(safe-area-inset-*) might return 0px
 if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android") {
