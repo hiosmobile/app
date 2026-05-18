@@ -48,10 +48,20 @@ export default function Home() {
   const { currentUser } = useAuth();
 
   // 1. Instantly load from localStorage to prevent the visual delay
-  const [layout, setLayout] = useState(() => {
+const [layout, setLayout] = useState(() => {
+  try {
     const cached = localStorage.getItem("hiosDashboardLayout");
-    return cached ? JSON.parse(cached) : DEFAULT_LAYOUT;
-  });
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed.left) && Array.isArray(parsed.right)) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error("Failed to parse local layout", e);
+  }
+  return DEFAULT_LAYOUT;
+});
 
   const [isEditing, setIsEditing] = useState(false);
   const [addModalTarget, setAddModalTarget] = useState(null); // 'left' or 'right'
@@ -82,14 +92,17 @@ export default function Home() {
         try {
           const docRef = doc(db, "users", currentUser.uid);
           const snap = await getDoc(docRef);
-          if (snap.exists() && snap.data().dashboardLayout) {
-            const cloudLayout = snap.data().dashboardLayout;
-            setLayout(cloudLayout);
-            localStorage.setItem(
-              "hiosDashboardLayout",
-              JSON.stringify(cloudLayout),
-            );
-          }
+// Inside your useEffect
+if (snap.exists() && snap.data().dashboardLayout) {
+  const cloudLayout = snap.data().dashboardLayout;
+  if (Array.isArray(cloudLayout.left) && Array.isArray(cloudLayout.right)) {
+    setLayout(cloudLayout);
+    localStorage.setItem(
+      "hiosDashboardLayout",
+      JSON.stringify(cloudLayout),
+    );
+  }
+}
         } catch (error) {
           console.error("Failed to load dashboard config:", error);
         }

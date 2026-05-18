@@ -10,44 +10,38 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 // =========================================
 const APP_PAGES = [
   {
-    id: "restaurant",
-    label: "Restaurant",
-    icon: "restaurant",
-    path: "/restaurant",
-  },
-  {
     id: "hicafe",
     label: "HiCafe™",
-    icon: "local_cafe",
+    icon: "restaurant",
     path: "/restaurant/hicafe",
   },
   {
     id: "breakfast",
     label: "Breakfast",
-    icon: "bakery_dining",
+    icon: "egg_alt",
     path: "/restaurant/breakfast",
   },
   {
     id: "cafefiesta",
-    label: "Cafe Fiesta",
-    icon: "local_pizza",
+    label: "CafeFiesta",
+    icon: "coffee",
     path: "/restaurant/cafefiesta",
   },
   {
     id: "locations",
     label: "Locations",
-    icon: "location_on",
+    icon: "location_pin",
     path: "/restaurant/locations",
   },
   {
     id: "hotel",
-    label: "Hotel Activities",
-    icon: "pool",
+    label: "Stay",
+    icon: "hotel",
     path: "/hotelactivities",
   },
-  { id: "rewards", label: "HiRewards", icon: "award_star", path: "/hirewards" },
+  { id: "rewards", label: "Rewards", icon: "award_star", path: "/hirewards" },
   { id: "settings", label: "Settings", icon: "settings", path: "/settings" },
-  { id: "help", label: "Help Center", icon: "help", path: "/help" },
+  { id: "help", label: "Help", icon: "help", path: "/help" },
 ];
 
 const DEFAULT_QUICK_ACTIONS = ["hicafe", "hotel"];

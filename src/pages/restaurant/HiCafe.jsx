@@ -60,7 +60,7 @@ export default function HiCafe() {
                 <span className="form-button-icon material-symbols-rounded">
                   fullscreen
                 </span>
-                Open Form Fullscreen
+                Open form fullscreen
               </RippleButton>
               <div className="iframe-wrapper">
                 <iframe
@@ -144,7 +144,7 @@ export default function HiCafe() {
                     <span className="form-button-icon material-symbols-rounded">
                       fullscreen
                     </span>
-                    Open Menu Fullscreen
+                    Open menu fullscreen
                   </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe
@@ -185,7 +185,7 @@ export default function HiCafe() {
                     <span className="form-button-icon material-symbols-rounded">
                       fullscreen
                     </span>
-                    Open Menu Fullscreen
+                    Open menu fullscreen
                   </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe
@@ -226,7 +226,7 @@ export default function HiCafe() {
                     <span className="form-button-icon material-symbols-rounded">
                       fullscreen
                     </span>
-                    Open Menu Fullscreen
+                    Open menu fullscreen
                   </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe
@@ -267,7 +267,7 @@ export default function HiCafe() {
                     <span className="form-button-icon material-symbols-rounded">
                       fullscreen
                     </span>
-                    Open Menu Fullscreen
+                    Open menu fullscreen
                   </RippleButton>
                   <div className="iframe-wrapper">
                     <iframe
@@ -316,7 +316,7 @@ export default function HiCafe() {
                 <span className="form-button-icon material-symbols-rounded">
                   fullscreen
                 </span>
-                Open Form Fullscreen
+                Open form fullscreen
               </RippleButton>
               <div className="iframe-wrapper">
                 <iframe
