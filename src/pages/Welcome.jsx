@@ -9,7 +9,7 @@ import {
   Row,
   Col,
   Modal,
-  Switch, // Re-using your switch for the settings modal
+  Switch,
 } from "../../components/HiMaterial";
 import {
   RewardsCodeWidget,
@@ -48,23 +48,24 @@ export default function Home() {
   const { currentUser } = useAuth();
 
   // 1. Instantly load from localStorage to prevent the visual delay
-const [layout, setLayout] = useState(() => {
-  try {
-    const cached = localStorage.getItem("hiosDashboardLayout");
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed.left) && Array.isArray(parsed.right)) {
-        return parsed;
+  const [layout, setLayout] = useState(() => {
+    try {
+      const cached = localStorage.getItem("hiosDashboardLayout");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed.left) && Array.isArray(parsed.right)) {
+          return parsed;
+        }
       }
+    } catch (e) {
+      console.error("Failed to parse local layout", e);
     }
-  } catch (e) {
-    console.error("Failed to parse local layout", e);
-  }
-  return DEFAULT_LAYOUT;
-});
+    return DEFAULT_LAYOUT;
+  });
 
   const [isEditing, setIsEditing] = useState(false);
   const [addModalTarget, setAddModalTarget] = useState(null); // 'left' or 'right'
+  const [expandedWidgetId, setExpandedWidgetId] = useState(null);
 
   const name = currentUser?.displayName?.split(" ")[0] || "HiOS User";
   const membershipCode = currentUser?.uid
@@ -92,17 +93,20 @@ const [layout, setLayout] = useState(() => {
         try {
           const docRef = doc(db, "users", currentUser.uid);
           const snap = await getDoc(docRef);
-// Inside your useEffect
-if (snap.exists() && snap.data().dashboardLayout) {
-  const cloudLayout = snap.data().dashboardLayout;
-  if (Array.isArray(cloudLayout.left) && Array.isArray(cloudLayout.right)) {
-    setLayout(cloudLayout);
-    localStorage.setItem(
-      "hiosDashboardLayout",
-      JSON.stringify(cloudLayout),
-    );
-  }
-}
+
+          if (snap.exists() && snap.data().dashboardLayout) {
+            const cloudLayout = snap.data().dashboardLayout;
+            if (
+              Array.isArray(cloudLayout.left) &&
+              Array.isArray(cloudLayout.right)
+            ) {
+              setLayout(cloudLayout);
+              localStorage.setItem(
+                "hiosDashboardLayout",
+                JSON.stringify(cloudLayout),
+              );
+            }
+          }
         } catch (error) {
           console.error("Failed to load dashboard config:", error);
         }
@@ -234,6 +238,76 @@ if (snap.exists() && snap.data().dashboardLayout) {
     }
   };
 
+  // --- Expanded Widget Content ---
+  const renderExpandedWidget = (id) => {
+    switch (id) {
+      case "rewardsCode":
+        return (
+          <div className="text-center">
+            <img
+              src={frameImg}
+              alt="Rewards QR"
+              className="img-fluid mb-3 roundedImage"
+              style={{ maxWidth: "200px" }}
+            />
+            <h3 className="fw-bold gradientHeading">{membershipCode}</h3>
+            <p className="mt-2" style={{ opacity: 0.8 }}>
+              Scan this code at the till to earn points, redeem offers, and
+              unlock exclusive HiCafe™ rewards!
+            </p>
+          </div>
+        );
+
+      case "progress":
+        return (
+          <div>
+            <p>
+              You are currently <strong>6 coffees</strong> away from your next
+              free drink, and <strong>14 stays</strong> away from a free night.
+            </p>
+            <RippleButton
+              className="button full mt-3"
+              onClick={() => navigate("/hirewards")}
+            >
+              View Full Rewards History
+            </RippleButton>
+          </div>
+        );
+
+      case "weather":
+        return (
+          <div>
+            <p style={{ opacity: 0.8 }}>
+              Current weather details for your location.
+            </p>
+            <WeatherWidget />
+          </div>
+        );
+
+      case "calendar":
+        return (
+          <div>
+            <p style={{ opacity: 0.8 }}>Your upcoming schedule and bookings.</p>
+            <DateWidget />
+          </div>
+        );
+
+      case "quickActions":
+        return (
+          <div>
+            <p style={{ opacity: 0.8 }}>
+              Your customized shortcuts. Enter edit mode on the dashboard to
+              change these.
+            </p>
+            <QuickActionsWidget isEditing={false} />
+          </div>
+        );
+
+      default:
+        return <p>More information coming soon.</p>;
+    }
+  };
+
   const renderColumn = (colName) => {
     return (
       <Col size={12} md={6}>
@@ -253,7 +327,7 @@ if (snap.exists() && snap.data().dashboardLayout) {
           </RippleButton>
         )}
 
-        {layout[colName].map((widgetId, index) => (
+        {(layout[colName] || []).map((widgetId, index) => (
           <div key={widgetId} className={index > 0 && !isEditing ? "mt-2" : ""}>
             {/* Edit Controls */}
             {isEditing && (
@@ -311,9 +385,29 @@ if (snap.exists() && snap.data().dashboardLayout) {
               </div>
             )}
 
-            {/* Widget Itself */}
-            <div style={{ transition: "opacity 0.2s" }}>
-              {renderWidgetContent(widgetId)}
+            {/* Smart Widget Wrapper */}
+            <div
+              style={{
+                transition: "transform 0.2s, opacity 0.2s",
+                cursor: isEditing ? "default" : "pointer",
+              }}
+              onClick={(e) => {
+                if (isEditing) return;
+                // Ignore clicks if they hit a button or input inside the widget
+                if (e.target.closest("button") || e.target.closest("input"))
+                  return;
+                setExpandedWidgetId(widgetId);
+              }}
+              onMouseEnter={(e) => {
+                if (!isEditing) e.currentTarget.style.transform = "scale(1.02)";
+              }}
+              onMouseLeave={(e) => {
+                if (!isEditing) e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
+              <div style={{ pointerEvents: isEditing ? "none" : "auto" }}>
+                {renderWidgetContent(widgetId)}
+              </div>
             </div>
           </div>
         ))}
@@ -349,11 +443,19 @@ if (snap.exists() && snap.data().dashboardLayout) {
                 className="nav-icon-btn"
                 onClick={() => setIsEditing(!isEditing)}
                 style={{
-                  backgroundColor: isEditing ? "var(--primary)" : "transparent",
-                  color: isEditing ? "var(--onPrimary)" : "var(--primary)",
+                  backgroundColor: isEditing
+                    ? "var(--primary)"
+                    : "var(--surfaceVariant)",
+                  color: isEditing ? "var(--onPrimary)" : "var(--onSurface)",
                   border: "none",
-                  width: "50px",
-                  height: "50px",
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "50%", // Forces a circle
+                  flexShrink: 0, // Stops flexbox from squishing it into an oval
+                  display: "flex", // Allows perfect centering of the icon
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 0, // Removes weird default button paddings
                 }}
               >
                 <span className="material-symbols-rounded">
@@ -372,7 +474,11 @@ if (snap.exists() && snap.data().dashboardLayout) {
       </main>
 
       {/* Add Widget Modal */}
-      <Modal isOpen={!!addModalTarget} title="Add Widget">
+      <Modal
+        isOpen={!!addModalTarget}
+        onClose={() => setAddModalTarget(null)}
+        title="Add Widget"
+      >
         <p className="text-start mb-3">
           Select a widget to add to the dashboard.
         </p>
@@ -386,8 +492,6 @@ if (snap.exists() && snap.data().dashboardLayout) {
           </div>
         ) : (
           <div className="d-flex flex-column">
-            {" "}
-            {/* Removed gap-1 to fix spacing */}
             {availableToAdd.map((widget, index) => {
               const isFirst = index === 0;
               const isLast = index === availableToAdd.length - 1;
@@ -422,6 +526,15 @@ if (snap.exists() && snap.data().dashboardLayout) {
             Cancel
           </button>
         </div>
+      </Modal>
+
+      {/* Expanded Widget Modal */}
+      <Modal
+        isOpen={!!expandedWidgetId}
+        onClose={() => setExpandedWidgetId(null)}
+        title={expandedWidgetId ? WIDGET_REGISTRY[expandedWidgetId]?.label : ""}
+      >
+        {expandedWidgetId && renderExpandedWidget(expandedWidgetId)}
       </Modal>
     </>
   );

@@ -175,7 +175,7 @@
 
 .bottom-sheet {
     position: fixed;
-    bottom: calc(var(--nav-pad-bottom) + 20px);
+    bottom: calc(10px + var(--nav-pad-bottom));
     left: 16px;
     right: 16px;
     border: 1px solid var(--glass-border);
@@ -266,7 +266,7 @@
     }
 
     .bottom-sheet {
-        bottom: 100px;
+        bottom: calc(10px + var(--nav-pad-bottom));
     }
 
     .fab {
@@ -410,10 +410,6 @@
 
     .top-bar-wrapper-container main.container {
         padding-top: 0 !important;
-    }
-
-    .bottom-sheet {
-        bottom: 100px;
     }
 }
 

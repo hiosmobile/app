@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import "../src/assets/ripple.css";
 
 /**
@@ -469,39 +469,76 @@ export const GoogleAuthButton = ({
 /**
  * Modal
  */
-export const Modal = ({ isOpen, title, children }) => {
-  if (!isOpen) return null;
-
+export const Modal = ({ isOpen, onClose, title, children }) => {
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.4)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "15px",
-      }}
-    >
-      <Card className="full p-4" style={{ maxWidth: "450px", width: "100%" }}>
-        {title && (
-          <h2
-            className="card-title mb-3"
-            style={{ fontSize: "1.5rem", textAlign: "left" }}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          // 1. Use the EXACT scrim class from your FabMenu
+          className="bottom-sheet-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "15px",
+            pointerEvents: "auto", // Overrides the default CSS 'none' so you can click it
+            transition: "none", // Disables CSS transition so Framer Motion can handle the fade
+          }}
+        >
+          <motion.div
+            // 2. Use the EXACT container class from your FabMenu
+            className="bottom-sheet"
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            style={{
+              // 3. Cancel out the 'fixed/bottom' CSS so it centers like a Modal
+              position: "relative",
+              bottom: "auto",
+              left: "auto",
+              right: "auto",
+              margin: 0,
+              transform: "none",
+              transition: "none", // Disables CSS transition so Framer Motion handles the slide
+              maxWidth: "450px",
+              width: "100%",
+              willChange: "transform, opacity",
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
-            {title}
-          </h2>
-        )}
-        {children}
-      </Card>
-    </div>
+            {/* 4. Use your exact header class to match font sizes and weights */}
+            <div className="bottom-sheet-header">
+              {title && <h2 style={{ color: "var(--primary)" }}>{title}</h2>}
+
+              {onClose && (
+                <button
+                  className="close-button"
+                  onClick={onClose}
+                  style={{ margin: "-8px -8px 0 0" }}
+                >
+                  <i
+                    className="material-symbols-rounded"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    close
+                  </i>
+                </button>
+              )}
+            </div>
+
+            {/* 5. Use your exact content wrapper */}
+            <div className="sheet-content" style={{ textAlign: "left" }}>
+              {children}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
