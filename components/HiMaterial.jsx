@@ -469,12 +469,18 @@ export const GoogleAuthButton = ({
 /**
  * Modal
  */
-export const Modal = ({ isOpen, onClose, title, children }) => {
+export const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  footer,
+  isScrollable = false,
+}) => {
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          // 1. Use the EXACT scrim class from your FabMenu
           className="bottom-sheet-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -485,36 +491,38 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
             alignItems: "center",
             justifyContent: "center",
             padding: "15px",
-            pointerEvents: "auto", // Overrides the default CSS 'none' so you can click it
-            transition: "none", // Disables CSS transition so Framer Motion can handle the fade
+            pointerEvents: "auto",
+            transition: "none",
           }}
         >
           <motion.div
-            // 2. Use the EXACT container class from your FabMenu
             className="bottom-sheet"
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             style={{
-              // 3. Cancel out the 'fixed/bottom' CSS so it centers like a Modal
               position: "relative",
               bottom: "auto",
               left: "auto",
               right: "auto",
               margin: 0,
               transform: "none",
-              transition: "none", // Disables CSS transition so Framer Motion handles the slide
-              maxWidth: "450px",
+              transition: "none",
+              maxWidth: isScrollable ? "1140px" : "500px",
               width: "100%",
+              height: isScrollable ? "85%" : "auto",
+              display: "flex",
+              flexDirection: "column",
               willChange: "transform, opacity",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* 4. Use your exact header class to match font sizes and weights */}
+            {/* 1. Sticky Header */}
             <div className="bottom-sheet-header">
-              {title && <h2 style={{ color: "var(--primary)" }}>{title}</h2>}
-
+              {title && (
+                <h2 style={{ color: "var(--primary)", margin: 0 }}>{title}</h2>
+              )}
               {onClose && (
                 <button
                   className="close-button"
@@ -531,10 +539,36 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
               )}
             </div>
 
-            {/* 5. Use your exact content wrapper */}
-            <div className="sheet-content" style={{ textAlign: "left" }}>
+            {/* 2. Scrollable Content Area */}
+            <div
+              className="sheet-content"
+              style={{
+                textAlign: "left",
+                overflowY: isScrollable ? "auto" : "visible",
+                flexGrow: isScrollable ? 1 : 0,
+                minHeight: 0,
+              }}
+            >
               {children}
             </div>
+
+            {/* 3. NEW: Sticky Footer */}
+            {footer && (
+              <div
+                className="bottom-sheet-footer"
+                style={{
+                  marginTop: "16px", // Adds space between the content and buttons
+                  paddingTop: "16px",
+                  borderTop: isScrollable
+                    ? "1px solid var(--glass-border)"
+                    : "none", // Adds a subtle line if it's a scrolling modal
+                  display: "flex",
+                  gap: "4px",
+                }}
+              >
+                {footer}
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}

@@ -7,7 +7,7 @@ import {
   Col,
   InfoBubble,
 } from "../../components/HiMaterial";
-import Logo from "../assets/pics/logos/hiosbadge.png";
+import Logo from "../assets/pics/logos/hicafe.webp";
 import { openExternalLink } from "../utils/externalLink";
 
 export default function Gateway() {
@@ -45,7 +45,9 @@ export default function Gateway() {
                 >
                   <b>{greeting}!</b>
                 </p>
-                <p className="gradientHeadingSmall mb-0">Welcome to HiOS!</p>
+                <p className="gradientHeadingSmall mb-0">
+                  Welcome to the HiCafe app!
+                </p>
               </Col>
             </Row>
           </Card>
@@ -99,7 +101,7 @@ export default function Gateway() {
               title="Your dashboard."
               className="joinTop"
             >
-              HiOS has a beautiful dashboard for you to see all your HiCafe™
+              The HiCafe app has a beautiful dashboard for you to see all your
               info at a glance.
             </InfoBubble>
 

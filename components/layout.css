@@ -105,7 +105,7 @@
 
 * {
     -webkit-tap-highlight-color: transparent;
-    font-family: "Google Sans Flex Variable", sans-serif;
+    font-family: var(--fontPrimary);
     box-sizing: border-box;
 }
 
@@ -465,4 +465,19 @@
 .main-content {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+}
+
+.modal-scroll-area {
+    max-height: 50vh; /* Restricts the height to 50% of the viewport */
+    overflow-y: auto; /* Enables vertical scrolling when content exceeds the height */
+    padding-right: 4px; /* Gives a tiny bit of breathing room on the right */
+    margin-bottom: 16px; /* Separates the scroll area from your pinned buttons */
+
+    /* Matches the hidden scrollbar style used elsewhere in your app */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.modal-scroll-area::-webkit-scrollbar {
+    display: none;
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   PageHeader,
   InfoBubble,
@@ -8,6 +8,8 @@ import {
   MenuActionBtn,
   Row,
   Col,
+  Modal,
+  RippleButton,
 } from "../../../components/HiMaterial";
 import { ThemeContext } from "../../../components/ThemeContext";
 import { openExternalLink } from "../../utils/externalLink";
@@ -29,6 +31,8 @@ export default function Appearance() {
     syncEnabled,
     setSyncEnabled,
   } = useContext(ThemeContext);
+
+  const [isWallpaperModalOpen, setIsWallpaperModalOpen] = useState(false);
 
   const effectiveAuto = backgroundEnabled ? autoColor : false;
 
@@ -99,6 +103,13 @@ export default function Appearance() {
 
             <h3 className="card-title mb-3 mt-4">Pick a wallpaper</h3>
             <div className="settings-group">
+              <MenuActionBtn
+                icon="web_asset"
+                text={wallpaperTheme}
+                className="joinTop"
+                onClick={() => setIsWallpaperModalOpen(true)}
+              />
+
               <Dropdown
                 value={wallpaperTheme}
                 onChange={setWallpaperTheme}
@@ -212,6 +223,41 @@ export default function Appearance() {
           </Card>
         </Col>
       </Row>
+
+      <Modal
+        isOpen={isWallpaperModalOpen}
+        title="Backgrounds"
+        style={{ height: "100vh" }}
+        isScrollable={true}
+        footer={
+          <>
+            <button
+              type="button"
+              className="joinLeft navButtonInactive flex-grow-1"
+              onClick={() => setIsWallpaperModalOpen(false)}
+              style={{ width: "50%" }}
+            >
+              Cancel
+            </button>
+
+            <RippleButton
+              type="submit"
+              className="joinRight form-button m-0 flex-grow-1"
+              style={{
+                backgroundColor: "var(--primary)",
+                color: "var(--onPrimary)",
+                width: "50%",
+              }}
+            >
+              Save changes
+            </RippleButton>
+          </>
+        }
+      >
+        <Card>
+          <h1>Hello</h1>
+        </Card>
+      </Modal>
     </main>
   );
 }

@@ -38,8 +38,8 @@
     --onSurfaceVarient: #43474e;
 
     /*Fonts*/
-    --fontPrimary: "Google Sans Flex Variable", sans-serif;
-    --fontCode: "Google Sans Flex Variable", sans-serif;
+    --fontPrimary: "Adwaita Sans", sans-serif;
+    --fontCode: "Adwaita Sans", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
