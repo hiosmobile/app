@@ -125,7 +125,7 @@
 
 * {
     -webkit-tap-highlight-color: transparent;
-    font-family: "Google Sans Flex Variable", sans-serif;
+    font-family: var(--fontPrimary);
     box-sizing: border-box;
 }
 
@@ -486,6 +486,21 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
+
+.modal-scroll-area {
+    max-height: 50vh; /* Restricts the height to 50% of the viewport */
+    overflow-y: auto; /* Enables vertical scrolling when content exceeds the height */
+    padding-right: 4px; /* Gives a tiny bit of breathing room on the right */
+    margin-bottom: 16px; /* Separates the scroll area from your pinned buttons */
+
+    /* Matches the hidden scrollbar style used elsewhere in your app */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.modal-scroll-area::-webkit-scrollbar {
+    display: none;
+}
 /* Navigation Items (Shared) */
 .nav-item {
     display: flex;
@@ -722,8 +737,8 @@
     --onSurfaceVarient: #43474e;
 
     /*Fonts*/
-    --fontPrimary: "Google Sans Flex Variable", sans-serif;
-    --fontCode: "Google Sans Flex Variable", sans-serif;
+    --fontPrimary: "Adwaita Sans", sans-serif;
+    --fontCode: "Adwaita Sans", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
@@ -3144,7 +3159,7 @@ img[src$="scrolltop.bmp"] {
    ========================================= */
 .switchContainer {
     padding-right: 20px;
-    border: 1px solid var(--glass-border);
+    border: 0.5px solid var(--outline);
     border-radius: var(--radius-card);
     background-color: color-mix(
         in srgb,
@@ -3517,4 +3532,11 @@ body.high-contrast .blue-h3 {
   font-weight: 1 1000;
   src: url(/app/assets/google-sans-flex-latin-wght-normal-fc8tlXEJ.woff2) format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}/* adwaita-sans-latin-400-normal */
+@font-face {
+  font-family: 'Adwaita Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/app/assets/adwaita-sans-latin-400-normal-CwqrQDOM.woff2) format('woff2'), url(/app/assets/adwaita-sans-latin-400-normal-BKZ4cG7n.woff) format('woff');
 }
