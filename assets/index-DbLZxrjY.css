@@ -1829,6 +1829,16 @@ main.container {
     border-radius: 6px var(--radius-card) var(--radius-card) 6px !important;
 }
 
+.joinTopLeft {
+    border-radius: var(--radius-card) 6px 6px 6px !important;
+    margin-right: 1.5px !important;
+}
+
+.joinTopRight {
+    border-radius: 6px var(--radius-card) 6px 6px !important;
+    margin-left: 1.5px !important;
+}
+
 .full {
     border-radius: var(--radius-card) !important;
 }
@@ -2447,8 +2457,8 @@ body.acrylic-on .top-app-bar,
 body.acrylic-on .side-rail,
 body.acrylic-on .bottom-nav {
     background: var(--glass-tint) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    backdrop-filter: blur(24px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow);
 }
