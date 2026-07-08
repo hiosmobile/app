@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   PageHeader,
   InfoBubble,
@@ -14,7 +14,35 @@ import {
 import { ThemeContext } from "../../../components/ThemeContext";
 import { openExternalLink } from "../../utils/externalLink";
 
+const wallpaperOptions = [
+  { value: "default", label: "Montenegrin Lake (Default)" },
+  { value: "dobrota", label: "Dobrota, Montenegro" },
+  { value: "spain", label: "Montefrío, Spain" },
+  { value: "france", label: "Terrasson, France" },
+  { value: "turkey", label: "Tlos, Turkey" },
+  { value: "morocco", label: "Dades Gorge, Morocco" },
+  { value: "clouds", label: "Cloudy Sunrise, Liverpool" },
+  { value: "london", label: "Tower Bridge, London" },
+  { value: "yorkshire", label: "Keld, North Yorkshire" },
+  { value: "scotland", label: "Knockan Crag, Scotland" },
+];
+
+const wallpaperModeOptions = [
+  { value: "auto", label: "Auto (Match device)" },
+  { value: "light", label: "Daytime (Light)" },
+  { value: "dark", label: "Nighttime (Dark)" },
+];
+
+const genericColourOptions = [
+  { value: "default-light", label: "HiOSMobile 2.x (Default)" },
+  { value: "generic-cyan", label: "HiOSMobile v1.3.2 (Cyan)" },
+  { value: "generic-green", label: "Green" },
+  { value: "generic-orange", label: "Orange" },
+];
+
 export default function Appearance() {
+  const baseUrl = import.meta.env.BASE_URL;
+
   const {
     backgroundEnabled,
     setBackgroundEnabled,
@@ -34,6 +62,30 @@ export default function Appearance() {
 
   const [isWallpaperModalOpen, setIsWallpaperModalOpen] = useState(false);
 
+  const [originalWallpaper, setOriginalWallpaper] = useState(wallpaperTheme);
+
+  // 2. Function to open the modal and lock in the original state
+  const handleOpenModal = () => {
+    setOriginalWallpaper(wallpaperTheme);
+    setIsWallpaperModalOpen(true);
+  };
+
+  // 3. Function to cancel (reverts to original)
+  const handleCancel = () => {
+    setWallpaperTheme(originalWallpaper);
+    setIsWallpaperModalOpen(false);
+  };
+
+  // 4. Function to save (just closes the modal, keeping the new theme)
+  const handleSave = () => {
+    setIsWallpaperModalOpen(false);
+  };
+
+  // Find the label for the currently active theme
+  const currentOption =
+    wallpaperOptions.find((opt) => opt.value === wallpaperTheme) ||
+    wallpaperOptions[0];
+
   const effectiveAuto = backgroundEnabled ? autoColor : false;
 
   const handleBackgroundToggle = (isChecked) => {
@@ -44,31 +96,16 @@ export default function Appearance() {
     }
   };
 
-  const wallpaperOptions = [
-    { value: "default", label: "Montenegrin Lake (Default)" },
-    { value: "dobrota", label: "Dobrota, Montenegro" },
-    { value: "spain", label: "Montefrío, Spain" },
-    { value: "france", label: "Terrasson, France" },
-    { value: "turkey", label: "Tlos, Turkey" },
-    { value: "morocco", label: "Dades Gorge, Morocco" },
-    { value: "clouds", label: "Cloudy Sunrise, Liverpool" },
-    { value: "london", label: "Tower Bridge, London" },
-    { value: "yorkshire", label: "Keld, North Yorkshire" },
-    { value: "scotland", label: "Knockan Crag, Scotland" },
-  ];
+  const currentImageSrc =
+    wallpaperTheme === "default"
+      ? `${baseUrl}assets/backgrounds/backgroundimage.webp`
+      : `${baseUrl}assets/backgrounds/${wallpaperTheme}.webp`;
 
-  const wallpaperModeOptions = [
-    { value: "auto", label: "Auto (Match device)" },
-    { value: "light", label: "Daytime (Light)" },
-    { value: "dark", label: "Nighttime (Dark)" },
-  ];
-
-  const genericColourOptions = [
-    { value: "default-light", label: "HiOSMobile 2.x (Default)" },
-    { value: "generic-cyan", label: "HiOSMobile v1.3.2 (Cyan)" },
-    { value: "generic-green", label: "Green" },
-    { value: "generic-orange", label: "Orange" },
-  ];
+  useEffect(() => {
+    if (!backgroundEnabled) {
+      setIsWallpaperModalOpen(false);
+    }
+  }, [backgroundEnabled]);
 
   return (
     <main className="container mt-4 mb-5">
@@ -86,12 +123,102 @@ export default function Appearance() {
         <Col size={12} md={6}>
           <Card title="Wallpaper settings">
             <div className="settings-group mt-3">
-              <Switch
-                label="Wallpaper"
-                checked={backgroundEnabled}
-                onChange={handleBackgroundToggle}
-                className="joinTop"
-              />
+              <Row className="g-0 joinTop">
+                {/* Option: Wallpaper On */}
+                <Col size={6}>
+                  <div
+                    onClick={() => handleBackgroundToggle(true)}
+                    className={`card joinTopLeft ${backgroundEnabled ? "selected" : ""}`}
+                    style={{
+                      cursor: "pointer",
+                      border: backgroundEnabled
+                        ? "3px solid var(--primary) !important"
+                        : "0.5px solid var(--outline) !important",
+                      margin: 0,
+                      height: "100%",
+                      position: "relative", // <-- add this
+                      transition: "all .2s ease",
+                    }}
+                  >
+                    {backgroundEnabled && (
+                      <span
+                        className="material-symbols-rounded"
+                        style={{
+                          position: "absolute",
+                          top: 10,
+                          right: 10,
+                          zIndex: 2,
+                          fontSize: 30,
+                          color: "var(--primary)",
+                          background: "white",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        check_circle
+                      </span>
+                    )}
+
+                    <img
+                      src={`/assets/thumbnails/wallpaper_on.png`}
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        objectFit: "cover",
+                        filter: backgroundEnabled ? "none" : "brightness(0.6)",
+                      }}
+                    />
+                    <p style={{ margin: "10px 0 0 0" }}>On</p>
+                  </div>
+                </Col>
+
+                {/* Option: Wallpaper Off */}
+                <Col size={6}>
+                  <div
+                    onClick={() => handleBackgroundToggle(false)}
+                    className={`card joinTopRight ${!backgroundEnabled ? "selected" : ""}`}
+                    style={{
+                      cursor: "pointer",
+                      border: !backgroundEnabled
+                        ? "3px solid var(--primary) !important"
+                        : "0.5px solid var(--outline) !important",
+                      margin: 0,
+                      height: "100%",
+                      position: "relative", // <-- add this
+                      transition: "all .2s ease",
+                    }}
+                  >
+                    {!backgroundEnabled && (
+                      <span
+                        className="material-symbols-rounded"
+                        style={{
+                          position: "absolute",
+                          top: 10,
+                          right: 10,
+                          zIndex: 2,
+                          fontSize: 30,
+                          color: "var(--primary)",
+                          background: "white",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        check_circle
+                      </span>
+                    )}
+
+                    <img
+                      src={`/assets/thumbnails/wallpaper_off.png`}
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        objectFit: "cover",
+                        filter: !backgroundEnabled ? "none" : "brightness(0.6)",
+                      }}
+                    />
+                    <p style={{ margin: "10px 0 0 0" }}>Off</p>
+                  </div>
+                </Col>
+              </Row>
+
               <InfoBubble
                 icon="wallpaper"
                 title="Turn on or off the background image"
@@ -103,20 +230,64 @@ export default function Appearance() {
 
             <h3 className="card-title mb-3 mt-4">Pick a wallpaper</h3>
             <div className="settings-group">
-              <MenuActionBtn
-                icon="web_asset"
-                text={wallpaperTheme}
-                className="joinTop"
-                onClick={() => setIsWallpaperModalOpen(true)}
-              />
+              {/* NEW: Graphical Preview Button */}
+              <RippleButton
+                className="joinTop p-0"
+                onClick={handleOpenModal}
+                style={{
+                  width: "100%",
+                  borderRadius: "var(--radius-card)",
+                  textAlign: "left",
+                  display: "block",
+                  border: "0.5px solid var(--outline)",
+                  overflow: "hidden",
+                  opacity: backgroundEnabled ? 1 : 0.5,
+                  cursor: backgroundEnabled ? "pointer" : "not-allowed",
+                  pointerEvents: backgroundEnabled ? "auto" : "none",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    height: "140px",
+                    width: "100%",
+                  }}
+                >
+                  {/* The background image preview */}
+                  <img
+                    src={currentImageSrc}
+                    alt={currentOption.label}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
 
-              <Dropdown
-                value={wallpaperTheme}
-                onChange={setWallpaperTheme}
-                options={wallpaperOptions}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
+                  {/* Dark gradient overlay so the white text is always readable */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
+                      padding: "16px",
+                      color: "#ffffff",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                      {currentOption.label}
+                    </span>
+                    <span className="material-symbols-rounded">wallpaper</span>
+                  </div>
+                </div>
+              </RippleButton>
+
               <InfoBubble
                 icon="photo_prints"
                 title="Pick a background. Our backgrounds are stunning."
@@ -229,20 +400,22 @@ export default function Appearance() {
         title="Backgrounds"
         style={{ height: "100vh" }}
         isScrollable={true}
+        onClose={handleCancel}
         footer={
           <>
             <button
               type="button"
               className="joinLeft navButtonInactive flex-grow-1"
-              onClick={() => setIsWallpaperModalOpen(false)}
+              onClick={handleCancel}
               style={{ width: "50%" }}
             >
               Cancel
             </button>
 
             <RippleButton
-              type="submit"
+              type="button" // Changed from submit since it's not in a form
               className="joinRight form-button m-0 flex-grow-1"
+              onClick={handleSave}
               style={{
                 backgroundColor: "var(--primary)",
                 color: "var(--onPrimary)",
@@ -254,9 +427,62 @@ export default function Appearance() {
           </>
         }
       >
-        <Card>
-          <h1>Hello</h1>
-        </Card>
+        <Row className="g-4 m-0 mt-0">
+          {/* Map through your options array to generate the grid */}
+          {wallpaperOptions.map((option) => {
+            // Check if this card is the active one
+            const isSelected = wallpaperTheme === option.value;
+
+            return (
+              <Col size={12} md={6} key={option.value}>
+                <div
+                  onClick={() => setWallpaperTheme(option.value)}
+                  style={{
+                    cursor: "pointer",
+                    borderRadius: "var(--radius-card)",
+                    // Apply a primary outline if selected, transparent if not
+                    outline: isSelected
+                      ? "4px solid var(--primary)"
+                      : "4px solid transparent",
+                    outlineOffset: "2px",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  <Card>
+                    <img
+                      // Assumes your images are named like "spain.webp", "clouds.webp", etc.
+                      // Fallback to backgroundimage.webp if it's the "default" option
+                      src={
+                        option.value === "default"
+                          ? "/assets/backgrounds/backgroundimage.webp"
+                          : `/assets/backgrounds/${option.value}.webp`
+                      }
+                      className="card-img-top mb-3"
+                      alt={option.label}
+                      style={{
+                        borderRadius: "25px",
+                        objectFit: "cover",
+                        // Slightly shorter max-height looks better in grids
+                        maxHeight: "200px",
+                        width: "100%",
+                      }}
+                    />
+                    {/* Keep the text size consistent and neat */}
+                    <h4
+                      style={{
+                        margin: "0 0 5px 0",
+                        fontSize: "1.2rem",
+                        fontWeight: isSelected ? "bold" : "normal",
+                      }}
+                    >
+                      {option.label}
+                    </h4>
+                  </Card>
+                </div>
+              </Col>
+            );
+          })}
+        </Row>
       </Modal>
     </main>
   );

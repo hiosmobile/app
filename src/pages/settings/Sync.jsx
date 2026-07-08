@@ -30,7 +30,7 @@ export default function Sync() {
         <Col size={12} md={6}>
           <Card title="Appearance">
             <Switch
-              label="Sync HiOS appearance"
+              label="Sync appearance"
               checked={syncEnabled}
               onChange={setSyncEnabled}
               className="joinTop"
@@ -40,9 +40,9 @@ export default function Sync() {
               title="Sync your themes like a pro."
               className="joinBottom"
             >
-              Save your HiOS appearance preferences with your HiAccount so they
-              auto-apply on all your devices with HiOS installed. How fancy is
-              that?!
+              Save your appearance preferences with your HiAccount so they
+              auto-apply on all your devices with this app installed. How fancy
+              is that?!
             </InfoBubble>
           </Card>
         </Col>
@@ -64,10 +64,9 @@ export default function Sync() {
               title="More syncs coming soon"
               className="joinBottom"
             >
-              We're still in the process of adding more ways to sync HiOS with
-              your HiAccount, so watch this space as we progress with our
-              updates! We plan to very soon add a toggle for syncing the
-              dashboard.
+              We're still in the process of adding more ways to sync with your
+              HiAccount, so watch this space as we progress with our updates! We
+              plan to very soon add a toggle for syncing the dashboard.
             </InfoBubble>
           </Card>
         </Col>

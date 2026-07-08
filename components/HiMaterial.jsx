@@ -547,6 +547,7 @@ export const Modal = ({
                 overflowY: isScrollable ? "auto" : "visible",
                 flexGrow: isScrollable ? 1 : 0,
                 minHeight: 0,
+                borderRadius: "25px",
               }}
             >
               {children}
