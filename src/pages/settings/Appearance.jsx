@@ -61,27 +61,22 @@ export default function Appearance() {
   } = useContext(ThemeContext);
 
   const [isWallpaperModalOpen, setIsWallpaperModalOpen] = useState(false);
-
   const [originalWallpaper, setOriginalWallpaper] = useState(wallpaperTheme);
 
-  // 2. Function to open the modal and lock in the original state
   const handleOpenModal = () => {
     setOriginalWallpaper(wallpaperTheme);
     setIsWallpaperModalOpen(true);
   };
 
-  // 3. Function to cancel (reverts to original)
   const handleCancel = () => {
     setWallpaperTheme(originalWallpaper);
     setIsWallpaperModalOpen(false);
   };
 
-  // 4. Function to save (just closes the modal, keeping the new theme)
   const handleSave = () => {
     setIsWallpaperModalOpen(false);
   };
 
-  // Find the label for the currently active theme
   const currentOption =
     wallpaperOptions.find((opt) => opt.value === wallpaperTheme) ||
     wallpaperOptions[0];
@@ -124,7 +119,6 @@ export default function Appearance() {
           <Card title="Wallpaper settings">
             <div className="settings-group mt-3">
               <Row className="g-0 joinTop">
-                {/* Option: Wallpaper On */}
                 <Col size={6}>
                   <div
                     onClick={() => handleBackgroundToggle(true)}
@@ -136,7 +130,7 @@ export default function Appearance() {
                         : "0.5px solid var(--outline) !important",
                       margin: 0,
                       height: "100%",
-                      position: "relative", // <-- add this
+                      position: "relative",
                       transition: "all .2s ease",
                     }}
                   >
@@ -159,7 +153,7 @@ export default function Appearance() {
                     )}
 
                     <img
-                      src={`/assets/thumbnails/wallpaper_on.png`}
+                      src={`${baseUrl}assets/thumbnails/wallpaper_on.png`}
                       style={{
                         width: "100%",
                         height: "150px",
@@ -171,7 +165,6 @@ export default function Appearance() {
                   </div>
                 </Col>
 
-                {/* Option: Wallpaper Off */}
                 <Col size={6}>
                   <div
                     onClick={() => handleBackgroundToggle(false)}
@@ -183,7 +176,7 @@ export default function Appearance() {
                         : "0.5px solid var(--outline) !important",
                       margin: 0,
                       height: "100%",
-                      position: "relative", // <-- add this
+                      position: "relative",
                       transition: "all .2s ease",
                     }}
                   >
@@ -206,7 +199,7 @@ export default function Appearance() {
                     )}
 
                     <img
-                      src={`/assets/thumbnails/wallpaper_off.png`}
+                      src={`${baseUrl}assets/thumbnails/wallpaper_off.png`}
                       style={{
                         width: "100%",
                         height: "150px",
@@ -230,7 +223,6 @@ export default function Appearance() {
 
             <h3 className="card-title mb-3 mt-4">Pick a wallpaper</h3>
             <div className="settings-group">
-              {/* NEW: Graphical Preview Button */}
               <RippleButton
                 className="joinTop p-0"
                 onClick={handleOpenModal}
@@ -253,7 +245,6 @@ export default function Appearance() {
                     width: "100%",
                   }}
                 >
-                  {/* The background image preview */}
                   <img
                     src={currentImageSrc}
                     alt={currentOption.label}
@@ -264,7 +255,6 @@ export default function Appearance() {
                     }}
                   />
 
-                  {/* Dark gradient overlay so the white text is always readable */}
                   <div
                     style={{
                       position: "absolute",
@@ -321,7 +311,6 @@ export default function Appearance() {
           </Card>
         </Col>
 
-        {/*Right column*/}
         <Col size={12} md={6}>
           <Card title="Dynamic colour">
             <div className="settings-group">
@@ -413,7 +402,7 @@ export default function Appearance() {
             </button>
 
             <RippleButton
-              type="button" // Changed from submit since it's not in a form
+              type="button"
               className="joinRight form-button m-0 flex-grow-1"
               onClick={handleSave}
               style={{
@@ -428,9 +417,7 @@ export default function Appearance() {
         }
       >
         <Row className="g-4 m-0 mt-0">
-          {/* Map through your options array to generate the grid */}
           {wallpaperOptions.map((option) => {
-            // Check if this card is the active one
             const isSelected = wallpaperTheme === option.value;
 
             return (
@@ -440,7 +427,6 @@ export default function Appearance() {
                   style={{
                     cursor: "pointer",
                     borderRadius: "var(--radius-card)",
-                    // Apply a primary outline if selected, transparent if not
                     outline: isSelected
                       ? "4px solid var(--primary)"
                       : "4px solid transparent",
@@ -450,24 +436,20 @@ export default function Appearance() {
                 >
                   <Card>
                     <img
-                      // Assumes your images are named like "spain.webp", "clouds.webp", etc.
-                      // Fallback to backgroundimage.webp if it's the "default" option
                       src={
                         option.value === "default"
-                          ? "/assets/backgrounds/backgroundimage.webp"
-                          : `/assets/backgrounds/${option.value}.webp`
+                          ? `${baseUrl}assets/backgrounds/backgroundimage.webp`
+                          : `${baseUrl}assets/backgrounds/${option.value}.webp`
                       }
                       className="card-img-top mb-3"
                       alt={option.label}
                       style={{
                         borderRadius: "25px",
                         objectFit: "cover",
-                        // Slightly shorter max-height looks better in grids
                         maxHeight: "200px",
                         width: "100%",
                       }}
                     />
-                    {/* Keep the text size consistent and neat */}
                     <h4
                       style={{
                         margin: "0 0 5px 0",
