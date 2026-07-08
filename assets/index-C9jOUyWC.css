@@ -1843,6 +1843,650 @@ main.container {
     border-radius: var(--radius-card) !important;
 }
 
+/* Appearance segmented choosers */
+.hm-choice-group {
+    display: grid;
+    gap: 3px;
+    margin-bottom: 3px;
+}
+
+.hm-choice-group.cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hm-choice-group.cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hm-choice-group.cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.hm-choice-group.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.hm-choice-card {
+    min-height: 92px;
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--outline) 70%, transparent);
+    outline: 0 solid transparent;
+    outline-offset: -3px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    color: var(--onSurface);
+    font-family: var(--fontPrimary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition:
+        background-color 0.15s ease,
+        outline 0.15s ease,
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.hm-choice-card:hover {
+    background: color-mix(in srgb, var(--primaryContainer) 28%, var(--surface));
+}
+
+.hm-choice-card.is-selected {
+    outline: 3px solid var(--primary);
+    background: color-mix(in srgb, var(--primaryContainer) 45%, var(--surface));
+    color: var(--onPrimaryContainer);
+}
+
+.hm-choice-card:active {
+    transform: scale(0.98);
+}
+
+.hm-choice-card-icon {
+    font-size: 36px !important;
+    color: var(--onSurfaceVariant);
+}
+
+.hm-choice-card.is-selected .hm-choice-card-icon {
+    color: var(--primary);
+}
+
+.hm-choice-label {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+    z-index: 1;
+}
+
+.hm-choice-check {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 20px !important;
+    color: var(--primary);
+    z-index: 2;
+}
+
+.hm-colour-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 2px solid color-mix(in srgb, var(--surface) 80%, white);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+    z-index: 1;
+}
+
+/* Make the chooser join neatly onto the InfoBubble below */
+.hm-choice-group.joinTop .hm-choice-card:first-child {
+    border-radius: var(--radius-card) 8px 8px 8px;
+}
+
+.hm-choice-group.joinTop .hm-choice-card:last-child {
+    border-radius: 8px var(--radius-card) 8px 8px;
+}
+
+.hm-choice-group.joinTop .hm-choice-card:not(:first-child):not(:last-child) {
+    border-radius: 8px;
+}
+
+/* Compact wallpaper picker button */
+.hm-wallpaper-picker {
+    width: 100%;
+    min-height: 96px;
+    border: 1px solid color-mix(in srgb, var(--outline) 70%, transparent);
+    outline: 0 solid transparent;
+    background: var(--surface);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        opacity 0.15s ease,
+        outline 0.15s ease;
+}
+
+.hm-wallpaper-picker:hover {
+    outline: 3px solid color-mix(in srgb, var(--primary) 55%, transparent);
+    outline-offset: -3px;
+}
+
+.hm-wallpaper-picker:active {
+    transform: scale(0.99);
+}
+
+.hm-wallpaper-picker.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.hm-wallpaper-picker-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.hm-wallpaper-picker-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.78),
+            rgba(0, 0, 0, 0.52),
+            rgba(0, 0, 0, 0.25)
+        );
+}
+
+.hm-wallpaper-picker-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.hm-wallpaper-picker-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px !important;
+    flex-shrink: 0;
+}
+
+.hm-wallpaper-picker-text {
+    min-width: 0;
+}
+
+.hm-wallpaper-picker-kicker {
+    display: block;
+    font-size: 0.78rem;
+    opacity: 0.85;
+    line-height: 1.1;
+}
+
+.hm-wallpaper-picker-title {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hm-wallpaper-picker-action {
+    position: relative;
+    z-index: 2;
+    font-size: 28px !important;
+    opacity: 0.9;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   HiOS background picker modal
+   ========================================================================== */
+
+.hm-background-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 4px 2px 18px;
+}
+
+/* Main preview area */
+
+.hm-background-hero {
+    position: relative;
+    min-height: 350px;
+    border-radius: 36px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--outline) 55%, transparent);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.hm-background-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.16) brightness(0.8);
+    transform: scale(1.02);
+    z-index: 0;
+}
+
+.hm-background-hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        radial-gradient(
+            circle at 50% 12%,
+            rgba(255, 255, 255, 0.24),
+            transparent 34%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.08),
+            rgba(0, 0, 0, 0.56)
+        );
+}
+
+/* Fake app UI preview */
+
+.hm-background-preview-shell {
+    position: relative;
+    z-index: 2;
+    width: min(540px, 100%);
+    border-radius: 34px;
+    padding: 14px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(26px) saturate(1.35);
+    -webkit-backdrop-filter: blur(26px) saturate(1.35);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow:
+        0 24px 65px rgba(0, 0, 0, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.hm-background-preview-topbar {
+    height: 44px;
+    border-radius: 999px;
+    padding: 0 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: white;
+    font-weight: 800;
+    font-size: 0.92rem;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.hm-background-preview-topbar .material-symbols-rounded {
+    font-size: 24px;
+}
+
+.hm-background-preview-card {
+    border-radius: 26px;
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+    color: var(--onSurface);
+    border: 1px solid color-mix(in srgb, var(--outline) 42%, transparent);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 color-mix(in srgb, white 22%, transparent);
+}
+
+.hm-background-preview-card.main {
+    min-height: 110px;
+    padding: 18px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.hm-background-preview-card.main .material-symbols-rounded {
+    font-size: 38px;
+    color: var(--primary);
+}
+
+.hm-background-preview-card.main strong {
+    display: block;
+    font-size: 1.1rem;
+    line-height: 1.1;
+}
+
+.hm-background-preview-card.main p {
+    margin: 5px 0 0;
+    font-size: 0.86rem;
+    color: var(--onSurfaceVarient);
+    line-height: 1.25;
+}
+
+.hm-background-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.hm-background-preview-card.small {
+    min-height: 82px;
+    padding: 14px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+}
+
+.hm-background-preview-card.small .material-symbols-rounded {
+    color: var(--primary);
+    font-size: 30px;
+}
+
+.hm-background-preview-card.small strong {
+    font-size: 0.9rem;
+    line-height: 1.1;
+}
+
+/* Current background label */
+
+.hm-background-current {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 24px;
+    background: rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-sizing: border-box;
+}
+
+.hm-background-current .material-symbols-rounded {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.hm-background-current p {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.1;
+    opacity: 0.8;
+}
+
+.hm-background-current h3 {
+    margin: 3px 0 0;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+/* Section heading */
+
+.hm-background-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+    color: var(--onSurface);
+}
+
+.hm-background-section-header p {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.1;
+    color: var(--onSurfaceVarient);
+}
+
+.hm-background-section-header h3 {
+    margin: 3px 0 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.hm-background-section-header .material-symbols-rounded {
+    color: var(--primary);
+    font-size: 30px;
+}
+
+/* Background tiles */
+
+.hm-background-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 12px;
+}
+
+.hm-background-tile {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border: 1px solid color-mix(in srgb, var(--outline) 55%, transparent);
+    outline: 0 solid transparent;
+    outline-offset: -4px;
+    border-radius: 28px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    background: var(--surface);
+    cursor: pointer;
+    box-sizing: border-box;
+    font-family: var(--fontPrimary);
+    text-align: left;
+    color: white;
+    transition:
+        transform 0.16s ease,
+        outline 0.16s ease,
+        box-shadow 0.16s ease,
+        filter 0.16s ease;
+}
+
+.hm-background-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+.hm-background-tile:active {
+    transform: scale(0.98);
+}
+
+.hm-background-tile.is-selected {
+    outline: 4px solid var(--primary);
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+.hm-background-tile-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: transform 0.22s ease;
+}
+
+.hm-background-tile:hover .hm-background-tile-img {
+    transform: scale(1.04);
+}
+
+.hm-background-tile-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(to top, rgba(0, 0, 0, 0.74), transparent 54%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 36%);
+}
+
+.hm-background-tile-check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    color: white;
+    background: var(--primary);
+    border-radius: 999px;
+    font-size: 24px !important;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.34);
+}
+
+.hm-background-tile-label {
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    bottom: 11px;
+    z-index: 2;
+    color: white;
+}
+
+.hm-background-tile-label span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.86rem;
+    font-weight: 800;
+    line-height: 1.12;
+    text-shadow: 0 2px 9px rgba(0, 0, 0, 0.62);
+}
+
+/* Footer buttons */
+
+.hm-background-modal-footer {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+}
+
+.hm-background-modal-btn {
+    width: 50%;
+    min-height: 52px;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--fontPrimary);
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.hm-background-modal-btn.secondary {
+    background: color-mix(in srgb, var(--surfaceVarient) 78%, transparent);
+    color: var(--onSurface);
+}
+
+.hm-background-modal-btn.primary {
+    background: var(--primary);
+    color: var(--onPrimary);
+}
+
+/* Mobile tuning */
+
+@media (max-width: 600px) {
+    .hm-background-modal {
+        gap: 16px;
+    }
+
+    .hm-background-hero {
+        min-height: 325px;
+        padding: 16px;
+        border-radius: 32px;
+    }
+
+    .hm-background-preview-shell {
+        border-radius: 30px;
+        padding: 12px;
+    }
+
+    .hm-background-preview-card.main {
+        min-height: 96px;
+        padding: 15px;
+    }
+
+    .hm-background-preview-card.main .material-symbols-rounded {
+        font-size: 34px;
+    }
+
+    .hm-background-preview-grid {
+        gap: 8px;
+    }
+
+    .hm-background-preview-card.small {
+        min-height: 76px;
+        padding: 12px;
+    }
+
+    .hm-background-current {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        border-radius: 22px;
+    }
+
+    .hm-background-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .hm-background-tile {
+        border-radius: 24px;
+    }
+
+    .hm-background-modal-footer {
+        gap: 6px;
+    }
+
+    .hm-background-modal-btn {
+        min-height: 50px;
+    }
+}
+
 /* Large link buttons */
 .button,
 .form-select {
