@@ -3,8 +3,6 @@ import {
   PageHeader,
   InfoBubble,
   Card,
-  Switch,
-  Dropdown,
   MenuActionBtn,
   Row,
   Col,
@@ -28,16 +26,16 @@ const wallpaperOptions = [
 ];
 
 const wallpaperModeOptions = [
-  { value: "auto", label: "Auto (Match device)" },
-  { value: "light", label: "Daytime (Light)" },
-  { value: "dark", label: "Nighttime (Dark)" },
+  { value: "auto", label: "Auto", icon: "brightness_auto" },
+  { value: "light", label: "Daytime", icon: "light_mode" },
+  { value: "dark", label: "Nighttime", icon: "dark_mode" },
 ];
 
 const genericColourOptions = [
-  { value: "default-light", label: "HiOSMobile 2.x (Default)" },
-  { value: "generic-cyan", label: "HiOSMobile v1.3.2 (Cyan)" },
-  { value: "generic-green", label: "Green" },
-  { value: "generic-orange", label: "Orange" },
+  { value: "default-light", label: "Default", color: "#607d8b" },
+  { value: "generic-cyan", label: "Cyan", color: "#00bcd4" },
+  { value: "generic-green", label: "Green", color: "#4caf50" },
+  { value: "generic-orange", label: "Orange", color: "#ff9800" },
 ];
 
 export default function Appearance() {
@@ -56,8 +54,6 @@ export default function Appearance() {
     setGenericColor,
     darkModePref,
     setDarkModePref,
-    syncEnabled,
-    setSyncEnabled,
   } = useContext(ThemeContext);
 
   const [isWallpaperModalOpen, setIsWallpaperModalOpen] = useState(false);
@@ -91,10 +87,39 @@ export default function Appearance() {
     }
   };
 
-  const currentImageSrc =
-    wallpaperTheme === "default"
+  const getWallpaperSrc = (value) =>
+    value === "default"
       ? `${baseUrl}assets/backgrounds/backgroundimage.webp`
-      : `${baseUrl}assets/backgrounds/${wallpaperTheme}.webp`;
+      : `${baseUrl}assets/backgrounds/${value}.webp`;
+
+  const currentImageSrc = getWallpaperSrc(wallpaperTheme);
+
+  const ChoiceCard = ({ selected, icon, label, colour, onClick }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`hm-choice-card ${selected ? "is-selected" : ""}`}
+    >
+      {selected && (
+        <span className="material-symbols-rounded hm-choice-check">
+          check_circle
+        </span>
+      )}
+
+      {colour ? (
+        <span
+          className="hm-colour-dot"
+          style={{ backgroundColor: colour }}
+        />
+      ) : (
+        <span className="material-symbols-rounded hm-choice-card-icon">
+          {icon}
+        </span>
+      )}
+
+      <p className="hm-choice-label">{label}</p>
+    </button>
+  );
 
   useEffect(() => {
     if (!backgroundEnabled) {
@@ -118,99 +143,21 @@ export default function Appearance() {
         <Col size={12} md={6}>
           <Card title="Wallpaper settings">
             <div className="settings-group mt-3">
-              <Row className="g-0 joinTop">
-                <Col size={6}>
-                  <div
-                    onClick={() => handleBackgroundToggle(true)}
-                    className={`card joinTopLeft ${backgroundEnabled ? "selected" : ""}`}
-                    style={{
-                      cursor: "pointer",
-                      border: backgroundEnabled
-                        ? "3px solid var(--primary) !important"
-                        : "0.5px solid var(--outline) !important",
-                      margin: 0,
-                      height: "100%",
-                      position: "relative",
-                      transition: "all .2s ease",
-                    }}
-                  >
-                    {backgroundEnabled && (
-                      <span
-                        className="material-symbols-rounded"
-                        style={{
-                          position: "absolute",
-                          top: 10,
-                          right: 10,
-                          zIndex: 2,
-                          fontSize: 30,
-                          color: "var(--primary)",
-                          background: "white",
-                          borderRadius: "50%",
-                        }}
-                      >
-                        check_circle
-                      </span>
-                    )}
+              <div className="hm-choice-group cols-2 joinTop">
+                <ChoiceCard
+                  selected={backgroundEnabled}
+                  icon="wallpaper"
+                  label="On"
+                  onClick={() => handleBackgroundToggle(true)}
+                />
 
-                    <img
-                      src={`${baseUrl}assets/thumbnails/wallpaper_on.png`}
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        objectFit: "cover",
-                        filter: backgroundEnabled ? "none" : "brightness(0.6)",
-                      }}
-                    />
-                    <p style={{ margin: "10px 0 0 0" }}>On</p>
-                  </div>
-                </Col>
-
-                <Col size={6}>
-                  <div
-                    onClick={() => handleBackgroundToggle(false)}
-                    className={`card joinTopRight ${!backgroundEnabled ? "selected" : ""}`}
-                    style={{
-                      cursor: "pointer",
-                      border: !backgroundEnabled
-                        ? "3px solid var(--primary) !important"
-                        : "0.5px solid var(--outline) !important",
-                      margin: 0,
-                      height: "100%",
-                      position: "relative",
-                      transition: "all .2s ease",
-                    }}
-                  >
-                    {!backgroundEnabled && (
-                      <span
-                        className="material-symbols-rounded"
-                        style={{
-                          position: "absolute",
-                          top: 10,
-                          right: 10,
-                          zIndex: 2,
-                          fontSize: 30,
-                          color: "var(--primary)",
-                          background: "white",
-                          borderRadius: "50%",
-                        }}
-                      >
-                        check_circle
-                      </span>
-                    )}
-
-                    <img
-                      src={`${baseUrl}assets/thumbnails/wallpaper_off.png`}
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        objectFit: "cover",
-                        filter: !backgroundEnabled ? "none" : "brightness(0.6)",
-                      }}
-                    />
-                    <p style={{ margin: "10px 0 0 0" }}>Off</p>
-                  </div>
-                </Col>
-              </Row>
+                <ChoiceCard
+                  selected={!backgroundEnabled}
+                  icon="hide_image"
+                  label="Off"
+                  onClick={() => handleBackgroundToggle(false)}
+                />
+              </div>
 
               <InfoBubble
                 icon="wallpaper"
@@ -224,58 +171,39 @@ export default function Appearance() {
             <h3 className="card-title mb-3 mt-4">Pick a wallpaper</h3>
             <div className="settings-group">
               <RippleButton
-                className="joinTop p-0"
-                onClick={handleOpenModal}
-                style={{
-                  width: "100%",
-                  borderRadius: "var(--radius-card)",
-                  textAlign: "left",
-                  display: "block",
-                  border: "0.5px solid var(--outline)",
-                  overflow: "hidden",
-                  opacity: backgroundEnabled ? 1 : 0.5,
-                  cursor: backgroundEnabled ? "pointer" : "not-allowed",
-                  pointerEvents: backgroundEnabled ? "auto" : "none",
-                }}
+                type="button"
+                className={`hm-wallpaper-picker joinTop ${
+                  !backgroundEnabled ? "is-disabled" : ""
+                }`}
+                onClick={backgroundEnabled ? handleOpenModal : undefined}
               >
-                <div
-                  style={{
-                    position: "relative",
-                    height: "140px",
-                    width: "100%",
-                  }}
-                >
-                  <img
-                    src={currentImageSrc}
-                    alt={currentOption.label}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
+                <img
+                  src={currentImageSrc}
+                  alt=""
+                  aria-hidden="true"
+                  className="hm-wallpaper-picker-img"
+                />
 
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      background:
-                        "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
-                      padding: "16px",
-                      color: "#ffffff",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                <div className="hm-wallpaper-picker-scrim" />
+
+                <div className="hm-wallpaper-picker-content">
+                  <span className="material-symbols-rounded hm-wallpaper-picker-icon">
+                    photo_library
+                  </span>
+
+                  <div className="hm-wallpaper-picker-text">
+                    <span className="hm-wallpaper-picker-kicker">
+                      Current wallpaper
+                    </span>
+                    <span className="hm-wallpaper-picker-title">
                       {currentOption.label}
                     </span>
-                    <span className="material-symbols-rounded">wallpaper</span>
                   </div>
                 </div>
+
+                <span className="material-symbols-rounded hm-wallpaper-picker-action">
+                  chevron_right
+                </span>
               </RippleButton>
 
               <InfoBubble
@@ -291,13 +219,21 @@ export default function Appearance() {
 
             <h3 className="card-title mb-3 mt-4">Wallpaper Time of Day</h3>
             <div className="settings-group">
-              <Dropdown
-                value={darkModePref}
-                onChange={setDarkModePref}
-                options={wallpaperModeOptions}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
+              <div
+                className={`hm-choice-group cols-3 joinTop ${
+                  !backgroundEnabled ? "is-disabled" : ""
+                }`}
+              >
+                {wallpaperModeOptions.map((opt) => (
+                  <ChoiceCard
+                    key={opt.value}
+                    selected={backgroundEnabled && darkModePref === opt.value}
+                    icon={opt.icon}
+                    label={opt.label}
+                    onClick={() => setDarkModePref(opt.value)}
+                  />
+                ))}
+              </div>
               <InfoBubble
                 icon="brightness_4"
                 title="Pick a colour of wallpaper."
@@ -313,14 +249,27 @@ export default function Appearance() {
 
         <Col size={12} md={6}>
           <Card title="Dynamic colour">
-            <div className="settings-group">
-              <Switch
-                label="Dynamic colour"
-                checked={effectiveAuto}
-                onChange={setAutoColor}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
+            <div className="settings-group mt-3">
+              <div
+                className={`hm-choice-group cols-2 joinTop ${
+                  !backgroundEnabled ? "is-disabled" : ""
+                }`}
+              >
+                <ChoiceCard
+                  selected={backgroundEnabled && effectiveAuto}
+                  icon="palette"
+                  label="Enabled"
+                  onClick={() => setAutoColor(true)}
+                />
+
+                <ChoiceCard
+                  selected={backgroundEnabled && !effectiveAuto}
+                  icon="format_color_reset"
+                  label="Disabled"
+                  onClick={() => setAutoColor(false)}
+                />
+              </div>
+
               <InfoBubble
                 icon="colors"
                 title="Turn on or off the dynamic wallpaper colours."
@@ -333,13 +282,21 @@ export default function Appearance() {
 
             <h3 className="card-title mb-3 mt-4">Basic colours</h3>
             <div className="settings-group">
-              <Dropdown
-                value={genericColor}
-                onChange={setGenericColor}
-                options={genericColourOptions}
-                disabled={effectiveAuto}
-                className="joinTop"
-              />
+              <div
+                className={`hm-choice-group cols-4 joinTop ${
+                  effectiveAuto ? "is-disabled" : ""
+                }`}
+              >
+                {genericColourOptions.map((opt) => (
+                  <ChoiceCard
+                    key={opt.value}
+                    selected={!effectiveAuto && genericColor === opt.value}
+                    colour={opt.color}
+                    label={opt.label}
+                    onClick={() => setGenericColor(opt.value)}
+                  />
+                ))}
+              </div>
               <InfoBubble
                 icon="colorize"
                 title="Pick a basic colour."
@@ -350,15 +307,28 @@ export default function Appearance() {
               </InfoBubble>
             </div>
 
-            <h3 className="card-title mb-3 mt-4">Materials</h3>
+            <h3 className="card-title mb-3 mt-4">ZenGlass</h3>
             <div className="settings-group">
-              <Switch
-                label="ZenGlass"
-                checked={acrylicEnabled}
-                onChange={setAcrylicEnabled}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
+              <div
+                className={`hm-choice-group cols-2 joinTop ${
+                  !backgroundEnabled ? "is-disabled" : ""
+                }`}
+              >
+                <ChoiceCard
+                  selected={backgroundEnabled && acrylicEnabled}
+                  icon="blur_on"
+                  label="On"
+                  onClick={() => setAcrylicEnabled(true)}
+                />
+
+                <ChoiceCard
+                  selected={backgroundEnabled && !acrylicEnabled}
+                  icon="blur_off"
+                  label="Off"
+                  onClick={() => setAcrylicEnabled(false)}
+                />
+              </div>
+
               <InfoBubble
                 icon="blur_on"
                 title="Turn on or off ZenGlass."
@@ -386,85 +356,125 @@ export default function Appearance() {
 
       <Modal
         isOpen={isWallpaperModalOpen}
-        title="Backgrounds"
+        title="Background & style"
         style={{ height: "100vh" }}
         isScrollable={true}
         onClose={handleCancel}
         footer={
-          <>
+          <div className="hm-background-modal-footer">
             <button
               type="button"
-              className="joinLeft navButtonInactive flex-grow-1"
+              className="hm-background-modal-btn secondary"
               onClick={handleCancel}
-              style={{ width: "50%" }}
             >
               Cancel
             </button>
 
             <RippleButton
               type="button"
-              className="joinRight form-button m-0 flex-grow-1"
+              className="hm-background-modal-btn primary"
               onClick={handleSave}
-              style={{
-                backgroundColor: "var(--primary)",
-                color: "var(--onPrimary)",
-                width: "50%",
-              }}
             >
-              Save changes
+              Apply background
             </RippleButton>
-          </>
+          </div>
         }
       >
-        <Row className="g-4 m-0 mt-0">
-          {wallpaperOptions.map((option) => {
-            const isSelected = wallpaperTheme === option.value;
+        <div className="hm-background-modal">
+          <section className="hm-background-hero">
+            <img
+              src={currentImageSrc}
+              alt=""
+              aria-hidden="true"
+              className="hm-background-hero-img"
+            />
 
-            return (
-              <Col size={12} md={6} key={option.value}>
-                <div
-                  onClick={() => setWallpaperTheme(option.value)}
-                  style={{
-                    cursor: "pointer",
-                    borderRadius: "var(--radius-card)",
-                    outline: isSelected
-                      ? "4px solid var(--primary)"
-                      : "4px solid transparent",
-                    outlineOffset: "2px",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  <Card>
-                    <img
-                      src={
-                        option.value === "default"
-                          ? `${baseUrl}assets/backgrounds/backgroundimage.webp`
-                          : `${baseUrl}assets/backgrounds/${option.value}.webp`
-                      }
-                      className="card-img-top mb-3"
-                      alt={option.label}
-                      style={{
-                        borderRadius: "25px",
-                        objectFit: "cover",
-                        maxHeight: "200px",
-                        width: "100%",
-                      }}
-                    />
-                    <h4
-                      style={{
-                        margin: "0 0 5px 0",
-                        fontSize: "1.2rem",
-                        fontWeight: isSelected ? "bold" : "normal",
-                      }}
-                    >
-                      {option.label}
-                    </h4>
-                  </Card>
+            <div className="hm-background-hero-scrim" />
+
+            <div className="hm-background-preview-shell">
+              <div className="hm-background-preview-topbar">
+                <span className="material-symbols-rounded">grid_view</span>
+                <span>HiOS preview</span>
+              </div>
+
+              <div className="hm-background-preview-card main">
+                <span className="material-symbols-rounded">palette</span>
+
+                <div>
+                  <strong>Appearance</strong>
+                  <p>Cards float above this background</p>
                 </div>
-              </Col>
-            );
-          })}
-        </Row>
+              </div>
+
+              <div className="hm-background-preview-grid">
+                <div className="hm-background-preview-card small">
+                  <span className="material-symbols-rounded">wallpaper</span>
+                  <strong>Background</strong>
+                </div>
+
+                <div className="hm-background-preview-card small">
+                  <span className="material-symbols-rounded">blur_on</span>
+                  <strong>ZenGlass</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="hm-background-current">
+              <span className="material-symbols-rounded">image</span>
+
+              <div>
+                <p>Current app background</p>
+                <h3>{currentOption.label}</h3>
+              </div>
+            </div>
+          </section>
+
+          <section className="hm-background-section-header">
+            <div>
+              <p>HiOS backgrounds</p>
+              <h3>Choose a background</h3>
+            </div>
+
+            <span className="material-symbols-rounded">photo_library</span>
+          </section>
+
+          <section className="hm-background-grid">
+            {wallpaperOptions.map((option) => {
+              const isSelected = wallpaperTheme === option.value;
+              const imageSrc = getWallpaperSrc(option.value);
+
+              return (
+                <button
+                  type="button"
+                  key={option.value}
+                  aria-pressed={isSelected}
+                  className={`hm-background-tile ${
+                    isSelected ? "is-selected" : ""
+                  }`}
+                  onClick={() => setWallpaperTheme(option.value)}
+                >
+                  <img
+                    src={imageSrc}
+                    alt={option.label}
+                    className="hm-background-tile-img"
+                  />
+
+                  <div className="hm-background-tile-scrim" />
+
+                  {isSelected && (
+                    <span className="material-symbols-rounded hm-background-tile-check">
+                      check_circle
+                    </span>
+                  )}
+
+                  <div className="hm-background-tile-label">
+                    <span>{option.label}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </section>
+        </div>
       </Modal>
     </main>
   );
