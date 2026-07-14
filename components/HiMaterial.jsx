@@ -482,7 +482,8 @@ export const Modal = ({
       {isOpen && (
         <motion.div
           className="bottom-sheet-overlay"
-          initial={{ opacity: 0 }}
+          // Start fully opaque to kill the fade-in
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
@@ -492,33 +493,32 @@ export const Modal = ({
             justifyContent: "center",
             padding: "15px",
             pointerEvents: "auto",
-            transition: "none",
+            // Force hardware acceleration on the overlay
+            WebkitTransform: "translateZ(0)",
           }}
         >
           <motion.div
             className="bottom-sheet"
-            initial={{ opacity: 0, scale: 0.95, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            // Start opaque, but keep the scale and Y offset for the bounce
+            initial={{ scale: 0.95, y: 15, opacity: 1 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
-              bottom: "auto",
-              left: "auto",
-              right: "auto",
               margin: 0,
-              transform: "none",
-              transition: "none",
               maxWidth: isScrollable ? "1140px" : "500px",
               width: "100%",
               height: isScrollable ? "85%" : "auto",
               display: "flex",
               flexDirection: "column",
-              willChange: "transform, opacity",
+              // CRITICAL FIX: Forces the browser to keep the glass effect active during motion
+              WebkitTransform: "translate3d(0,0,0)",
+              transform: "translate3d(0,0,0)",
+              willChange: "transform",
             }}
-            onClick={(e) => e.stopPropagation()}
           >
-            {/* 1. Sticky Header */}
             <div className="bottom-sheet-header">
               {title && (
                 <h2 style={{ color: "var(--primary)", margin: 0 }}>{title}</h2>
@@ -527,7 +527,12 @@ export const Modal = ({
                 <button
                   className="close-button"
                   onClick={onClose}
-                  style={{ margin: "-8px -8px 0 0" }}
+                  style={{ 
+                    margin: "-8px -8px 0 0", 
+                    background: "none", 
+                    border: "none", 
+                    cursor: "pointer" 
+                  }}
                 >
                   <i
                     className="material-symbols-rounded"
@@ -539,7 +544,6 @@ export const Modal = ({
               )}
             </div>
 
-            {/* 2. Scrollable Content Area */}
             <div
               className="sheet-content"
               style={{
@@ -553,16 +557,15 @@ export const Modal = ({
               {children}
             </div>
 
-            {/* 3. NEW: Sticky Footer */}
             {footer && (
               <div
                 className="bottom-sheet-footer"
                 style={{
-                  marginTop: "16px", // Adds space between the content and buttons
+                  marginTop: "16px",
                   paddingTop: "16px",
                   borderTop: isScrollable
                     ? "1px solid var(--glass-border)"
-                    : "none", // Adds a subtle line if it's a scrolling modal
+                    : "none",
                   display: "flex",
                   gap: "4px",
                 }}

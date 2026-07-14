@@ -16,6 +16,7 @@ const wallpaperOptions = [
   { value: "default", label: "Montenegrin Lake (Default)" },
   { value: "dobrota", label: "Dobrota, Montenegro" },
   { value: "spain", label: "Montefrío, Spain" },
+  { value: "almeria", label: "Alcazaba de Almería, Spain"},
   { value: "france", label: "Terrasson, France" },
   { value: "turkey", label: "Tlos, Turkey" },
   { value: "morocco", label: "Dades Gorge, Morocco" },

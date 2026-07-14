@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
 import {
   PageHeader,
   Card,
@@ -15,14 +16,20 @@ export default function Updates() {
   const [latestVersion, setLatestVersion] = useState("Checking...");
   const [releaseUrl, setReleaseUrl] = useState("");
 
+  const isWeb = Capacitor.getPlatform() === "web";
+
   useEffect(() => {
     const fetchVersions = async () => {
-      // 1. Get current local app version
-      try {
-        const info = await App.getInfo();
-        setAppVersion(`${info.version} (${info.build})`);
-      } catch (error) {
-        setAppVersion("Web/Dev Mode");
+      // 1. Get current local app version safely
+      if (isWeb) {
+        setAppVersion("Web Application");
+      } else {
+        try {
+          const info = await App.getInfo();
+          setAppVersion(`${info.version} (${info.build})`);
+        } catch (error) {
+          setAppVersion("Dev Mode / Unknown");
+        }
       }
 
       // 2. Fetch the latest release from GitHub
@@ -44,7 +51,7 @@ export default function Updates() {
     };
 
     fetchVersions();
-  }, []);
+  }, [isWeb]);
 
   return (
     <main className="container mt-4 mb-5">
@@ -53,7 +60,11 @@ export default function Updates() {
           <PageHeader
             icon="system_update"
             title="Updates"
-            subtitle="Check your current app version and find the latest releases."
+            subtitle={
+              isWeb
+                ? "You are running the web version, which is always up to date."
+                : "Check your current app version and find the latest releases."
+            }
           />
         </Col>
       </Row>
@@ -63,15 +74,16 @@ export default function Updates() {
         <Col size={12} md={6}>
           <Card title="Version Status">
             <InfoBubble
-              icon="smartphone"
+              icon={isWeb ? "language" : "smartphone"}
               title="Current Version"
               className="joinTop"
             >
               {appVersion}
+              {isWeb && " (Always Up to Date)"}
             </InfoBubble>
             <InfoBubble
               icon="cloud_download"
-              title="Latest Available"
+              title="Latest Android Release"
               className="joinBottom m-0"
             >
               {latestVersion}
@@ -79,11 +91,11 @@ export default function Updates() {
           </Card>
         </Col>
 
-        {/* Right Column: Update Actions */}
+        {/* Right Column: Update Actions / Native Promo */}
         <Col size={12} md={6}>
-          <Card title="Update Sources">
+          <Card title={isWeb ? "Get the Native App" : "Update Sources"}>
             <MenuActionBtn
-              icon="open_in_new"
+              icon={isWeb ? "android" : "open_in_new"}
               text="Download .apk"
               className="joinTop"
               onClick={() => {
@@ -95,12 +107,17 @@ export default function Updates() {
               }}
             />
             <InfoBubble
-              icon="system_update"
-              title="Go ahead, download our update."
+              icon={isWeb ? "install_mobile" : "system_update"}
+              title={
+                isWeb
+                  ? "Take it on the go."
+                  : "Go ahead, download our update."
+              }
               className="joinBottom"
             >
-              What are you waiting for? We pour love and heart into updating
-              this app, and adding tonnes of beautiful new features!
+              {isWeb
+                ? "You are currently viewing the web version. Download the Android APK to get the full native experience on your device!"
+                : "What are you waiting for? We pour love and heart into updating this app, and adding tonnes of beautiful new features!"}
             </InfoBubble>
           </Card>
         </Col>

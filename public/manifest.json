@@ -1,0 +1,16 @@
+{
+  "name": "HiCafe",
+  "short_name": "HiCafe",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#111318",
+  "background_color": "#111318",
+  "icons": [
+    {
+      "src": "/hicafe.webp",
+      "sizes": "64x64 192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

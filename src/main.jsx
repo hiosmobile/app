@@ -7,7 +7,19 @@ import "../components/navigation.css";
 import "../components/layout.css";
 import "./assets/style.css"; // style.css loads last, ensuring its theme/glass variables overrule everything else
 import "@fontsource-variable/google-sans-flex/wght.css";
-import "@fontsource/adwaita-sans";
+import "@fontsource/ubuntu";
+
+// THIS IS THE MISSING LINE:
+import { registerSW } from "virtual:pwa-register";
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    console.log("New content available, please refresh.");
+  },
+  onOfflineReady() {
+    console.log("App is ready to work offline.");
+  },
+});
 
 // Fix for Android safe areas where env(safe-area-inset-*) might return 0px
 if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android") {

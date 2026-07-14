@@ -551,10 +551,11 @@ export function WeatherWidget() {
 }
 
 // =========================================
-// DATE WIDGET
+// DATE WIDGET (Redesigned)
 // =========================================
 export function DateWidget() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const today = new Date();
   const year = currentDate.getFullYear();
@@ -562,45 +563,85 @@ export function DateWidget() {
 
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
 
   const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
   ];
 
-  const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  // Single letters for a cleaner, modern look
+  const dayNames = ["S", "M", "T", "W", "T", "F", "S"];
 
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
-  const resetToToday = () => setCurrentDate(new Date());
+  const resetToToday = () => {
+    const now = new Date();
+    setCurrentDate(now);
+    setSelectedDate(now);
+  };
 
-  const blanks = Array(firstDayOfMonth).fill(null);
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const totalCells = [...blanks, ...days];
+  // Build the calendar grid including prev/next month overflow days
+  const calendarCells = [];
+
+  // Previous month trailing days
+  for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+    calendarCells.push({
+      day: daysInPrevMonth - i,
+      isCurrentMonth: false,
+      date: new Date(year, month - 1, daysInPrevMonth - i),
+    });
+  }
+
+  // Current month days
+  for (let i = 1; i <= daysInMonth; i++) {
+    calendarCells.push({
+      day: i,
+      isCurrentMonth: true,
+      date: new Date(year, month, i),
+    });
+  }
+
+  // Next month leading days (fill out the last row)
+  const remainingCells = (7 - (calendarCells.length % 7)) % 7;
+  for (let i = 1; i <= remainingCells; i++) {
+    calendarCells.push({
+      day: i,
+      isCurrentMonth: false,
+      date: new Date(year, month + 1, i),
+    });
+  }
+
+  // Helper to check if two dates are the same day
+  const isSameDate = (d1, d2) =>
+    d1.getDate() === d2.getDate() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getFullYear() === d2.getFullYear();
 
   return (
     <div
-      className="translucentAboutBox p-3 d-flex flex-column mt-2"
-      style={{ width: "100%", boxSizing: "border-box" }}
+      className="translucentAboutBox p-4 d-flex flex-column mt-2"
+      style={{
+        width: "100%",
+        boxSizing: "border-box",
+        borderRadius: "24px",
+      }}
     >
       {/* Header Controls */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <button
           onClick={prevMonth}
-          className="nav-icon-btn"
-          style={{ padding: "4px", color: "var(--onTertiaryContainer)" }}
+          className="nav-icon-btn d-flex align-items-center justify-content-center"
+          style={{
+            padding: "6px",
+            color: "var(--onTertiaryContainer)",
+            backgroundColor: "color-mix(in srgb, var(--onTertiaryContainer) 10%, transparent)",
+            borderRadius: "50%",
+            border: "none",
+            cursor: "pointer",
+          }}
         >
-          <i className="material-symbols-rounded" style={{ fontSize: "24px" }}>
+          <i className="material-symbols-rounded" style={{ fontSize: "20px" }}>
             chevron_left
           </i>
         </button>
@@ -610,10 +651,11 @@ export function DateWidget() {
           style={{
             background: "none",
             border: "none",
-            fontSize: "1.2rem",
+            fontSize: "1.15rem",
             fontWeight: "700",
             color: "var(--onTertiaryContainer)",
             cursor: "pointer",
+            letterSpacing: "-0.3px",
           }}
         >
           {monthNames[month]} {year}
@@ -621,10 +663,17 @@ export function DateWidget() {
 
         <button
           onClick={nextMonth}
-          className="nav-icon-btn"
-          style={{ padding: "4px", color: "var(--onTertiaryContainer)" }}
+          className="nav-icon-btn d-flex align-items-center justify-content-center"
+          style={{
+            padding: "6px",
+            color: "var(--onTertiaryContainer)",
+            backgroundColor: "color-mix(in srgb, var(--onTertiaryContainer) 10%, transparent)",
+            borderRadius: "50%",
+            border: "none",
+            cursor: "pointer",
+          }}
         >
-          <i className="material-symbols-rounded" style={{ fontSize: "24px" }}>
+          <i className="material-symbols-rounded" style={{ fontSize: "20px" }}>
             chevron_right
           </i>
         </button>
@@ -635,19 +684,19 @@ export function DateWidget() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(7, 1fr)",
-          gap: "4px",
-          marginBottom: "8px",
+          gap: "6px",
+          marginBottom: "12px",
           textAlign: "center",
         }}
       >
-        {dayNames.map((day) => (
+        {dayNames.map((day, index) => (
           <div
-            key={day}
+            key={index}
             style={{
-              fontSize: "13px",
-              fontWeight: "600",
+              fontSize: "12px",
+              fontWeight: "700",
               color: "var(--onTertiaryContainer)",
-              opacity: 0.7,
+              opacity: 0.5,
             }}
           >
             {day}
@@ -660,33 +709,53 @@ export function DateWidget() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(7, 1fr)",
-          gap: "4px",
+          gap: "6px",
         }}
       >
-        {totalCells.map((day, index) => {
-          const isToday =
-            day === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear();
+        {calendarCells.map((cell, index) => {
+          const isToday = isSameDate(cell.date, today);
+          const isSelected = isSameDate(cell.date, selectedDate) && !isToday;
+
+          // Determine styles based on state
+          let bgColor = "transparent";
+          let textColor = "var(--onTertiaryContainer)";
+          let fontWeight = "500";
+          let opacity = cell.isCurrentMonth ? 1 : 0.3;
+
+          if (isToday) {
+            bgColor = "var(--primary)";
+            textColor = "var(--onPrimary)";
+            fontWeight = "700";
+            opacity = 1;
+          } else if (isSelected) {
+            bgColor = "color-mix(in srgb, var(--primary) 20%, transparent)";
+            textColor = "var(--primary)";
+            fontWeight = "700";
+            opacity = 1;
+          }
 
           return (
-            <div
+            <button
               key={index}
+              onClick={() => setSelectedDate(cell.date)}
               className="d-flex justify-content-center align-items-center"
               style={{
-                height: "36px",
+                height: "38px",
+                width: "100%",
                 borderRadius: "50%",
                 fontSize: "14px",
-                fontWeight: isToday ? "700" : "500",
-                backgroundColor: isToday ? "var(--primary)" : "transparent",
-                color: isToday
-                  ? "var(--onPrimary)"
-                  : "var(--onTertiaryContainer)",
-                opacity: day ? 1 : 0,
+                fontWeight: fontWeight,
+                backgroundColor: bgColor,
+                color: textColor,
+                opacity: opacity,
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                transition: "all 0.2s ease-in-out",
               }}
             >
-              {day}
-            </div>
+              {cell.day}
+            </button>
           );
         })}
       </div>

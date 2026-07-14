@@ -38,8 +38,8 @@
     --onSurfaceVarient: #43474e;
 
     /*Fonts*/
-    --fontPrimary: "Adwaita Sans", sans-serif;
-    --fontCode: "Adwaita Sans", sans-serif;
+    --fontPrimary: "Ubuntu", sans-serif;
+    --fontCode: "Ubuntu", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
@@ -211,6 +211,86 @@ body.spain.theme-dark {
     --surfaceVarient: #43474e;
     --onSurfaceVarient: #c4c6cf;
     --outline: #8d9199;
+}
+
+body.almeria {
+    --primary: rgb(73 93 146);
+    --onPrimary: rgb(255 255 255);
+    --primaryContainer: rgb(218 226 255);
+    --onPrimaryContainer: rgb(49 69 120);
+    --secondary: rgb(88 94 113);
+    --onSecondary: rgb(255 255 255);
+    --secondaryContainer: rgb(221 226 249);
+    --onSecondaryContainer: rgb(64 70 89);
+    --tertiary: rgb(115 84 113);
+    --onTertiary: rgb(255 255 255);
+    --tertiaryContainer: rgb(254 214 249);
+    --onTertiaryContainer: rgb(90 61 89);
+    --error: rgb(186 26 26);
+    --onError: rgb(255 255 255);
+    --errorContainer: rgb(255 218 214);
+    --onErrorContainer: rgb(147 0 10);
+    --background: rgb(250 248 255);
+    --onBackground: rgb(26 27 33);
+    --surface: rgb(250 248 255);
+    --onSurface: rgb(26 27 33);
+    --surfaceVarient: rgb(225 226 236);
+    --onSurfaceVarient: rgb(69 70 79);
+    --outline: rgb(117 119 128);
+}
+
+@media (prefers-color-scheme: dark) {
+    body.almeria:not(.theme-light) {
+        --primary: rgb(178 197 255);
+        --onPrimary: rgb(24 46 96);
+        --primaryContainer: rgb(49 69 120);
+        --onPrimaryContainer: rgb(218 226 255);
+        --secondary: rgb(192 198 221);
+        --onSecondary: rgb(42 48 66);
+        --secondaryContainer: rgb(64 70 89);
+        --onSecondaryContainer: rgb(221 226 249);
+        --tertiary: rgb(225 187 220);
+        --onTertiary: rgb(66 39 65);
+        --tertiaryContainer: rgb(90 61 89);
+        --onTertiaryContainer: rgb(254 214 249);
+        --error: rgb(255 180 171);
+        --onError: rgb(105 0 5);
+        --errorContainer: rgb(147 0 10);
+        --onErrorContainer: rgb(255 218 214);
+        --background: rgb(18 19 24);
+        --onBackground: rgb(227 226 233);
+        --surface: rgb(18 19 24);
+        --onSurface: rgb(227 226 233);
+        --surfaceVarient: rgb(69 70 79);
+        --onSurfaceVarient: rgb(197 198 208);
+        --outline: rgb(143 144 154);
+    }
+}
+
+body.almeria.theme-dark {
+    --primary: rgb(178 197 255);
+    --onPrimary: rgb(24 46 96);
+    --primaryContainer: rgb(49 69 120);
+    --onPrimaryContainer: rgb(218 226 255);
+    --secondary: rgb(192 198 221);
+    --onSecondary: rgb(42 48 66);
+    --secondaryContainer: rgb(64 70 89);
+    --onSecondaryContainer: rgb(221 226 249);
+    --tertiary: rgb(225 187 220);
+    --onTertiary: rgb(66 39 65);
+    --tertiaryContainer: rgb(90 61 89);
+    --onTertiaryContainer: rgb(254 214 249);
+    --error: rgb(255 180 171);
+    --onError: rgb(105 0 5);
+    --errorContainer: rgb(147 0 10);
+    --onErrorContainer: rgb(255 218 214);
+    --background: rgb(18 19 24);
+    --onBackground: rgb(227 226 233);
+    --surface: rgb(18 19 24);
+    --onSurface: rgb(227 226 233);
+    --surfaceVarient: rgb(69 70 79);
+    --onSurfaceVarient: rgb(197 198 208);
+    --outline: rgb(143 144 154);
 }
 
 body.france {
@@ -3388,4 +3468,30 @@ body.high-contrast .blue-h3 {
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
     background-color: #303030;
     opacity: 8%;
+}
+
+/* 1. Stop the overlay from doubling up the blur and muddying the background */
+.bottom-sheet-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.4) !important; /* Just a simple dark wash */
+}
+
+/* 2. Fix the Modal glass effect specifically when wrapped in the overlay */
+body.acrylic-on .bottom-sheet-overlay .bottom-sheet {
+    /* Slightly lighter tint so it pops against the dark overlay */
+    background: color-mix(in srgb, var(--glass-tint) 70%, transparent) !important;
+    backdrop-filter: blur(24px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+    
+    /* Bring the glossy sheen back using inset shadows instead of the hidden pseudo-element */
+    box-shadow: 
+        var(--glass-shadow), 
+        inset 0 1px 1px rgba(255, 255, 255, 0.15), 
+        inset 0 10px 20px rgba(255, 255, 255, 0.03) !important;
+}
+
+/* 3. Hide the trapped pseudo-element sheen on the modal so it doesn't conflict */
+body.acrylic-on .bottom-sheet-overlay .bottom-sheet::after {
+    display: none !important;
 }
