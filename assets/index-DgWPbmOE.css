@@ -4168,7 +4168,32 @@ body.high-contrast .blue-h3 {
     background-color: #303030;
     opacity: 8%;
 }
-/* google-sans-flex-canadian-aboriginal-wght-normal */
+
+/* 1. Stop the overlay from doubling up the blur and muddying the background */
+.bottom-sheet-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.4) !important; /* Just a simple dark wash */
+}
+
+/* 2. Fix the Modal glass effect specifically when wrapped in the overlay */
+body.acrylic-on .bottom-sheet-overlay .bottom-sheet {
+    /* Slightly lighter tint so it pops against the dark overlay */
+    background: color-mix(in srgb, var(--glass-tint) 70%, transparent) !important;
+    backdrop-filter: blur(24px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+    
+    /* Bring the glossy sheen back using inset shadows instead of the hidden pseudo-element */
+    box-shadow: 
+        var(--glass-shadow), 
+        inset 0 1px 1px rgba(255, 255, 255, 0.15), 
+        inset 0 10px 20px rgba(255, 255, 255, 0.03) !important;
+}
+
+/* 3. Hide the trapped pseudo-element sheen on the modal so it doesn't conflict */
+body.acrylic-on .bottom-sheet-overlay .bottom-sheet::after {
+    display: none !important;
+}/* google-sans-flex-canadian-aboriginal-wght-normal */
 @font-face {
   font-family: 'Google Sans Flex Variable';
   font-style: normal;
