@@ -15,8 +15,8 @@ export default defineConfig({
       },
 
       manifest: {
-        name: 'HiCafe',
-        short_name: 'HiCafe',
+        name: 'HiOSMobile',
+        short_name: 'HiOSMobile',
         description: 'The main app by The Highland Cafe(tm)',
         theme_color: '#111318',
         background_color: '#111318',
@@ -24,19 +24,19 @@ export default defineConfig({
         start_url: '/app/',
         icons: [
           {
-            src: '/app/hicafe.webp',
+            src: '/app/hiosbadge.png',
             sizes: '192x192',
-            type: 'image/webp'
+            type: 'image/png'
           },
           {
-            src: '/app/hicafe.webp',
+            src: '/app/hiosbadge.png',
             sizes: '512x512',
-            type: 'image/webp'
+            type: 'image/png'
           },
           {
-            src: '/app/hicafe.webp',
+            src: '/app/hiosbadge.png',
             sizes: '512x512',
-            type: 'image/webp',
+            type: 'image/png',
             purpose: 'any maskable'
           }
         ]
