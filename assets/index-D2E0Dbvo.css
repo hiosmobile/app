@@ -279,6 +279,34 @@
     margin-right: 12px;
 }
 
+/* Centred Modal */
+.bottom-sheet.centered-modal {
+    position: relative;
+
+    /* Kill old bottom-sheet positioning */
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+
+    /* Let the overlay handle centring */
+    margin: 0;
+
+    transform: none;
+
+    width: 100%;
+    max-width: 500px;
+}
+
+@media (max-width: 767px) {
+    .bottom-sheet.centered-modal {
+        top: auto;
+        right: auto;
+        bottom: auto;
+        left: auto;
+    }
+}
+
 /* App Shell Layout Toggles */
 @media (max-width: 767px) {
     .main-content {
@@ -737,8 +765,8 @@
     --onSurfaceVarient: #43474e;
 
     /*Fonts*/
-    --fontPrimary: "Ubuntu", sans-serif;
-    --fontCode: "Ubuntu", sans-serif;
+    --fontPrimary: "Inter Variable", sans-serif;
+    --fontCode: "Inter Variable", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
@@ -2149,31 +2177,79 @@ main.container {
     flex-shrink: 0;
 }
 
-/* ==========================================================================
+/* ========================================================================== 
    HiOS background picker modal
    ========================================================================== */
 
+/*
+ * The wallpaper picker gets a roomier dialog without changing the generic
+ * Modal component. :has() scopes these rules only to a modal containing the
+ * wallpaper picker, so other HiOS dialogs keep their existing dimensions.
+ */
+.bottom-sheet:has(.hm-background-modal) {
+    max-width: 1120px !important;
+    width: calc(100vw - 32px) !important;
+    height: min(88dvh, 820px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    padding: 16px 18px 18px !important;
+    border-radius: 38px;
+}
+
+.bottom-sheet:has(.hm-background-modal) .bottom-sheet-header {
+    flex-shrink: 0;
+    min-height: 44px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.bottom-sheet:has(.hm-background-modal) .bottom-sheet-header h2 {
+    font-size: 1.45rem;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+}
+
+.bottom-sheet:has(.hm-background-modal) .sheet-content {
+    min-height: 0;
+    padding: 2px;
+    border-radius: 28px !important;
+    overscroll-behavior: contain;
+}
+
+.bottom-sheet:has(.hm-background-modal) .bottom-sheet-footer {
+    flex-shrink: 0;
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+}
+
 .hm-background-modal {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding: 4px 2px 18px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.5fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 26px;
+    row-gap: 14px;
+    align-items: start;
+    padding: 4px 4px 18px;
 }
 
 /* Main preview area */
-
 .hm-background-hero {
-    position: relative;
-    min-height: 350px;
-    border-radius: 36px;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: min(62vh, 560px);
+    min-height: 460px;
+    border-radius: 30px;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--outline) 55%, transparent);
+    border: 1px solid color-mix(in srgb, var(--outline) 48%, transparent);
     background: var(--surface);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 18px;
     box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .hm-background-hero-img {
@@ -2182,9 +2258,10 @@ main.container {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(1.16) brightness(0.8);
-    transform: scale(1.02);
+    filter: saturate(1.08) brightness(0.88);
+    transform: scale(1.015);
     z-index: 0;
+    transition: filter 0.25s ease, transform 0.35s ease;
 }
 
 .hm-background-hero-scrim {
@@ -2193,57 +2270,57 @@ main.container {
     z-index: 1;
     background:
         radial-gradient(
-            circle at 50% 12%,
-            rgba(255, 255, 255, 0.24),
-            transparent 34%
+            circle at 50% 8%,
+            rgba(255, 255, 255, 0.2),
+            transparent 38%
         ),
         linear-gradient(
             to bottom,
-            rgba(0, 0, 0, 0.08),
-            rgba(0, 0, 0, 0.56)
+            rgba(0, 0, 0, 0.02) 14%,
+            rgba(0, 0, 0, 0.16) 54%,
+            rgba(0, 0, 0, 0.64) 100%
         );
 }
 
 /* Fake app UI preview */
-
 .hm-background-preview-shell {
     position: relative;
     z-index: 2;
-    width: min(540px, 100%);
-    border-radius: 34px;
-    padding: 14px;
+    width: 100%;
+    border-radius: 26px;
+    padding: 12px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(26px) saturate(1.35);
-    -webkit-backdrop-filter: blur(26px) saturate(1.35);
-    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.17);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow:
-        0 24px 65px rgba(0, 0, 0, 0.36),
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .hm-background-preview-topbar {
-    height: 44px;
+    height: 38px;
     border-radius: 999px;
-    padding: 0 14px;
-    margin-bottom: 10px;
+    padding: 0 12px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
     color: white;
     font-weight: 800;
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
 
 .hm-background-preview-topbar .material-symbols-rounded {
-    font-size: 24px;
+    font-size: 21px;
 }
 
 .hm-background-preview-card {
-    border-radius: 26px;
+    border-radius: 20px;
     background: color-mix(in srgb, var(--surface) 78%, transparent);
     color: var(--onSurface);
     border: 1px solid color-mix(in srgb, var(--outline) 42%, transparent);
@@ -2253,144 +2330,149 @@ main.container {
 }
 
 .hm-background-preview-card.main {
-    min-height: 110px;
-    padding: 18px;
+    min-height: 88px;
+    padding: 14px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
 .hm-background-preview-card.main .material-symbols-rounded {
-    font-size: 38px;
+    font-size: 32px;
     color: var(--primary);
 }
 
 .hm-background-preview-card.main strong {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.1;
 }
 
 .hm-background-preview-card.main p {
-    margin: 5px 0 0;
-    font-size: 0.86rem;
+    margin: 4px 0 0;
+    font-size: 0.78rem;
     color: var(--onSurfaceVarient);
-    line-height: 1.25;
+    line-height: 1.22;
 }
 
 .hm-background-preview-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 8px;
+    margin-top: 8px;
 }
 
 .hm-background-preview-card.small {
-    min-height: 82px;
-    padding: 14px;
+    min-height: 68px;
+    padding: 11px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 7px;
+    gap: 5px;
+    border-radius: 18px;
 }
 
 .hm-background-preview-card.small .material-symbols-rounded {
     color: var(--primary);
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .hm-background-preview-card.small strong {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.1;
 }
 
 /* Current background label */
-
 .hm-background-current {
     position: absolute;
-    left: 18px;
-    right: 18px;
-    bottom: 18px;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
     z-index: 3;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     color: white;
-    padding: 12px 14px;
-    border-radius: 24px;
-    background: rgba(0, 0, 0, 0.38);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    padding: 11px 13px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(22px) saturate(1.25);
+    -webkit-backdrop-filter: blur(22px) saturate(1.25);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-sizing: border-box;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .hm-background-current .material-symbols-rounded {
-    font-size: 28px;
+    font-size: 24px;
     flex-shrink: 0;
 }
 
 .hm-background-current p {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     line-height: 1.1;
     opacity: 0.8;
 }
 
 .hm-background-current h3 {
     margin: 3px 0 0;
-    font-size: 1rem;
+    font-size: 0.94rem;
     font-weight: 800;
     line-height: 1.15;
 }
 
 /* Section heading */
-
 .hm-background-section-header {
+    grid-column: 2;
+    grid-row: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 4px;
+    align-self: end;
+    padding: 8px 5px 4px;
     color: var(--onSurface);
 }
 
 .hm-background-section-header p {
     margin: 0;
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     line-height: 1.1;
     color: var(--onSurfaceVarient);
 }
 
 .hm-background-section-header h3 {
-    margin: 3px 0 0;
-    font-size: 1.25rem;
-    font-weight: 800;
-    line-height: 1.1;
+    margin: 4px 0 0;
+    font-size: 1.35rem;
+    font-weight: 750;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
 }
 
 .hm-background-section-header .material-symbols-rounded {
     color: var(--primary);
-    font-size: 30px;
+    font-size: 28px;
 }
 
 /* Background tiles */
-
 .hm-background-grid {
+    grid-column: 2;
+    grid-row: 2;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    align-content: start;
 }
 
 .hm-background-tile {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 5;
-    border: 1px solid color-mix(in srgb, var(--outline) 55%, transparent);
-    outline: 0 solid transparent;
-    outline-offset: -4px;
-    border-radius: 28px;
+    aspect-ratio: 4 / 3;
+    border: 1px solid color-mix(in srgb, var(--outline) 45%, transparent);
+    outline: none;
+    border-radius: 22px;
     overflow: hidden;
     padding: 0;
     margin: 0;
@@ -2400,16 +2482,11 @@ main.container {
     font-family: var(--fontPrimary);
     text-align: left;
     color: white;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
     transition:
         transform 0.16s ease,
-        outline 0.16s ease,
         box-shadow 0.16s ease,
         filter 0.16s ease;
-}
-
-.hm-background-tile:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
 }
 
 .hm-background-tile:active {
@@ -2417,8 +2494,10 @@ main.container {
 }
 
 .hm-background-tile.is-selected {
-    outline: 4px solid var(--primary);
-    box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 30%, transparent);
+    border-color: transparent;
+    box-shadow:
+        inset 0 0 0 3px var(--primary),
+        0 8px 24px color-mix(in srgb, var(--primary) 28%, transparent);
 }
 
 .hm-background-tile-img {
@@ -2428,11 +2507,7 @@ main.container {
     height: 100%;
     object-fit: cover;
     z-index: 0;
-    transition: transform 0.22s ease;
-}
-
-.hm-background-tile:hover .hm-background-tile-img {
-    transform: scale(1.04);
+    transition: transform 0.22s ease, filter 0.22s ease;
 }
 
 .hm-background-tile-scrim {
@@ -2440,26 +2515,27 @@ main.container {
     inset: 0;
     z-index: 1;
     background:
-        linear-gradient(to top, rgba(0, 0, 0, 0.74), transparent 54%),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 36%);
+        linear-gradient(to top, rgba(0, 0, 0, 0.76), transparent 58%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.14), transparent 38%);
 }
 
 .hm-background-tile-check {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 9px;
+    right: 9px;
     z-index: 3;
     color: white;
     background: var(--primary);
+    border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: 999px;
-    font-size: 24px !important;
-    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.34);
+    font-size: 22px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .hm-background-tile-label {
     position: absolute;
-    left: 11px;
-    right: 11px;
+    left: 12px;
+    right: 12px;
     bottom: 11px;
     z-index: 2;
     color: white;
@@ -2471,29 +2547,56 @@ main.container {
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-size: 0.86rem;
+    font-size: 0.82rem;
     font-weight: 800;
-    line-height: 1.12;
-    text-shadow: 0 2px 9px rgba(0, 0, 0, 0.62);
+    line-height: 1.15;
+    text-shadow: 0 2px 9px rgba(0, 0, 0, 0.68);
+}
+
+@media (hover: hover) {
+    .hm-background-tile:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+    }
+
+    .hm-background-tile:hover .hm-background-tile-img {
+        transform: scale(1.035);
+    }
+
+    .hm-background-tile.is-selected:hover {
+        box-shadow:
+            inset 0 0 0 3px var(--primary),
+            0 14px 30px color-mix(in srgb, var(--primary) 30%, transparent);
+    }
 }
 
 /* Footer buttons */
-
 .hm-background-modal-footer {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(120px, 0.72fr) minmax(180px, 1.28fr);
     width: 100%;
     gap: 8px;
 }
 
 .hm-background-modal-btn {
-    width: 50%;
-    min-height: 52px;
+    width: 100%;
+    min-height: 50px;
+    padding: 0 20px;
     border: none;
     border-radius: 999px;
     font-family: var(--fontPrimary);
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     cursor: pointer;
+    white-space: nowrap;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.hm-background-modal-btn:active {
+    transform: scale(0.98);
 }
 
 .hm-background-modal-btn.secondary {
@@ -2504,66 +2607,225 @@ main.container {
 .hm-background-modal-btn.primary {
     background: var(--primary);
     color: var(--onPrimary);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--primary) 28%, transparent);
 }
 
-/* Mobile tuning */
+@media (hover: hover) {
+    .hm-background-modal-btn:hover {
+        filter: brightness(1.04);
+    }
+}
 
-@media (max-width: 600px) {
+/* Tablet: keep the two-panel layout but reduce the preview footprint. */
+@media (min-width: 701px) and (max-width: 900px) {
     .hm-background-modal {
-        gap: 16px;
+        grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.35fr);
+        column-gap: 18px;
     }
 
     .hm-background-hero {
-        min-height: 325px;
-        padding: 16px;
-        border-radius: 32px;
-    }
-
-    .hm-background-preview-shell {
-        border-radius: 30px;
-        padding: 12px;
-    }
-
-    .hm-background-preview-card.main {
-        min-height: 96px;
-        padding: 15px;
-    }
-
-    .hm-background-preview-card.main .material-symbols-rounded {
-        font-size: 34px;
-    }
-
-    .hm-background-preview-grid {
-        gap: 8px;
-    }
-
-    .hm-background-preview-card.small {
-        min-height: 76px;
-        padding: 12px;
-    }
-
-    .hm-background-current {
-        left: 14px;
-        right: 14px;
-        bottom: 14px;
-        border-radius: 22px;
+        min-height: 420px;
+        padding: 14px;
     }
 
     .hm-background-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        gap: 11px;
+    }
+}
+
+/* Mobile tuning */
+@media (max-width: 700px) {
+    .bottom-sheet:has(.hm-background-modal) {
+        width: calc(100vw - 12px) !important;
+        max-width: none !important;
+        height: calc(100dvh - 12px) !important;
+        max-height: calc(100dvh - 12px) !important;
+        padding: 10px 12px 12px !important;
+        border-radius: 30px;
+    }
+
+    .bottom-sheet:has(.hm-background-modal) .bottom-sheet-header {
+        min-height: 42px;
+        margin-bottom: 7px;
+        padding: 0 2px;
+    }
+
+    .bottom-sheet:has(.hm-background-modal) .bottom-sheet-header h2 {
+        font-size: 1.22rem;
+    }
+
+    .bottom-sheet:has(.hm-background-modal) .bottom-sheet-footer {
+        margin-top: 8px !important;
+        padding-top: 8px !important;
+    }
+
+    .hm-background-modal {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+        padding: 0 2px 14px;
+    }
+
+    .hm-background-hero {
+        position: relative;
+        top: auto;
+        width: 100%;
+        height: 220px;
+        min-height: 220px;
+        padding: 12px;
+        border-radius: 24px;
+        align-items: flex-start;
+    }
+
+    .hm-background-preview-shell {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        width: auto;
+        padding: 9px;
+        border-radius: 20px;
+    }
+
+    .hm-background-preview-topbar {
+        height: 30px;
+        margin-bottom: 7px;
+        padding: 0 9px;
+        font-size: 0.72rem;
+    }
+
+    .hm-background-preview-topbar .material-symbols-rounded {
+        font-size: 18px;
+    }
+
+    .hm-background-preview-card.main {
+        min-height: 58px;
+        padding: 10px 11px;
+        gap: 9px;
+        border-radius: 16px;
+    }
+
+    .hm-background-preview-card.main .material-symbols-rounded {
+        font-size: 25px;
+    }
+
+    .hm-background-preview-card.main strong {
+        font-size: 0.88rem;
+    }
+
+    .hm-background-preview-card.main p,
+    .hm-background-preview-grid {
+        display: none;
+    }
+
+    .hm-background-current {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        padding: 9px 11px;
+        border-radius: 17px;
+    }
+
+    .hm-background-current .material-symbols-rounded {
+        font-size: 22px;
+    }
+
+    .hm-background-current p {
+        display: none;
+    }
+
+    .hm-background-current h3 {
+        margin: 0;
+        min-width: 0;
+        font-size: 0.84rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .hm-background-section-header {
+        padding: 2px 3px 0;
+    }
+
+    .hm-background-section-header p {
+        font-size: 0.7rem;
+    }
+
+    .hm-background-section-header h3 {
+        font-size: 1.15rem;
+    }
+
+    .hm-background-section-header .material-symbols-rounded {
+        font-size: 25px;
+    }
+
+    .hm-background-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
     }
 
     .hm-background-tile {
-        border-radius: 24px;
+        aspect-ratio: 4 / 3;
+        border-radius: 18px;
+    }
+
+    .hm-background-tile-label {
+        left: 9px;
+        right: 9px;
+        bottom: 9px;
+    }
+
+    .hm-background-tile-label span {
+        font-size: 0.75rem;
+        line-height: 1.12;
+    }
+
+    .hm-background-tile-check {
+        top: 7px;
+        right: 7px;
+        font-size: 19px !important;
+        border-width: 1.5px;
     }
 
     .hm-background-modal-footer {
-        gap: 6px;
+        grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+        gap: 7px;
     }
 
     .hm-background-modal-btn {
-        min-height: 50px;
+        min-height: 48px;
+        padding: 0 12px;
+        font-size: 0.84rem;
+    }
+}
+
+/* Extra-narrow phones: preserve readable labels and button text. */
+@media (max-width: 390px) {
+    .bottom-sheet:has(.hm-background-modal) {
+        width: calc(100vw - 8px) !important;
+        height: calc(100dvh - 8px) !important;
+        max-height: calc(100dvh - 8px) !important;
+        padding-left: 9px !important;
+        padding-right: 9px !important;
+    }
+
+    .hm-background-hero {
+        height: 205px;
+        min-height: 205px;
+    }
+
+    .hm-background-grid {
+        gap: 7px;
+    }
+
+    .hm-background-tile-label span {
+        font-size: 0.7rem;
+    }
+
+    .hm-background-modal-btn {
+        padding: 0 8px;
+        font-size: 0.79rem;
     }
 }
 
@@ -4207,8 +4469,7 @@ body.acrylic-on .bottom-sheet-overlay .bottom-sheet {
 /* 3. Hide the trapped pseudo-element sheen on the modal so it doesn't conflict */
 body.acrylic-on .bottom-sheet-overlay .bottom-sheet::after {
     display: none !important;
-}
-/* google-sans-flex-canadian-aboriginal-wght-normal */
+}/* google-sans-flex-canadian-aboriginal-wght-normal */
 @font-face {
   font-family: 'Google Sans Flex Variable';
   font-style: normal;
@@ -4306,62 +4567,72 @@ body.acrylic-on .bottom-sheet-overlay .bottom-sheet::after {
   font-weight: 1 1000;
   src: url(/app/assets/google-sans-flex-latin-wght-normal-fc8tlXEJ.woff2) format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}/* ubuntu-cyrillic-ext-400-normal */
+}/* inter-cyrillic-ext-wght-normal */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
-  src: url(/app/assets/ubuntu-cyrillic-ext-400-normal-B-Nhg57H.woff2) format('woff2'), url(/app/assets/ubuntu-cyrillic-ext-400-normal-BQUrPAlD.woff) format('woff');
+  font-weight: 100 900;
+  src: url(/app/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2) format('woff2-variations');
   unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
 }
 
-/* ubuntu-cyrillic-400-normal */
+/* inter-cyrillic-wght-normal */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
-  src: url(/app/assets/ubuntu-cyrillic-400-normal-D9OZd8lm.woff2) format('woff2'), url(/app/assets/ubuntu-cyrillic-400-normal-CD6XmiVF.woff) format('woff');
+  font-weight: 100 900;
+  src: url(/app/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2) format('woff2-variations');
   unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
 }
 
-/* ubuntu-greek-ext-400-normal */
+/* inter-greek-ext-wght-normal */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
-  src: url(/app/assets/ubuntu-greek-ext-400-normal-CeBDcuzJ.woff2) format('woff2'), url(/app/assets/ubuntu-greek-ext-400-normal-VZgpvyyF.woff) format('woff');
+  font-weight: 100 900;
+  src: url(/app/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2) format('woff2-variations');
   unicode-range: U+1F00-1FFF;
 }
 
-/* ubuntu-greek-400-normal */
+/* inter-greek-wght-normal */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
-  src: url(/app/assets/ubuntu-greek-400-normal-GaJa0t-K.woff2) format('woff2'), url(/app/assets/ubuntu-greek-400-normal-UX4bU-Ff.woff) format('woff');
+  font-weight: 100 900;
+  src: url(/app/assets/inter-greek-wght-normal-CkhJZR-_.woff2) format('woff2-variations');
   unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
 }
 
-/* ubuntu-latin-ext-400-normal */
+/* inter-vietnamese-wght-normal */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
-  src: url(/app/assets/ubuntu-latin-ext-400-normal-Bb6UNjxu.woff2) format('woff2'), url(/app/assets/ubuntu-latin-ext-400-normal-kv0aZEtN.woff) format('woff');
+  font-weight: 100 900;
+  src: url(/app/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2) format('woff2-variations');
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+/* inter-latin-ext-wght-normal */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/app/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2) format('woff2-variations');
   unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 
-/* ubuntu-latin-400-normal */
+/* inter-latin-wght-normal */
 @font-face {
-  font-family: 'Ubuntu';
+  font-family: 'Inter Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
-  src: url(/app/assets/ubuntu-latin-400-normal-CQJ26Fy6.woff2) format('woff2'), url(/app/assets/ubuntu-latin-400-normal-ChuJk2Dr.woff) format('woff');
+  font-weight: 100 900;
+  src: url(/app/assets/inter-latin-wght-normal-Dx4kXJAl.woff2) format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
