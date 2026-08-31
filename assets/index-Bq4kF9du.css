@@ -505,11 +505,11 @@
 }
 
 .activeIcon {
-    background-color: var(--primary);
-    color: var(--onPrimary);
-    width: 64px;
-    height: 32px;
-    border-radius: var(--radius-card);
+    background-color: var(--glass-border);
+    color: var(--primary);
+    width: 90%;
+    height: 58px;
+    border-radius: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -647,8 +647,8 @@
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    max-width: 500px;
-    height: 60px;
+    max-width: 400px;
+    height: 70px;
     border-radius: 600px;
     display: flex;
     justify-content: space-around;
@@ -660,8 +660,8 @@
 
     /* Glass Effect matching style.css */
     background-color: var(--glass-tint);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     will-change: transform, backdrop-filter;
@@ -700,7 +700,7 @@
     --statusbar-pad: env(safe-area-inset-top);
     --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
 
-    --radius-card: 28px;
+    --radius-card: 40px;
     --radius-button: 20px;
     --radius-inner: 12px;
 
@@ -3204,8 +3204,8 @@ img[src$="scrolltop.bmp"] {
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 28px;
+    width: 45px;
+    height: 20px;
 }
 .switch input {
     opacity: 0;
@@ -3225,24 +3225,25 @@ img[src$="scrolltop.bmp"] {
 .slider:before {
     position: absolute;
     content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
+    height: 18px;
+    width: 25px;
+    left: 1px;
+    bottom: 1px;
     background-color: white;
     transition: 0.4s;
+    border: 0.5px solid var(--outline);
 }
 input:checked + .slider {
     background-color: var(--primary);
 }
 input:checked + .slider:before {
-    transform: translateX(22px);
+    transform: translateX(18px);
 }
 .slider.round {
     border-radius: 34px;
 }
 .slider.round:before {
-    border-radius: 50%;
+    border-radius: 20px;
 }
 
 /* --- HIGH CONTRAST MODE OVERRIDES --- */
