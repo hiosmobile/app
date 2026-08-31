@@ -1,0 +1,69 @@
+/* Background and Wrapper Styles */
+
+.background-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/assets/backgrounds/backgroundimage.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: saturate(110%) brightness(0.92);
+}
+
+.background-wrapper::before,
+.background-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.background-wrapper::before {
+    background: rgba(255, 255, 255, 0.05);
+    mix-blend-mode: soft-light;
+}
+
+.background-wrapper::after {
+    background-image: var(--glass-noise);
+    opacity: 0.04;
+}
+
+/* Background Toggle */
+.background-off .background-wrapper {
+    display: none;
+}
+
+.background-off {
+    background-color: var(--background);
+}
+
+.background-off .card,
+.background-off .card.glass-container-ready {
+    background: var(--primaryContainer) !important;
+    color: var(--onPrimaryContainer);
+    border: none !important;
+    box-shadow: none;
+}
+
+.background-off .card::before,
+.background-off .card::after {
+    display: none;
+}
+
+.background-off .glass-content {
+    padding: 0;
+}

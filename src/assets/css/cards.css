@@ -1,0 +1,254 @@
+/* Card and Box Styles */
+
+/* --- UPDATED UNIFORM SQUIRCLE ELEMENTS --- */
+
+.roundedImage {
+    border-radius: var(--radius-card) !important;
+    border: 0.5px solid var(--outline);
+    overflow: hidden;
+}
+
+.translucentAboutBox {
+    background-color: color-mix(
+        in srgb,
+        var(--tertiaryContainer) 60%,
+        transparent
+    );
+    color: var(--onTertiaryContainer);
+    padding: 10px;
+    backdrop-filter: blur(24px);
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 1;
+    border-radius: var(--radius-card) !important;
+    border: 0.5px solid var(--outline);
+}
+
+.translucentBox {
+    padding: 10px;
+    min-width: 300px;
+    background-color: color-mix(
+        in srgb,
+        var(--primaryContainer) 75%,
+        transparent
+    );
+    backdrop-filter: blur(24px);
+    color: var(--onPrimaryContainer);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.imageBox {
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* Stacked section containers */
+.joinTop {
+    border-radius: var(--radius-card) var(--radius-card) 6px 6px !important;
+    margin-bottom: 3px !important;
+}
+
+.joinMiddle {
+    border-radius: 6px !important;
+    margin-bottom: 3px !important;
+}
+
+.joinBottom {
+    border-radius: 6px 6px var(--radius-card) var(--radius-card) !important;
+}
+
+.joinLeft {
+    border-radius: var(--radius-card) 6px 6px var(--radius-card) !important;
+}
+
+.joinRight {
+    border-radius: 6px var(--radius-card) var(--radius-card) 6px !important;
+}
+
+.full {
+    border-radius: var(--radius-card) !important;
+}
+
+/* Glass Cards */
+.card,
+.card.glass-container-ready {
+    position: relative;
+    background: var(--primaryContainer);
+    color: var(--onPrimaryContainer);
+    border: none;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1;
+}
+
+body:not(.acrylic-on) .card,
+body:not(.acrylic-on) .card.glass-container-ready,
+body:not(.acrylic-on) .bottom-sheet,
+body:not(.acrylic-on) .top-app-bar,
+body:not(.acrylic-on) .side-rail,
+body:not(.acrylic-on) .bottom-nav {
+    background: var(--primaryContainer) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-body.joinTop {
+    padding: 0.5rem;
+}
+
+.card-title {
+    margin-bottom: 0.75rem;
+    font-size: 1.4rem;
+    font-variation-settings:
+        "slnt" 0,
+        "wdth" 100,
+        "GRAD" 0;
+    font-weight: 600;
+}
+
+.card-text {
+    margin-bottom: 0.75rem;
+}
+
+.card h1,
+.card h2 {
+    color: var(--primary) !important;
+}
+
+.card h5 {
+    font-size: 1.4rem;
+    font-variation-settings:
+        "slnt" 0,
+        "wdth" 100,
+        "GRAD" 0;
+    font-weight: 600;
+}
+
+.infoBubble {
+    padding: 15px;
+    margin-bottom: 8px;
+    background-color: color-mix(
+        in srgb,
+        var(--tertiaryContainer) 70%,
+        transparent
+    );
+    color: var(--onTertiaryContainer);
+    border: 0.5px solid var(--outline);
+}
+
+/* Glass morphism effects */
+body.acrylic-on .card,
+body.acrylic-on .card.glass-container-ready,
+body.acrylic-on .bottom-sheet,
+body.acrylic-on .top-app-bar,
+body.acrylic-on .side-rail,
+body.acrylic-on .bottom-nav {
+    background: var(--glass-tint) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow);
+}
+
+body.acrylic-on .card::after,
+body.acrylic-on .card.glass-container-ready::after,
+body.acrylic-on .bottom-sheet::after,
+body.acrylic-on .top-app-bar::after,
+body.acrylic-on .side-rail::after,
+body.acrylic-on .bottom-nav::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+.acrylic-on .card,
+.acrylic-on .card.glass-container-ready,
+.acrylic-on .bottom-sheet,
+.acrylic-on .top-app-bar,
+.acrylic-on .side-rail,
+.acrylic-on .bottom-nav {
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+}
+
+.acrylic-on .card::before,
+.acrylic-on .card.glass-container-ready::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.acrylic-on .card::after,
+.acrylic-on .card.glass-container-ready::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.4;
+    z-index: -1;
+}
+
+.glass-filter,
+.glass-overlay,
+.glass-specular {
+    display: none !important;
+}
+
+.glass-content {
+    position: relative;
+    z-index: 1;
+    display: block;
+    padding: 0;
+}
+
+.acrylic-on .card .form-control,
+.acrylic-on .glass-content .form-control {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    color: var(--onSurface) !important;
+    border-radius: 40px !important;
+}
+
+.acrylic-on .card,
+.acrylic-on .glass-content {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.theme-light).acrylic-on .card .form-control,
+    body:not(.theme-light).acrylic-on .glass-content .form-control {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    body:not(.theme-light).acrylic-on .card,
+    body:not(.theme-light).acrylic-on .glass-content {
+        border-color: rgba(255, 255, 255, 0.18) !important;
+    }
+}
+
+body.theme-dark.acrylic-on .card .form-control,
+body.theme-dark.acrylic-on .glass-content .form-control {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.theme-dark.acrylic-on .card,
+body.theme-dark.acrylic-on .glass-content {
+    border-color: rgba(255, 255, 255, 0.18) !important;
+}

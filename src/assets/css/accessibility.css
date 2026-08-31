@@ -1,0 +1,72 @@
+/* Accessibility Features */
+
+/* --- HIGH CONTRAST MODE OVERRIDES --- */
+body.high-contrast {
+    /* Maximum contrast variables for light mode */
+    --background: #ffffff !important;
+    --onBackground: #000000 !important;
+    --surface: #ffffff !important;
+    --onSurface: #000000 !important;
+    --primaryContainer: #ffffff !important;
+    --onPrimaryContainer: #000000 !important;
+    --secondaryContainer: #eeeeee !important;
+    --onSecondaryContainer: #000000 !important;
+    --tertiaryContainer: #dddddd !important;
+    --onTertiaryContainer: #000000 !important;
+    --outline: #000000 !important;
+    --primary: #0000ee !important;
+    --onPrimary: #ffffff !important;
+
+    background-color: var(--background) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.high-contrast {
+        /* Maximum contrast variables for dark mode */
+        --background: #000000 !important;
+        --onBackground: #ffffff !important;
+        --surface: #000000 !important;
+        --onSurface: #ffffff !important;
+        --primaryContainer: #000000 !important;
+        --onPrimaryContainer: #ffffff !important;
+        --secondaryContainer: #111111 !important;
+        --onSecondaryContainer: #ffffff !important;
+        --tertiaryContainer: #222222 !important;
+        --onTertiaryContainer: #ffffff !important;
+        --outline: #ffffff !important;
+        --primary: #ffff00 !important;
+        --onPrimary: #000000 !important;
+    }
+}
+
+/* Force solid borders and remove shadows for clarity */
+body.high-contrast .card,
+body.high-contrast .translucentAboutBox,
+body.high-contrast .translucentBox,
+body.high-contrast .infoBubble,
+body.high-contrast .switchContainer {
+    border: 2px solid var(--outline) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    background-color: var(--primaryContainer) !important;
+}
+
+/* Ensure buttons are highly visible */
+body.high-contrast .button,
+body.high-contrast .form-select,
+body.high-contrast .form-control {
+    border: 2px solid var(--outline) !important;
+    background-color: var(--secondaryContainer) !important;
+    color: var(--onSecondaryContainer) !important;
+}
+
+body.high-contrast .gradientHeading,
+body.high-contrast .gradientHeadingSmall,
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast .blue-h2,
+body.high-contrast .blue-h3 {
+    color: var(--primary) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--primary) !important;
+}

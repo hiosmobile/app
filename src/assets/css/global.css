@@ -1,0 +1,66 @@
+/* Global Element Styles */
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+body {
+    background-color: var(--background);
+    font-family: var(--fontPrimary);
+    font-variation-settings:
+        "slnt" 0,
+        "wdth" 100,
+        "GRAD" 0;
+    font-weight: 500; /* Increased to improve legibility on glass */
+    color: var(--onPrimaryContainer);
+    user-select: none;
+    align-content: center;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
+}
+
+/* Inside your React project */
+main.container {
+    /* Guarantees your 'Good Afternoon' text is pushed below the transparent status bar */
+    padding-top: max(env(safe-area-inset-top), 45px) !important;
+    padding-bottom: calc(var(--nav-pad-bottom) + 40px) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0;
+    margin-bottom: var(--h-margin-bottom);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-family: var(--fontCode) !important;
+}
+
+.termsconditions,
+#infoText {
+    font-family: var(--fontCode);
+}
+
+.termsconditions {
+    background-color: #fcfcff;
+    color: black;
+    border-radius: 35px;
+    width: 350px;
+    border: 0.5px solid #303034;
+}

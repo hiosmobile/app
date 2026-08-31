@@ -1,0 +1,327 @@
+/* Navigation, Drawer, and Nav Pills Styles */
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: inherit;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.nav-link:focus {
+    outline: none;
+}
+
+.nav-pills {
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-pills .nav-item {
+    flex-grow: 1;
+}
+
+.nav-pills .nav-link {
+    width: 100%;
+    text-align: center;
+}
+
+.nav-pills .nav-item-left,
+.nav-pills .nav-item-middle {
+    margin-right: 3px !important;
+}
+
+.nav-pills .nav-item-full {
+    border-radius: 25px !important;
+}
+
+.nav-pills .nav-item:last-child {
+    margin-right: 0;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--secondary);
+    color: var(--onSecondary);
+    border-radius: 25px !important;
+}
+
+.nav-pills .nav-link:not(.active) {
+    background-color: var(--primary);
+    color: var(--onPrimary);
+}
+
+/* Drawer Styles */
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 20;
+}
+
+.drawer-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.side-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 340px;
+    max-width: 92%;
+    background: color-mix(in srgb, var(--primaryContainer) 75%, transparent);
+    color: var(--onPrimaryContainer);
+    border: 1px solid var(--outline);
+    border-radius: 24px 0 0 24px;
+    box-shadow: var(--glass-shadow);
+    transform: translateX(110%);
+    transition: transform 0.25s ease;
+    z-index: 21;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.75rem;
+    backdrop-filter: blur(24px) saturate(150%);
+    isolation: isolate;
+}
+
+.side-drawer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-noise);
+    opacity: var(--glass-noise-opacity);
+    z-index: -1;
+}
+
+.side-drawer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.3;
+    z-index: -1;
+}
+
+.side-drawer.show {
+    transform: translateX(0);
+}
+
+.side-drawer .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+}
+
+.side-drawer .drawer-title {
+    font-size: 1.2rem;
+    font-weight: 650;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.side-drawer .drawer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-drawer {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition:
+        max-height 0.25s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    pointer-events: none;
+}
+
+.nav-drawer.show {
+    max-height: 260px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.nav-drawer .card-body {
+    padding: 0.35rem 0.5rem;
+}
+
+.nav-drawer .nav {
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+}
+
+.nav-drawer .nav-link {
+    padding: 0.5rem 0.75rem;
+    white-space: nowrap;
+}
+
+.nav-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.scrolltop-image,
+img[src$="scrolltop.bmp"] {
+    display: block;
+    margin: 0.5rem auto 0;
+    max-width: 150px;
+}
+
+/* =========================================
+   SUB NAV PILLS (Segmented logic)
+   ========================================= */
+.nav-pills-header {
+    display: flex;
+    padding: 3px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card) !important;
+    gap: 3px;
+}
+
+/* 1. The Container - Mirrored to .side-rail */
+.sub-nav-pills-header {
+    display: flex;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 8px 10px; /* Matched to side-rail */
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    border-radius: 90px !important; /* Fully rounded pill shape */
+    gap: 4px;
+}
+
+.sub-nav-pills-header::-webkit-scrollbar {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .nav-pills-header {
+        background-color: color-mix(
+            in srgb,
+            var(--glass-tint) 40%,
+            transparent
+        );
+    }
+}
+
+.header-tab {
+    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
+    border: none;
+    color: var(--onSurface);
+    padding: 6px 12px;
+    font-family: var(--fontPrimary);
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    opacity: 0.8;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.header-tab:first-child {
+    border-radius: 60px 10px 10px 60px !important;
+}
+
+.header-tab:last-child {
+    border-radius: 10px 60px 60px 10px !important;
+}
+
+.header-tab:first-child:last-child {
+    border-radius: 60px !important;
+}
+
+.header-rab .material-symbols-rounded {
+    font-size: 16px !important;
+}
+
+/* 2. The Inner Tabs - Mirrored to side-rail links */
+.sub-header-tab {
+    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
+    border: none;
+    color: var(--onPrimaryContainer);
+    padding: 10px 16px; /* Matched to side-rail */
+    font-family: var(--fontPrimary);
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 4px !important;
+}
+
+/* Hover state matching side-rail */
+.sub-header-tab:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary);
+}
+
+.sub-header-tab:first-child {
+    border-radius: 60px 15px 15px 60px !important;
+}
+
+.sub-header-tab:last-child {
+    border-radius: 15px 60px 60px 15px !important;
+}
+
+.sub-header-tab:first-child:last-child {
+    border-radius: 60px !important;
+}
+
+.header-tab .material-symbols-rounded {
+    font-size: 18px !important;
+}
+
+.header-tab.active,
+.sub-header-tab.active {
+    background-color: var(--primary);
+    color: var(--onPrimary);
+    font-weight: bold;
+    opacity: 1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 360px) {
+    .header-tab .tab-text {
+        display: none;
+    }
+    .header-tab {
+        padding: 6px 8px;
+    }
+}

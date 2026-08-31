@@ -5,7 +5,20 @@ import { StatusBar } from "@capacitor/status-bar";
 import App from "./App.jsx";
 import "../components/navigation.css";
 import "../components/layout.css";
-import "./assets/style.css"; // style.css loads last, ensuring its theme/glass variables overrule everything else
+// Organized CSS imports - load in order for proper cascade
+import "./assets/css/variables.css";
+import "./assets/css/fonts.css";
+import "./assets/css/global.css";
+import "./assets/css/background.css";
+import "./assets/css/cards.css";
+import "./assets/css/typography.css";
+import "./assets/css/buttons.css";
+import "./assets/css/forms.css";
+import "./assets/css/navigation.css";
+import "./assets/css/components.css";
+import "./assets/css/utilities.css";
+import "./assets/css/accessibility.css";
+import "./assets/css/google-auth.css";
 import "@fontsource-variable/google-sans-flex/wght.css";
 
 // Fix for Android safe areas where env(safe-area-inset-*) might return 0px

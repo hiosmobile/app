@@ -1,0 +1,128 @@
+/* Typography Styles */
+
+.blue-h2,
+.blue-h3 {
+    color: var(--primary);
+    font-family: var(--fontPrimary);
+    font-size: 45px;
+    font-weight: 400; /* Bumped slightly */
+    text-align: left;
+}
+
+.gradientHeading,
+.gradientHeadingSmall {
+    color: var(--primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-family: var(--fontPrimary);
+}
+
+.gradientHeading {
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.gradientHeadingSmall {
+    font-size: 30px;
+    font-weight: 350;
+}
+
+.top-container {
+    margin: 0 auto;
+    min-width: 300px;
+    padding: 0px;
+}
+
+.top-container #para {
+    text-align: left !important;
+}
+
+#homeheading,
+#homeheadingsmall,
+#rickroll {
+    animation: pulse 15s infinite;
+}
+
+#homeheading {
+    font-size: 40px;
+}
+
+#homeheadingsmall {
+    font-size: 30px;
+}
+
+#p11,
+#p12,
+#paraheadings,
+#rickroll {
+    font-size: 40px;
+}
+
+#p11 {
+    color: #0f9d58;
+}
+
+#p12 {
+    color: #4285f4;
+}
+
+#para {
+    font-size: 17px;
+}
+
+.paraHomeSubtitle {
+    text-align: left;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
+
+#paraheadings {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#smallpara {
+    font-size: 10px;
+    text-align: center;
+    color: var(--onPrimaryContainer);
+}
+
+#rickroll {
+    text-decoration: underline;
+}
+
+@keyframes pulse {
+    0% {
+        color: #ff0000;
+    }
+    25% {
+        color: #22229a;
+    }
+    50% {
+        color: #228b22;
+    }
+    75% {
+        color: #dde0fe;
+    }
+    100% {
+        color: darkorange;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .button:hover {
+        background-color: #5a6b74;
+    }
+    .gradientHeading,
+    .gradientHeadingSmall {
+        color: var(--primary);
+    }
+}
+
+.text-start {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}

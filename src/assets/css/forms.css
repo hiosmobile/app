@@ -1,0 +1,157 @@
+/* Form Controls and Inputs */
+
+.form-control,
+.loginInput {
+    font-size: 20px !important; /* Slightly smaller for better fit */
+    padding: 12px 18px;
+    background-color: color-mix(
+        in srgb,
+        var(--secondaryContainer) 30%,
+        transparent
+    ) !important;
+    color: var(--onSecondaryContainer) !important;
+    border: 0.5px solid var(--outline) !important;
+    width: 100%;
+    outline: none;
+    transition: all 0.2s ease;
+    border-radius: 25px;
+}
+
+.form-control.joinTop,
+.loginInput.joinTop {
+    border-radius: 25px 25px 4px 4px !important;
+    margin-bottom: 3px;
+}
+
+.form-control.joinMiddle,
+.loginInput.joinMiddle {
+    border-radius: 4px !important;
+    margin-bottom: 3px;
+    margin-top: 0 !important;
+}
+
+.form-control.joinBottom,
+.loginInput.joinBottom {
+    border-radius: 4px 4px 25px 25px !important;
+    margin-top: 0 !important;
+}
+
+.form-control:focus,
+.loginInput:focus {
+    border: 1.5px solid var(--primary) !important;
+    background-color: color-mix(
+        in srgb,
+        var(--secondaryContainer) 50%,
+        transparent
+    ) !important;
+    z-index: 5;
+    position: relative;
+}
+
+.form-control::placeholder,
+.loginInput::placeholder {
+    color: color-mix(
+        in srgb,
+        var(--onPrimaryContainer) 40%,
+        transparent
+    ) !important;
+}
+
+.loginLabel {
+    background-color: #a1cce3;
+    width: 250px;
+    height: 50px;
+}
+
+.loginText {
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: var(--fontPrimary);
+    margin-bottom: 20px;
+}
+
+/* Offer Styles */
+.offerBox {
+    background: #006ee6;
+}
+
+.offerBoxExpired {
+    background: red;
+}
+
+.offerHeadings {
+    font-size: 35px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.offerBody {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.offerExpiry {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.offerDate {
+    font-size: 14px;
+    text-align: left;
+}
+
+#nfccheck {
+    display: block;
+}
+
+#roomunlock,
+#exitButton {
+    display: none;
+}
+
+.iframe-wrapper {
+    max-width: 100%;
+    min-width: 250px;
+    height: 800px;
+}
+
+.menu-iframe,
+.form-button {
+    width: 100%;
+    height: 100%;
+}
+
+menu-iframe {
+    object-fit: contain;
+}
+
+.imageIcon {
+    font-size: 40px !important;
+}
+
+.titleIcon {
+    line-height: 45px;
+    font-size: 45px;
+    margin-right: 10px;
+}
+
+.dropdownIcon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.helpcenterIcons {
+    font-size: 25px !important;
+    line-height: inherit;
+    vertical-align: middle;
+}
+
+.brand {
+    width: 300px;
+}
+
+#homeImage {
+    min-width: 300px;
+    max-width: 350px;
+}
