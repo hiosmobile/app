@@ -195,7 +195,7 @@
 
 .bottom-sheet {
     position: fixed;
-    bottom: 20px;
+    bottom: calc(10px + var(--nav-pad-bottom));
     left: 16px;
     right: 16px;
     border: 1px solid var(--glass-border);
@@ -286,7 +286,7 @@
     }
 
     .bottom-sheet {
-        bottom: 100px;
+        bottom: calc(10px + var(--nav-pad-bottom));
     }
 
     .fab {
@@ -508,7 +508,7 @@
     background-color: var(--glass-border);
     color: var(--primary);
     width: 90%;
-    height: 58px;
+    height: 48px;
     border-radius: 60px;
     display: flex;
     justify-content: center;
@@ -648,7 +648,7 @@
     transform: translateX(-50%);
     width: 90%;
     max-width: 400px;
-    height: 70px;
+    height: 60px;
     border-radius: 600px;
     display: flex;
     justify-content: space-around;
@@ -1724,8 +1724,6 @@ body {
 /* Inside your React project */
 main.container {
     /* Guarantees your 'Good Afternoon' text is pushed below the transparent status bar */
-    padding-top: max(env(safe-area-inset-top), 45px) !important;
-    padding-bottom: calc(var(--nav-pad-bottom) + 40px) !important;
 }
 
 .background-wrapper {
