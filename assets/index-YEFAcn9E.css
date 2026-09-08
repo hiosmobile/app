@@ -518,7 +518,7 @@
         color 0.3s ease;
 }
 
-.inactiveIcon {
+.inactiveIcon, .nav-action-btn {
     width: 64px;
     height: 32px;
     display: flex;
@@ -587,7 +587,7 @@
     justify-content: center;
 }
 
-.side-rail ul li a {
+.side-rail ul li a, .siderailActionBtn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -603,6 +603,7 @@
     z-index: 2;
     transition: all 0.3s ease;
     border-radius: 5px;
+    border: none;
 }
 
 /* Specific End-Cap Rounding */
@@ -610,12 +611,12 @@
     border-radius: 60px 15px 15px 60px;
 }
 
-.side-rail ul li:last-child a {
+.side-rail ul li:last-child a, .siderailActionBtn {
     border-radius: 15px 60px 60px 15px;
 }
 
 /* States */
-.side-rail ul li a:hover {
+.side-rail ul li a:hover, .siderailActionBtn:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--secondary);
 }
@@ -648,7 +649,7 @@
     transform: translateX(-50%);
     width: 90%;
     max-width: 400px;
-    height: 60px;
+    height: 57px;
     border-radius: 600px;
     display: flex;
     justify-content: space-around;
@@ -700,8 +701,8 @@
     --statusbar-pad: env(safe-area-inset-top);
     --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
 
-    --radius-card: 40px;
-    --radius-button: 20px;
+    --radius-card: 35px;
+    --radius-button: 35px;
     --radius-inner: 12px;
 
     /*OLD Colours*/
@@ -1771,7 +1772,7 @@ main.container {
 /* --- UPDATED UNIFORM SQUIRCLE ELEMENTS --- */
 
 .roundedImage {
-    border-radius: var(--radius-card) !important;
+    border-radius: var(--radius-button) !important;
     border: 0.5px solid var(--outline);
     overflow: hidden;
 }
@@ -2985,7 +2986,6 @@ img[src$="scrolltop.bmp"] {
 }
 
 .nav-icon-btn {
-    background: none;
     border: none;
     color: var(--primary);
     padding: 8px;
