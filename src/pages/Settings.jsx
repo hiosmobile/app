@@ -138,7 +138,6 @@ export default function Settings() {
 
         <Row className="g-2">
           {/* Left Column: Account Profile */}
-          {/* Left Column: Account Profile */}
           <Col size={12} md={6}>
             <ProfileHeader
               name={currentUser?.displayName}

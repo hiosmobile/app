@@ -34,6 +34,7 @@ import CafeFiesta from "./pages/restaurant/CafeFiesta";
 import Locations from "./pages/restaurant/Locations";
 import HotelActivities from "./pages/HotelActivities";
 import HiRewards from "./pages/HiRewards.jsx";
+import Profile from "./pages/Profile.jsx";
 
 import Settings from "./pages/Settings";
 import Sync from "./pages/settings/Sync.jsx";
@@ -121,6 +122,7 @@ function AppRoutes() {
         <Route path="/restaurant/locations" element={<Locations />} />
         <Route path="/hotelactivities" element={<HotelActivities />} />
         <Route path="/hirewards" element={<HiRewards />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/viewer" element={<FullscreenViewer />} />
       </Route>
 

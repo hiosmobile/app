@@ -314,7 +314,7 @@ export default function Home() {
         {/* Header Row with Edit Toggle */}
         <Row className="mb-2">
           <Col size={12}>
-            <Card bodyClass="text-start d-flex justify-content-between align-items-center p-3">
+            <Card bodyClass="text-start d-flex justify-content-between align-items-center p-6">
               <div>
                 <p
                   className="gradientHeading mb-0"
@@ -336,9 +336,9 @@ export default function Home() {
                 className="nav-icon-btn"
                 onClick={() => setIsEditing(!isEditing)}
                 style={{
-                  backgroundColor: isEditing ? "var(--primary)" : "transparent",
-                  color: isEditing ? "var(--onPrimary)" : "var(--primary)",
-                  border: "none",
+                  backgroundColor: isEditing ? "var(--primary)" : "var(--tertiaryContainer)",
+                  color: isEditing ? "var(--onPrimary)" : "var(--onTertiaryContainer)",
+                  border: "0.5px solid var(--outline)",
                   width: "50px",
                   height: "50px",
                 }}
