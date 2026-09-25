@@ -303,7 +303,7 @@
     .main-content {
         border-radius: var(--radius-card);
         padding-top: calc(
-            64px + var(--statusbar-pad)
+            52px
         ); /* Pushes content below the 60px floating rail */
     }
 
@@ -365,10 +365,9 @@
 
 .top-bar-title {
     font-size: 1.25rem;
-    font-weight: 700; /* Bolder, premium look */
+    font-weight: 400; /* Bolder, premium look */
     color: var(--primary); /* Ties into your app's theme */
     margin: 0;
-    letter-spacing: -0.5px;
 }
 
 .top-bar-wrapper-container {
@@ -390,7 +389,7 @@
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(56px + var(--statusbar-pad));
+        padding-top: calc(52px);
     }
 
     .top-app-bar {
@@ -404,7 +403,7 @@
         width: calc(100% - 12px);
         padding: 0 24px;
         justify-content: center;
-        border-radius: 60px; /* Perfect pill shape */
+        border-radius: 0px; /* Perfect pill shape */
         z-index: 1000;
     }
 
@@ -444,7 +443,7 @@
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(64px + var(--statusbar-pad));
+        padding-top: calc(52px + var(--statusbar-pad));
     }
 
     .top-bar-wrapper-container main.container {
@@ -461,7 +460,7 @@
         max-width: 1108px;
         padding: 0 24px;
         justify-content: center;
-        border-radius: 60px;
+        border-radius: 0px;
         z-index: 1000;
     }
 
@@ -553,7 +552,7 @@
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
-    border-radius: 90px;
+    border-radius: 1px;
     isolation: isolate;
 }
 
@@ -602,17 +601,17 @@
     white-space: nowrap;
     z-index: 2;
     transition: all 0.3s ease;
-    border-radius: 5px;
+    border-radius: 1px;
     border: none;
 }
 
 /* Specific End-Cap Rounding */
 .side-rail ul li:first-child a {
-    border-radius: 60px 15px 15px 60px;
+    border-radius: 1px;
 }
 
 .side-rail ul li:last-child a, .siderailActionBtn {
-    border-radius: 15px 60px 60px 15px;
+    border-radius: 1px;
 }
 
 /* States */
@@ -647,10 +646,9 @@
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 400px;
+    width: 100%;
     height: 57px;
-    border-radius: 600px;
+    border-radius: 0px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -663,13 +661,13 @@
     background-color: var(--glass-tint);
     backdrop-filter: blur(15px) saturate(180%);
     -webkit-backdrop-filter: blur(15px) saturate(180%);
-    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     will-change: transform, backdrop-filter;
 
     /* Crucial for keeping the sheen contained */
     isolation: isolate;
-    bottom: calc(10px + var(--nav-pad-bottom));
+    bottom: 0px;
 }
 
 /* =========================================
@@ -701,7 +699,7 @@
     --statusbar-pad: env(safe-area-inset-top);
     --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
 
-    --radius-card: 35px;
+    --radius-card: 1px;
     --radius-button: 35px;
     --radius-inner: 12px;
 
@@ -1796,25 +1794,25 @@ main.container {
 
 /* Stacked section containers */
 .joinTop {
-    border-radius: var(--radius-card) var(--radius-card) 6px 6px !important;
+    border-radius: var(--radius-card) var(--radius-card) 0px 0px !important;
     margin-bottom: 3px !important;
 }
 
 .joinMiddle {
-    border-radius: 6px !important;
+    border-radius: 0px !important;
     margin-bottom: 3px !important;
 }
 
 .joinBottom {
-    border-radius: 6px 6px var(--radius-card) var(--radius-card) !important;
+    border-radius: 0px 0px var(--radius-card) var(--radius-card) !important;
 }
 
 .joinLeft {
-    border-radius: var(--radius-card) 6px 6px var(--radius-card) !important;
+    border-radius: var(--radius-card) 0px 0px var(--radius-card) !important;
 }
 
 .joinRight {
-    border-radius: 6px var(--radius-card) var(--radius-card) 6px !important;
+    border-radius: 0px var(--radius-card) var(--radius-card) 0px !important;
 }
 
 .full {
@@ -1858,9 +1856,10 @@ main.container {
 .blue-h3 {
     color: var(--primary);
     font-family: var(--fontPrimary);
-    font-size: 45px;
-    font-weight: 400; /* Bumped slightly */
+    font-size: 60px;
+    font-weight: 250; /* Bumped slightly */
     text-align: left;
+    text-transform: lowercase;
 }
 
 .material-symbols-rounded {
@@ -1875,6 +1874,8 @@ main.container {
 
 .subtitle {
     font-family: var(--fontCode) !important;
+    font-weight: 300;
+    text-transform: lowercase;
 }
 
 .gradientHeading,
@@ -2563,7 +2564,7 @@ body:not(.acrylic-on) .bottom-sheet,
 body:not(.acrylic-on) .top-app-bar,
 body:not(.acrylic-on) .side-rail,
 body:not(.acrylic-on) .bottom-nav {
-    background: var(--primaryContainer) !important;
+    background: var(--surfaceVarient) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
@@ -2582,6 +2583,7 @@ h6 {
     margin-bottom: var(--h-margin-bottom);
     font-weight: 500;
     line-height: 1.2;
+    text-transform: lowercase;
 }
 
 p {
@@ -2706,6 +2708,7 @@ p {
         "wdth" 100,
         "GRAD" 0;
     font-weight: 600;
+    text-transform: unset;
 }
 .card-text {
     margin-bottom: 0.75rem;
@@ -3012,11 +3015,11 @@ img[src$="scrolltop.bmp"] {
     display: flex;
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
-    padding: 8px 10px; /* Matched to side-rail */
+    padding: 4px; /* Matched to side-rail */
     overflow-x: auto;
     white-space: nowrap;
     scrollbar-width: none;
-    border-radius: 90px !important; /* Fully rounded pill shape */
+    border-radius: 1px; /* Fully rounded pill shape */
     gap: 4px;
 }
 
@@ -3050,20 +3053,20 @@ img[src$="scrolltop.bmp"] {
     transition: all 0.3s ease;
     cursor: pointer;
     opacity: 0.8;
-    border-radius: 4px;
+    border-radius: 1px;
     flex-grow: 1;
 }
 
 .header-tab:first-child {
-    border-radius: 60px 10px 10px 60px !important;
+    border-radius: 1px;
 }
 
 .header-tab:last-child {
-    border-radius: 10px 60px 60px 10px !important;
+    border-radius: 1px;
 }
 
 .header-tab:first-child:last-child {
-    border-radius: 60px !important;
+    border-radius: 1px;
 }
 
 .header-rab .material-symbols-rounded {
@@ -3086,7 +3089,7 @@ img[src$="scrolltop.bmp"] {
     transition: all 0.3s ease;
     cursor: pointer;
     flex-shrink: 0;
-    border-radius: 4px !important;
+    border-radius: 1px !important;
 }
 
 /* Hover state matching side-rail */
@@ -3096,15 +3099,15 @@ img[src$="scrolltop.bmp"] {
 }
 
 .sub-header-tab:first-child {
-    border-radius: 60px 15px 15px 60px !important;
+    border-radius: 1px;
 }
 
 .sub-header-tab:last-child {
-    border-radius: 15px 60px 60px 15px !important;
+    border-radius: 1px;
 }
 
 .sub-header-tab:first-child:last-child {
-    border-radius: 60px !important;
+    border-radius: 1px;
 }
 
 .header-tab .material-symbols-rounded {
