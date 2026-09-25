@@ -3425,6 +3425,43 @@ body.high-contrast .blue-h3 {
     background-color: #303030;
     opacity: 8%;
 }
+
+@keyframes metro-tumble-in {
+    0% {
+        transform: perspective(800px) rotateX(-40deg) translateY(40px);
+        opacity: 0;
+    }
+    100% {
+        transform: perspective(800px) rotateX(0deg) translateY(0);
+        opacity: 1;
+    }
+}
+
+.metro-anim-list-item {
+    opacity: 0;
+    animation: metro-tumble-in 0.45s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    transform-origin: top center;
+}
+
+/* Staggered Delays for the cascading effect */
+.delay-1 {
+    animation-delay: 0.05s;
+}
+.delay-2 {
+    animation-delay: 0.1s;
+}
+.delay-3 {
+    animation-delay: 0.15s;
+}
+.delay-4 {
+    animation-delay: 0.2s;
+}
+.delay-5 {
+    animation-delay: 0.25s;
+}
+.delay-6 {
+    animation-delay: 0.3s;
+}
 /* google-sans-flex-canadian-aboriginal-wght-normal */
 @font-face {
   font-family: 'Google Sans Flex Variable';
