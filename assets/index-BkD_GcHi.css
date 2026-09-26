@@ -1835,6 +1835,12 @@ main.container {
     font-weight: bold;
     transition: 0.5s;
     float: inline-block;
+    transform-style: preserve-3d;
+    transition: transform 0.1s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.button:active, .form-select:active {
+    transform: perspective(400px) scale(0.96) rotateX(4deg);
 }
 
 /* Glass Cards */
@@ -3461,6 +3467,116 @@ body.high-contrast .blue-h3 {
 }
 .delay-6 {
     animation-delay: 0.3s;
+}
+
+/* =========================================
+   METRO WEATHER POPUP (GLASS EDITION)
+   ========================================= */
+
+:root {
+    --metro-cyan: #1ba1e2;
+    --subtext: rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.theme-light) {
+        --subtext: rgba(255, 255, 255, 0.6);
+    }
+}
+
+body.theme-dark {
+    --subtext: rgba(255, 255, 255, 0.6);
+}
+
+.material-symbols-sharp {
+    font-family: "Material Symbols Rounded";
+    font-weight: 300;
+    font-style: normal;
+    line-height: 1;
+    display: inline-block;
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 48;
+}
+
+.metro-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fade-in 0.2s ease forwards;
+}
+
+.metro-modal-content {
+    background: var(--glass-tint) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid var(--glass-border);
+    border-top: 6px solid var(--metro-cyan);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-card);
+    width: 100%;
+    max-width: 450px;
+    padding: 24px;
+    text-align: left;
+    animation: wp7-pop-in 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.metro-modal-content::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.35;
+    z-index: -1;
+}
+
+.wp7-app-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--subtext);
+    letter-spacing: 1px;
+    margin: 0 0 5px 0;
+}
+
+.wp7-app-header {
+    font-family: var(--fontPrimary);
+    font-size: 3rem;
+    font-weight: 200;
+    margin: 0 0 20px -3px;
+    text-transform: lowercase;
+    letter-spacing: -2px;
+    color: var(--onBackground) !important;
+    line-height: 1;
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes wp7-pop-in {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 /* google-sans-flex-canadian-aboriginal-wght-normal */
 @font-face {
