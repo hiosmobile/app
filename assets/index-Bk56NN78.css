@@ -498,7 +498,479 @@ body.background-off .app-container {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
-/* Navigation Items (Shared) */
+@font-face {
+    font-family: "Material Symbols Sharp";
+    font-style: normal;
+    font-weight: 400;
+    src: url("./icons-BDwzk6uS.woff2") format("woff2");
+}
+
+.material-symbols-rounded {
+    font-family: "Material Symbols Sharp";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Color Variables */
+:root {
+    --bg-color: #fdfcff;
+    --text-color: #1a1c1e;
+    --nav-bg: rgba(255, 255, 255, 0.85);
+    --rail-bg: #fdfcff;
+    --border-color: #73777f;
+    --icon-active-bg: #d2e4ff;
+    --icon-active-color: #001c37;
+    --icon-inactive-color: #001c37;
+    --fab-bg: #d2e4ff;
+    --fab-color: #001c37;
+    --sheet-bg: #fdfcff;
+    --sheet-button-bg: #d7e3f8;
+    --sheet-button-color: #101c2b;
+    --overlay-bg: rgba(0, 0, 0, 0.5);
+    --primary: #0061a6;
+    --onPrimary: #ffffff;
+    --primaryContainer: #d2e4ff;
+    --onPrimaryContainer: #001c37;
+    --secondary: #535f70;
+    --onSecondary: #ffffff;
+    --secondaryContainer: #d7e3f8;
+    --onSecondaryContainer: #101c2b;
+    --tertiary: #6c5778;
+    --onTertiary: #ffffff;
+    --tertiaryContainer: #f3daff;
+    --onTertiaryContainer: #251431;
+    --background: #fdfcff;
+    --onBackground: #1a1c1e;
+    --surface: #fdfcff;
+    --onSurface: #1a1c1e;
+    --outline: #73777f;
+    --surfaceVarient: #dfe2eb;
+    --onSurfaceVarient: #43474e;
+    --glass-tint: rgba(255, 255, 255, 0.62);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    --radius-card: 42px;
+    --radius-medium: 22px;
+    --radius-small: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1a1c1e;
+        --text-color: #e3e2e6;
+        --nav-bg: rgba(30, 30, 30, 0.85);
+        --rail-bg: #1a1c1e;
+        --border-color: #8d9199;
+        --icon-active-bg: #253141;
+        --icon-active-color: #d2e4ff;
+        --icon-inactive-color: #e3e2e6;
+        --fab-bg: #253141;
+        --fab-color: #d2e4ff;
+        --sheet-bg: #1a1c1e;
+        --sheet-button-bg: #3c4858;
+        --sheet-button-color: #d7e3f8;
+        --overlay-bg: rgba(0, 0, 0, 0.7);
+        --primary: #a0c9ff;
+        --onPrimary: #00325a;
+        --primaryContainer: #253141;
+        --onPrimaryContainer: #d2e4ff;
+        --secondary: #bbc7db;
+        --onSecondary: #253141;
+        --secondaryContainer: #3c4858;
+        --onSecondaryContainer: #d7e3f8;
+        --tertiary: #d7bde4;
+        --onTertiary: #3b2947;
+        --tertiaryContainer: #533f5f;
+        --onTertiaryContainer: #f3daff;
+        --background: #1a1c1e;
+        --onBackground: #e3e2e6;
+        --surface: #1a1c1e;
+        --onSurface: #e3e2e6;
+        --outline: #8d9199;
+        --surfaceVarient: #43474e;
+        --onSurfaceVarient: #c3c6cf;
+        --glass-tint: rgba(26, 28, 30, 0.62);
+        --glass-border: rgba(255, 255, 255, 0.08);
+    }
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    font-family: "Noto Sans Variable", sans-serif;
+    box-sizing: border-box;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: var(--background);
+    color: var(--text-color);
+    padding-left: max(env(safe-area-inset-left, 0px), 0px);
+    padding-right: max(env(safe-area-inset-right, 0px), 0px);
+    box-sizing: border-box;
+}
+
+.main-content {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    transition: border-radius 0.3s ease;
+}
+
+/* FAB */
+.fab {
+    position: fixed;
+    bottom: 1px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    color: var(--onPrimary);
+    background-color: var(--primary);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1001;
+    border-radius: 15px;
+}
+
+/* Bottom Sheet */
+.bottom-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.bottom-sheet-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.bottom-sheet {
+    position: fixed;
+    bottom: calc(10px + var(--nav-pad-bottom));
+    left: 16px;
+    right: 16px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    color: var(--text-color);
+    padding: 12px 24px 24px 24px;
+    z-index: 2001;
+    transform: translateY(150%);
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: var(--radius-card);
+}
+
+/* Ensure the content stays above the glass sheen layer */
+.bottom-sheet > * {
+    position: relative;
+    z-index: 1;
+}
+
+.bottom-sheet.open {
+    transform: translateY(0);
+}
+
+.bottom-sheet-drag-handle {
+    width: 32px;
+    height: 4px;
+    background-color: var(--outline);
+    border-radius: 2px;
+    margin: 0 auto 12px auto;
+    opacity: 0.4;
+}
+
+.bottom-sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.bottom-sheet-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    z-index: 2; /* Ensure button stays above sheen */
+}
+
+.close-button:hover {
+    background-color: var(--surfaceVarient);
+}
+
+.sheet-button {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--sheet-button-bg);
+    color: var(--sheet-button-color);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-card);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sheet-button i {
+    margin-right: 12px;
+}
+
+/* App Shell Layout Toggles */
+@media (max-width: 767px) {
+    .main-content {
+        padding-bottom: 120px;
+    }
+
+    .bottom-sheet {
+        bottom: calc(10px + var(--nav-pad-bottom));
+    }
+
+    .fab {
+        right: 20px;
+        bottom: calc(90px + var(--nav-pad-bottom));
+    }
+}
+
+@media (min-width: 768px) {
+    .app-container {
+        padding: 0px;
+    }
+
+    .main-content {
+        border-radius: var(--radius-card);
+        padding-top: calc(
+            52px
+        ); /* Pushes content below the 60px floating rail */
+    }
+
+    .main-content main.container {
+        padding-top: 0 !important;
+    }
+
+    .fab {
+        right: 16px;
+        bottom: calc(16px + var(--nav-pad-bottom));
+    }
+}
+
+/* Top App Bar Styling */
+.top-app-bar {
+    background-color: color-mix(in srgb, var(--surface) 85%, transparent);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color); /* Full border to trace the pill shape */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); /* Lift it off the scrolling content */
+    z-index: 1000;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.back-button {
+    background-color: color-mix(
+        in srgb,
+        var(--primaryContainer) 50%,
+        transparent
+    );
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: var(--primaryContainer);
+}
+
+.back-button:active {
+    transform: scale(0.9);
+}
+
+.back-button .material-symbols-rounded {
+    font-size: 20px; /* Slightly smaller icon to fit the 40px circle perfectly */
+    margin-left: 10px; /* Optically centers the back arrow */
+}
+
+.top-bar-title {
+    font-size: 1.25rem;
+    font-weight: 400; /* Bolder, premium look */
+    color: var(--primary); /* Ties into your app's theme */
+    margin: 0;
+}
+
+.top-bar-wrapper-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    background-color: var(--background);
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        padding 0.3s ease;
+}
+
+@media (max-width: 767px) {
+    .side-rail {
+        display: none;
+    }
+
+    .top-bar-wrapper-container {
+        padding-top: 43px;
+    }
+
+    .top-app-bar {
+        position: fixed;
+        top: calc(
+            8px + var(--statusbar-pad)
+        ); /* Slightly more top breathing room */
+        left: 50%;
+        transform: translateX(-50%);
+        height: 56px; /* Fixed height for uniformity */
+        width: calc(100% - 12px);
+        padding: 0 24px;
+        justify-content: center;
+        border-radius: 0px; /* Perfect pill shape */
+        z-index: 1000;
+    }
+
+    .top-app-bar > * {
+        z-index: 1;
+    }
+
+    .top-bar-wrapper-container .back-button {
+        position: absolute;
+        left: 8px; /* Snug against the left edge of the pill */
+        margin: 0;
+    }
+
+    .main-content,
+    .top-bar-wrapper-container iframe {
+        position: relative;
+        z-index: 10;
+    }
+
+    .top-bar-wrapper-container .main-content {
+        padding-bottom: var(--nav-pad-bottom);
+    }
+
+    .top-bar-wrapper-container main.container {
+        padding-top: 0 !important;
+    }
+
+    .bottom-sheet {
+        bottom: 100px;
+    }
+}
+
+/* Desktop & Tablet Layout (Floating Island) */
+@media (min-width: 768px) {
+    .bottom-nav {
+        display: none;
+    }
+
+    .top-bar-wrapper-container {
+        padding-top: calc(52px + var(--statusbar-pad));
+    }
+
+    .top-bar-wrapper-container main.container {
+        padding-top: 0 !important;
+    }
+
+    .top-bar-wrapper-container .top-app-bar {
+        position: fixed;
+        top: calc(12px + var(--statusbar-pad));
+        left: 50%;
+        transform: translateX(-50%);
+        height: 60px;
+        width: calc(100% - 32px);
+        max-width: 1108px;
+        padding: 0 24px;
+        justify-content: center;
+        border-radius: 0px;
+        z-index: 1000;
+    }
+
+    .top-bar-wrapper-container .top-app-bar > * {
+        z-index: 1;
+    }
+
+    .top-bar-wrapper-container .back-button {
+        position: absolute;
+        left: 10px;
+        margin: 0;
+    }
+
+    .top-bar-wrapper-container .main-content {
+        padding-top: 0;
+    }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.main-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.main-content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Navigation Items (Shared) - Metro Style */
 .nav-item {
     display: flex;
     flex-direction: column;
@@ -507,33 +979,58 @@ body.background-off .app-container {
     text-decoration: none;
     color: var(--onPrimaryContainer);
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: all 0.2s ease;
     z-index: 2; /* Keeps links above the glass sheen */
     flex: 1; /* Distributes items equally to fix the off-center margin */
+    height: 100%;
 }
 
 .activeIcon {
-    background-color: var(--glass-border);
-    color: var(--primary);
-    width: 90%;
-    height: 48px;
-    border-radius: 60px;
+    background-color: var(--primary);
+    color: var(--onPrimary);
+    width: 100%;
+    height: 100%; /* Fills the entire nav item container vertically */
+    border-radius: 1px; /* Metro sharp corner */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-weight: bold;
 }
 
 .inactiveIcon, .nav-action-btn {
-    width: 64px;
-    height: 32px;
+    background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
+    width: 100%;
+    height: 100%; /* Fills the entire nav item container vertically */
+    border-radius: 1px; /* Metro sharp corner */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     color: var(--onPrimaryContainer);
-    transition: color 0.3s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* New class for bottom nav text labels */
+.nav-label {
+    font-size: 11px;
+    margin-top: 4px; /* Space between icon and text */
+    font-weight: inherit; /* Picks up bold from .activeIcon */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 0 4px;
+    box-sizing: border-box;
+    letter-spacing: 0.3px;
+    text-transform: lowercase; /* Optional: fits the Metro aesthetic */
+}
+
+.nav-item:hover .inactiveIcon,
+.nav-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary);
 }
 
 /* =========================================
@@ -656,14 +1153,15 @@ body.background-off .app-container {
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    height: 57px;
+    height: 68px; /* Increased slightly to comfortably fit text and icons */
     border-radius: 0px;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: stretch; /* Forces items to stretch full height */
     z-index: 1000;
     box-sizing: border-box;
-    padding: 0;
+    padding: 4px; /* Matches the padding of the side-rail */
+    gap: 4px; /* Adds space between Metro tiles */
     margin: 0;
 
     /* Glass Effect matching style.css */
