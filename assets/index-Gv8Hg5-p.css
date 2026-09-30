@@ -2438,15 +2438,6 @@ main.container {
     color: var(--primary) !important;
 }
 
-.card h5 {
-    font-size: 1.4rem;
-    font-variation-settings:
-        "slnt" 0,
-        "wdth" 100,
-        "GRAD" 0;
-    font-weight: 600;
-}
-
 .translucentBox {
     padding: 10px;
     min-width: 300px;
@@ -3274,15 +3265,16 @@ p {
     padding: 1.25rem;
 }
 
+.card h5,
 .card-title {
-    margin-bottom: 0.75rem;
-    font-size: 1.4rem;
-    font-variation-settings:
-        "slnt" 0,
-        "wdth" 100,
-        "GRAD" 0;
-    font-weight: 600;
-    text-transform: unset;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--onBackground) !important;
+    letter-spacing: -0.5px;
+    text-transform: lowercase;
+    text-align: left;
+    font-variation-settings: "slnt" 0, "wdth" 100, "GRAD" 0;
 }
 
 .card-text {
@@ -4203,6 +4195,105 @@ body.theme-dark {
 .red {
     background-color: var(--errorContainer) !important;
     color: var(--onErrorContainer) !important;
+}
+
+.metro-widget-tile {
+    background-color: color-mix(in srgb, var(--primaryContainer) 65%, transparent) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-radius: var(--radius-card) !important;
+    border: 0.5px solid var(--outline) !important;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+.metro-widget-tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-noise);
+    background-repeat: repeat;
+    background-size: 160px 160px;
+    opacity: var(--glass-noise-opacity);
+    mix-blend-mode: overlay;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+.metro-widget-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--glass-sheen);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+.metro-tile-btn {
+    transform-style: preserve-3d;
+    transition: transform 0.1s cubic-bezier(0.1, 0.9, 0.2, 1), background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.metro-tile-btn:active {
+    transform: perspective(400px) scale(0.96) rotateX(4deg);
+}
+
+/* =========================================
+   METRO LIST BUTTONS
+   ========================================= */
+
+.metro-list-btn {
+    width: 100%;
+    background-color: color-mix(in srgb, var(--surface) 30%, transparent);
+    border: 1px solid var(--glass-border);
+    color: var(--onBackground);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    cursor: pointer;
+    /* Force sharp Metro edges, overriding any .joinTop/.joinBottom pill logic */
+    border-radius: 1px !important;
+    margin-bottom: 2px !important;
+    transform-style: preserve-3d;
+    transition: transform 0.1s cubic-bezier(0.1, 0.9, 0.2, 1), background-color 0.2s ease;
+}
+
+.metro-list-btn:hover {
+    background-color: color-mix(in srgb, var(--surface) 50%, transparent);
+}
+
+.metro-list-btn:active {
+    transform: perspective(400px) scale(0.98) rotateX(2deg);
+    background-color: var(--primary);
+    color: var(--onPrimary);
+}
+
+/* Force thin, un-filled icons on the left */
+
+.metro-list-btn .material-symbols-rounded {
+    font-size: 28px !important;
+    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24 !important;
+    margin: 0 !important;
+    float: none !important; /* Overrides the old right float */
+    line-height: 1 !important;
+}
+
+/* Force thin, lowercase text */
+
+.metro-list-btn .button-text {
+    font-size: 1.2rem !important;
+    font-weight: 400 !important;
+    letter-spacing: -0.5px;
+    text-transform: lowercase;
+    margin: 0 !important;
+    line-height: 1 !important;
 }
 /* google-sans-flex-canadian-aboriginal-wght-normal */
 @font-face {
