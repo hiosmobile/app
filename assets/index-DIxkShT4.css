@@ -3081,32 +3081,75 @@ body.theme-dark.acrylic-on .glass-content {
     background-color: var(--background);
 }
 
+/* WINDOWS 8 MOBILE FLAT FALLBACK (Glass Disabled) */
+
+/* Light Mode (Default) - Light Grey */
+
 .background-off .card,
-.background-off .card.glass-container-ready {
-    background: var(--primaryContainer) !important;
-    color: var(--onPrimaryContainer);
-    border: none !important;
-    box-shadow: none;
-}
-
-.background-off .card::before,
-.background-off .card::after {
-    display: none;
-}
-
-.background-off .glass-content {
-    padding: 0;
-}
-
+.background-off .card.glass-container-ready,
 body:not(.acrylic-on) .card,
 body:not(.acrylic-on) .card.glass-container-ready,
 body:not(.acrylic-on) .bottom-sheet,
 body:not(.acrylic-on) .top-app-bar,
 body:not(.acrylic-on) .side-rail,
 body:not(.acrylic-on) .bottom-nav {
-    background: var(--surfaceVarient) !important;
+    background: #eeeeee !important;
+    color: #000000 !important;
+    border: none !important;
+    box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+}
+
+/* Hide glass noise/sheen overlays when glass is off */
+
+.background-off .card::before,
+.background-off .card::after,
+body:not(.acrylic-on) .card::before,
+body:not(.acrylic-on) .card::after,
+body:not(.acrylic-on) .bottom-sheet::before,
+body:not(.acrylic-on) .bottom-sheet::after,
+body:not(.acrylic-on) .top-app-bar::before,
+body:not(.acrylic-on) .top-app-bar::after,
+body:not(.acrylic-on) .side-rail::before,
+body:not(.acrylic-on) .side-rail::after,
+body:not(.acrylic-on) .bottom-nav::before,
+body:not(.acrylic-on) .bottom-nav::after {
+    display: none !important;
+}
+
+.background-off .glass-content {
+    padding: 0;
+}
+
+/* Dark Mode (System Preference) - Almost Black */
+
+@media (prefers-color-scheme: dark) {
+    body:not(.theme-light) .background-off .card,
+    body:not(.theme-light) .background-off .card.glass-container-ready,
+    body:not(.theme-light):not(.acrylic-on) .card,
+    body:not(.theme-light):not(.acrylic-on) .card.glass-container-ready,
+    body:not(.theme-light):not(.acrylic-on) .bottom-sheet,
+    body:not(.theme-light):not(.acrylic-on) .top-app-bar,
+    body:not(.theme-light):not(.acrylic-on) .side-rail,
+    body:not(.theme-light):not(.acrylic-on) .bottom-nav {
+        background: #1f1f1f !important;
+        color: #ffffff !important;
+    }
+}
+
+/* Dark Mode (Manual Toggle) - Almost Black */
+
+body.theme-dark .background-off .card,
+body.theme-dark .background-off .card.glass-container-ready,
+body.theme-dark:not(.acrylic-on) .card,
+body.theme-dark:not(.acrylic-on) .card.glass-container-ready,
+body.theme-dark:not(.acrylic-on) .bottom-sheet,
+body.theme-dark:not(.acrylic-on) .top-app-bar,
+body.theme-dark:not(.acrylic-on) .side-rail,
+body.theme-dark:not(.acrylic-on) .bottom-nav {
+    background: #1f1f1f !important;
+    color: #ffffff !important;
 }
 
 :root {
