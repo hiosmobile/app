@@ -328,7 +328,7 @@ body.background-off .app-container {
     background-color: color-mix(in srgb, var(--surface) 85%, transparent);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    color: var(--text-color);
+    color: var(--primary);
     display: flex;
     align-items: center;
     border: 1px solid var(--border-color); /* Full border to trace the pill shape */
@@ -409,7 +409,7 @@ body.background-off .app-container {
         width: calc(100% - 12px);
         padding: 0 24px;
         justify-content: center;
-        border-radius: 0px; /* Perfect pill shape */
+        border-radius: 999px; /* Perfect pill shape */
         z-index: 1000;
     }
 
@@ -467,7 +467,7 @@ body.background-off .app-container {
         max-width: 1108px;
         padding: 0 24px;
         justify-content: center;
-        border-radius: 0px;
+        border-radius: 25px;
         z-index: 1000;
     }
 
@@ -3130,11 +3130,11 @@ img[src$="scrolltop.bmp"] {
 }
 
 .card.joinMiddle .card-body {
-    padding: 0.5rem 1.25rem;
+    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
 }
 
 .card.joinBottom .card-body {
-    padding: 0.5rem 1.25rem 1.25rem 1.25rem;
+    padding: 1.25rem 1.25rem 1.25rem 1.25rem;
 }
 
 .d-flex {
@@ -3319,22 +3319,15 @@ img[src$="scrolltop.bmp"] {
     padding-right: 20px;
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-card);
-    background-color: color-mix(
-        in srgb,
-        var(--secondaryContainer) 70%,
-        transparent
-    ) !important;
+    background-color: color-mix(in srgb, var(--surface) 30%, transparent) !important;
+    text-transform: lowercase;
 }
 
 .form-select {
     padding-left: 15px !important;
-    border: 0.5px solid var(--outline) !important;
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-card);
-    background-color: color-mix(
-        in srgb,
-        var(--secondaryContainer) 90%,
-        transparent
-    ) !important;
+    background-color: color-mix(in srgb, var(--surface) 30%, transparent) !important;
     color: var(--onSecondaryContainer) !important;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -3343,10 +3336,9 @@ img[src$="scrolltop.bmp"] {
     background-position: right 15px center;
     background-size: 20px;
     padding-right: 45px;
-    height: 54px;
+    height: 64px;
     transition: all 0.3s ease;
-    backdrop-filter: blur(16px);
-
+    text-transform: lowercase;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 -960 960 960' width='24' fill='%23101c2b'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
 }
 
@@ -3394,19 +3386,20 @@ img[src$="scrolltop.bmp"] {
     background-color: transparent;
     border: 2px solid var(--primary);
     transition: background-color 0.15s ease-in-out;
-    border-radius: 0;
+    border-radius: 999px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
     height: 24px; /* Flush with top and bottom inner borders */
-    width: 16px;
-    left: 0;
+    width: 24px;
+    left: 0px;
+    border: 1px solid var(--glass-tint);
     bottom: 0;
     background-color: var(--primary);
     transition: transform 0.15s cubic-bezier(0.1, 0.9, 0.2, 1), background-color 0.15s ease-in-out;
-    border-radius: 0;
+    border-radius: 999px;
 }
 
 input:checked + .slider {
@@ -3415,7 +3408,7 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     background-color: var(--onPrimary); /* Contrasts against the filled track */
-    transform: translateX(44px); /* Slides completely to the right edge */
+    transform: translateX(36px); /* Slides completely to the right edge */
 }
 
 /* --- HIGH CONTRAST MODE OVERRIDES --- */
