@@ -1838,9 +1838,50 @@ main.container {
     margin-bottom: 3px !important;
 }
 
+/*JoinTop for mobileOnly*/
+
+@media (max-width: 767.98px) {
+    .joinTop-mobile {
+        border-radius: var(--radius-card) var(--radius-card) 6px 6px !important;
+        margin-bottom: 3px;
+        padding-bottom: var(--bs-space-3) !important;
+    }
+}
+
+.joinTop-mobile {
+    margin-bottom: 3px;
+}
+
 .joinMiddle {
     border-radius: 6px !important;
     margin-bottom: 3px !important;
+}
+
+@media (max-width: 767.98px) {
+    .joinMiddle-mobile {
+        border-radius: 6px 6px var(--radius-card) var(--radius-card) !important;
+        margin-bottom: 3px !important;
+    }
+}
+
+.card.rightColJoinTop {
+    border-radius: var(--radius-card) var(--radius-card) 6px 6px !important;
+    margin-bottom: 3px;
+}
+
+@media (min-width: 768px) {
+    .joinMiddle-mobile {
+        border-radius: 6px 6px 6px var(--radius-card) !important;
+        margin-bottom: 3px !important;
+    }
+
+    /*On desktop, right col top card displays as join Middle. Otherwise it's a joinTop on mobile.*/
+    .card.rightColJoinTop {
+        border-radius: 6px !important;
+        margin-bottom: 3px !important;
+    }
+
+    /*on Desktop, it appears as a joinTopLeft*/
 }
 
 .joinBottom {
@@ -1857,6 +1898,26 @@ main.container {
 
 .full {
     border-radius: var(--radius-card) !important;
+}
+
+/*Bottom left and bottom right cards*/
+
+.card.joinBottomLeft, .card.joinBottomRight {
+    border-radius: 6px 6px var(--radius-card) var(--radius-card) !important;
+}
+
+.card.joinBottomRight-mobile {
+    border-radius: var(--radius-card);
+}
+
+@media (min-width: 768px) {
+    .card.joinBottomLeft {
+        border-radius: 6px 6px 6px var(--radius-card) !important;
+    }
+
+    .card.joinBottomRight, .card.joinBottomRight-mobile {
+        border-radius: 6px 6px var(--radius-card) 6px !important;
+    }
 }
 
 /* Large link buttons */
