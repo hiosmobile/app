@@ -40,8 +40,8 @@ export default function Sync() {
               title="Sync your themes like a pro."
               className="joinBottom"
             >
-              Save your HiOSMobile appearance preferences with your HiAccount so they
-              auto-apply on all your devices with HiOS installed. How fancy is
+              Save your Harmony appearance preferences with your HiAccount so they
+              auto-apply on all your devices with Harmony installed. How fancy is
               that?!
             </InfoBubble>
           </Card>
@@ -64,7 +64,7 @@ export default function Sync() {
               title="More syncs coming soon"
               className="joinBottom"
             >
-              We're still in the process of adding more ways to sync HiOSMobile with
+              We're still in the process of adding more ways to sync Harmony with
               your HiAccount, so watch this space as we progress with our
               updates! We plan to very soon add a toggle for syncing the
               dashboard.

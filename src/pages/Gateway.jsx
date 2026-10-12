@@ -100,9 +100,9 @@ export default function Gateway() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-1">
+      <Row>
         <Col size={12}>
-          <Card className="metro-anim-list-item delay-1" bodyClass="p-4">
+          <Card className="joinTop metro-anim-list-item delay-1" bodyClass="p-4">
             <Row className="align-items-center">
               <Col className="text-start">
                 <p
@@ -113,7 +113,7 @@ export default function Gateway() {
                 >
                   {greeting}!
                 </p>
-                <p className="gradientHeadingSmall mb-0">Welcome to HiOSMobile!</p>
+                <p className="gradientHeadingSmall mb-0">Welcome to Harmony!</p>
               </Col>
             </Row>
           </Card>
@@ -122,7 +122,7 @@ export default function Gateway() {
 
       <Row className="g-1">
         <Col size={12}>
-          <Card className="joinTop metro-anim-list-item delay-2" bodyClass="p-2">
+          <Card className="joinMiddle metro-anim-list-item delay-2" bodyClass="p-2">
             <div className="sub-nav-pills-header">
               {mainTabs.map((tab) => (
                 <button
@@ -142,7 +142,7 @@ export default function Gateway() {
         {activeMainTab === "login" && (
           <Row className="g-1">
             <Col size={12} md={6}>
-              <Card title="Log-in with email" className="metro-anim-list-item delay-3">
+              <Card title="Log-in with email" className="joinBottomLeft metro-anim-list-item delay-3">
                 {successMessage && (
                   <InfoBubble
                     icon="check"
@@ -161,8 +161,8 @@ export default function Gateway() {
                 >
                   <TextInput
                     type="email"
-                    className="mb-1"
-                    placeholder="Email address"
+                    className="joinTop"
+                    placeholder="email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -170,19 +170,19 @@ export default function Gateway() {
 
                   <TextInput
                     type="password"
-                    className="mb-1"
-                    placeholder="Password"
+                    className="joinMiddle"
+                    placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
 
                   <RippleButton
-                    className="button roundedImage joinBottom"
+                    className="metro-list-btn button joinBottom"
                     type="submit"
                     disabled={isLoading}
                   >
-                    <span className="material-symbols-rounded">arrow_forward_ios</span>
+                    <span className="material-symbols-rounded">login</span>
                     <span className="button-text">
                       {isLoading ? "Logging in..." : "Continue"}
                     </span>
@@ -226,7 +226,7 @@ export default function Gateway() {
             </Col>
 
             <Col size={12} md={6}>
-              <Card className="metro-anim-list-item delay-4">
+              <Card className="joinBottomRight-mobile metro-anim-list-item delay-4">
                 <InfoBubble
                   icon="flare"
                   title="Your HiAccount, for all of HiEnterprises™."
@@ -258,7 +258,7 @@ export default function Gateway() {
         {activeMainTab === "signup" && (
           <Row className="g-1">
             <Col size={12} md={6}>
-              <Card title="Sign-up with email" className="metro-anim-list-item delay-3">
+              <Card title="Sign-up with email" className="joinBottomLeft metro-anim-list-item delay-3">
                 {error && (
                   <div
                     className="infoBubble text-start mb-2"
@@ -279,8 +279,8 @@ export default function Gateway() {
                 >
                   <TextInput
                     type="text"
-                    className="mb-1"
-                    placeholder="Full name"
+                    className="joinTop"
+                    placeholder="first and last name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -288,8 +288,8 @@ export default function Gateway() {
 
                   <TextInput
                     type="email"
-                    className="mb-1"
-                    placeholder="Email address"
+                    className="joinMiddle"
+                    placeholder="email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -297,8 +297,8 @@ export default function Gateway() {
 
                   <TextInput
                     type="password"
-                    className="mb-1"
-                    placeholder="Password (min 6 characters)"
+                    className="joinMiddle"
+                    placeholder="password (> 6 characters)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -306,11 +306,11 @@ export default function Gateway() {
                   />
 
                   <RippleButton
-                    className="button roundedImage joinBottom"
+                    className="metro-list-btn button roundedImage joinBottom"
                     type="submit"
                     disabled={isLoading}
                   >
-                    <span className="material-symbols-rounded">add_task</span>
+                    <span className="material-symbols-rounded">how_to_reg</span>
                     <span className="button-text">
                       {isLoading ? "Creating..." : "Create HiAccount"}
                     </span>
@@ -339,13 +339,13 @@ export default function Gateway() {
             </Col>
 
             <Col size={12} md={6}>
-              <Card title="What can HiOSMobile do?" className="metro-anim-list-item delay-4">
+              <Card title="What can Harmony do?" className="joinBottomRight-mobile metro-anim-list-item delay-4">
                 <InfoBubble
                   icon="dashboard"
                   title="Your dashboard."
                   className="joinTop"
                 >
-                  HiOS has a beautiful dashboard for you to see all your HiCafe™
+                  Harmony has a beautiful dashboard for you to see all your HiCafe™
                   info at a glance.
                 </InfoBubble>
 

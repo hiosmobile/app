@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
 import { PageHeader, Card, Row, Col, InfoBubble } from "../../../components/HiMaterial";
-import logoNew from "../../assets/pics/logos/logo_new.png";
+import logoNew from "../../assets/pics/logos/logo_harmony.jpeg";
 import pkg from "../../../package.json";
 
 export default function About() {
@@ -28,7 +28,7 @@ export default function About() {
         <Col size={12}>
           <PageHeader
             title="About"
-            subtitle="Find out the technical details about HiOSMobile below."
+            subtitle="Find out the technical details about Harmony below."
             className="pb-3 joinTop"
           />
         </Col>
@@ -45,12 +45,12 @@ export default function About() {
             />
           </Card>
           <Card className="joinBottom">
-            <InfoBubble className="full" title="HiOSMobile by The Highland Cafe™">
+            <InfoBubble className="full" title="Harmony by The Highland Cafe™">
               <h5 className="card-title mb-0">Version</h5>
               <p className="card-text">{appVersion}</p>
               <hr></hr>
               <h5 className="card-title mb-0">HiMaterial Version</h5>
-              <p className="card-text">7.1</p>
+              <p className="card-text">8</p>
             </InfoBubble>
             <p className="mt-4 small mb-0">
               This webapp was made entirely with ReactJS.

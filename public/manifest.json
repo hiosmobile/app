@@ -1,0 +1,24 @@
+{
+  "short_name": "Harmony",
+  "name": "Harmony",
+  "icons": [
+    {
+      "src": "hiosbadge-touch.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "hiosbadge-touch.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./",
+  "background_color": "#1a1c1e",
+  "theme_color": "#0061a6",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "./"
+}

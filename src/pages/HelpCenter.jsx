@@ -27,7 +27,7 @@ export default function HelpCenter() {
       <Row className="g-1">
         {/*Left col*/}
         <Col size={12} md={6}>
-          <Card title="How to use HiOSMobile" className="metro-anim-list-item delay-2 joinMiddle">
+          <Card title="How to use Harmony" className="metro-anim-list-item delay-2 joinMiddle">
             <MenuActionBtn
               icon="developer_guide"
               text="Navigation tutorial"
@@ -36,7 +36,7 @@ export default function HelpCenter() {
             />
             <InfoBubble
               icon="school"
-              title="Learn how to navigate HiOS."
+              title="Learn how to navigate Harmony."
               className="joinBottom"
             >
               Are you a little lost or baffled by how beautiful this app is?

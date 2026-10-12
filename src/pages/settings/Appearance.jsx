@@ -60,8 +60,8 @@ export default function Appearance() {
   ];
 
   const genericColourOptions = [
-    { value: "default-light", label: "HiOSMobile 2.x (Default)" },
-    { value: "generic-cyan", label: "HiOSMobile v1.3.2 (Cyan)" },
+    { value: "default-light", label: "Harmony 2.x (Default)" },
+    { value: "generic-cyan", label: "Harmony v1.3.2 (Cyan)" },
     { value: "generic-green", label: "Green" },
     { value: "generic-orange", label: "Orange" },
   ];
@@ -72,7 +72,7 @@ export default function Appearance() {
         <Col size={12}>
           <PageHeader
             title="Look and feel"
-            subtitle="Customise the look and feel of HiOSMobile to your taste below."
+            subtitle="Customise the look and feel of Harmony to your taste below."
             className="pb-3 joinTop metro-anim-list-item delay-1"
           />
         </Col>
@@ -114,7 +114,7 @@ export default function Appearance() {
               >
                 All our background photos were taken by us. We took the light
                 mode photos, and Google Gemini generated dark mode versions of
-                them, for HiOSMobile.
+                them, for Harmony.
               </InfoBubble>
             </div>
           </Card>
@@ -197,7 +197,7 @@ export default function Appearance() {
                 title="Turn glass on or off."
                 className="joinBottom"
               >
-                Glass is the beautiful effect used throughout HiOSMobile.
+                Glass is the beautiful effect used throughout Harmony.
                 It's our spiritual tribute to beautiful UI designs the '00s, and
                 stands out amoungst the rather dull and plain designs used in
                 today's apps. Find out more on our HiMaterial page.

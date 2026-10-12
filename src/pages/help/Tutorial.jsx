@@ -7,7 +7,7 @@ export default function TutorialHelp() {
     <main className="container mt-4 mb-5">
       <PageHeader
         title="Navigation tutorial"
-        subtitle="Unsure how to navigate and use HiOSMobile? Take a look at the animations below."
+        subtitle="Unsure how to navigate and use Harmony? Take a look at the animations below."
         className="metro-anim-list-item delay-1"
       />
 

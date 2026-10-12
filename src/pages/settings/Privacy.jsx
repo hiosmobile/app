@@ -25,8 +25,8 @@ export default function PrivacyPolicy() {
 
         <p>
           This Privacy Policy outlines the collection, use, and protection of
-          personal information when you use HiOSMobile for Android, and
-          HiOSMobile for Web, open-source applications created by HiOSMobile and
+          personal information when you use Harmony for Android, and
+          Harmony for Web, open-source applications created by Harmony and
           The Highland Cafe™️ Enterprises ("we," "our," or "us"). By
           downloading, installing, or using these applications, you agree to the
           practices described in this policy.
@@ -119,13 +119,13 @@ export default function PrivacyPolicy() {
         <h2 className="mt-4">7. Contact Us</h2>
         <p>
           If you have questions or concerns about this Privacy Policy or our
-          data practices, please contact us via the HiOSMobile app at Help &gt;
+          data practices, please contact us via the Harmony app at Help &gt;
           Customer Support, or via our Customer Support page.
         </p>
 
         <h3 className="mt-5 text-center">
           <i>
-            <u>This is the end of the HiOSMobile Privacy Policy.</u>
+            <u>This is the end of the Harmony Privacy Policy.</u>
           </i>
         </h3>
 

@@ -47,7 +47,7 @@ export default function Accessibility() {
         <Col size={12}>
           <PageHeader
             title="Ease of access"
-            subtitle="Adjust the accessibility of HiOSMobile below."
+            subtitle="Adjust the accessibility of Harmony below."
             className="pb-3 joinTop metro-anim-list-item delay-1"
           />
         </Col>
@@ -65,7 +65,7 @@ export default function Accessibility() {
             />
             <InfoBubble
               icon="contrast"
-              title="Increase legibility across HiOS."
+              title="Increase legibility across Harmony."
               className="joinBottom"
             >
               This overrides theme colours with high-contrast alternatives and

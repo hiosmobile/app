@@ -19,7 +19,7 @@ export default function Restaurant() {
           <PageHeader
             title="Eat"
             subtitle="Pick an action below."
-            className="mb-1 metro-anim-list-item delay-1"
+            className="joinTop pb-3 metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
@@ -27,10 +27,10 @@ export default function Restaurant() {
       <Row className="g-1">
         {/* Left column */}
         <Col size={12} md={6}>
-          <Card title="Dining" className="metro-anim-list-item delay-2 mb-1">
+          <Card title="Restaurant" className=" joinMiddle metro-anim-list-item delay-2 mb-1">
             <MenuActionBtn
               icon="dining"
-              text="Your HiCafe™ visit"
+              text="The Highland Cafe™"
               className="joinTop"
               onClick={() => navigate("/restaurant/hicafe")}
             />
@@ -43,7 +43,7 @@ export default function Restaurant() {
             </InfoBubble>
           </Card>
 
-          <Card title="Coffee" className="metro-anim-list-item delay-3">
+          <Card title="Coffee" className="joinBottomLeft metro-anim-list-item delay-3">
             <MenuActionBtn
               icon="local_cafe"
               text="CafeFiesta™"
@@ -62,7 +62,7 @@ export default function Restaurant() {
 
         {/* Right column */}
         <Col size={12} md={6}>
-          <Card title="Breakfast" className="mb-1 metro-anim-list-item delay-4">
+          <Card title="Breakfast" className="rightColJoinTop metro-anim-list-item delay-4">
             <MenuActionBtn
               icon="egg_alt"
               text="Breakfast check-in"
@@ -85,7 +85,7 @@ export default function Restaurant() {
             </InfoBubble>
           </Card>
 
-          <Card title="Find us" className="metro-anim-list-item delay-5">
+          <Card title="Where are we?" className="joinBottomRight metro-anim-list-item delay-5">
             <MenuActionBtn
               icon="pin_drop"
               text="Locations"

@@ -41,19 +41,19 @@ export default function ForgotPassword() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-1 metro-anim-list-item delay-1">
+      <Row>
         <Col size={12}>
           <PageHeader
             title="Forgot your password?"
             subtitle="No worries, we'll help you out. Just follow the steps below."
-            className="joinBottom"
+            className="joinTop pb-3 metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
 
       <Row className="g-1">
         <Col size={12} md={6}>
-          <Card className="metro-anim-list-item delay-2">
+          <Card className="joinBottomLeft metro-anim-list-item delay-2">
             {message && (
               <div
                 className="infoBubble text-start"
@@ -84,15 +84,15 @@ export default function ForgotPassword() {
             >
               <TextInput
                 type="email"
-                className="mb-1"
-                placeholder="Email address"
+                className="joinTop"
+                placeholder="email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
 
               <RippleButton
-                className="button roundedImage joinBottom"
+                className="metro-list-btn button roundedImage joinBottom"
                 type="submit"
                 disabled={isLoading}
               >
@@ -106,7 +106,7 @@ export default function ForgotPassword() {
         </Col>
 
         <Col size={12} md={6}>
-          <Card className="metro-anim-list-item delay-3">
+          <Card className="joinBottomRight-mobile metro-anim-list-item delay-3">
             <InfoBubble
               icon="digital_wellbeing"
               title="We've got your back."

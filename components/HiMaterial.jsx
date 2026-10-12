@@ -577,7 +577,7 @@ export const ProfileHeader = ({ name, email, className = "" }) => {
           className="card-title mb-1 text-center"
           style={{ fontSize: "1.5rem", fontWeight: "bold" }}
         >
-          {name || "HiOS User"}
+          {name || "Harmony User"}
         </h2>
         <p className="mb-0" style={{ opacity: 0.7, fontSize: "0.95rem" }}>
           {email}

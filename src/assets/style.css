@@ -11,7 +11,7 @@
 
 /*Variables*/
 :root {
-    --statusbar-pad: env(safe-area-inset-top);
+    --statusbar-pad: max(env(safe-area-inset-top));
     --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
 
     --radius-card: 25px;
@@ -1085,8 +1085,8 @@ main.container {
 /* --- UPDATED UNIFORM SQUIRCLE ELEMENTS --- */
 
 .roundedImage {
-    border-radius: var(--radius-button) !important;
-    border: 0.5px solid var(--outline);
+    border-radius: var(--radius-card) !important;
+    border: none;
     overflow: hidden;
 }
 
@@ -1155,7 +1155,6 @@ main.container {
         margin-bottom: 3px !important;
     }
 
-    /*on Desktop, it appears as a joinTopLeft*/
 }
 
 .joinBottom {
@@ -1681,16 +1680,13 @@ menu-iframe {
 
 .form-control,
 .loginInput {
-    font-size: 20px !important; /* Slightly smaller for better fit */
+    font-size: 1.3rem !important; /* Slightly smaller for better fit */
     padding: 12px 18px;
-    background-color: color-mix(
-        in srgb,
-        var(--secondaryContainer) 30%,
-        transparent
-    ) !important;
-    color: var(--onSecondaryContainer) !important;
-    border: 0.5px solid var(--outline) !important;
+    background-color: color-mix(in srgb, var(--surface) 30%, transparent);
+    color: var(--onSurface) !important;
+    border: 0.5px solid var(--glass-border) !important;
     width: 100%;
+    font-weight: 400;
     outline: none;
     transition: all 0.2s ease;
     border-radius: 1px;
@@ -1717,14 +1713,15 @@ menu-iframe {
 
 .form-control:focus,
 .loginInput:focus {
-    border: 1.5px solid var(--primary) !important;
+    border: 0.5px solid var(--outline) !important;
     background-color: color-mix(
         in srgb,
-        var(--secondaryContainer) 50%,
+        var(--background) 50%,
         transparent
     ) !important;
     z-index: 5;
     position: relative;
+    transition: 0.5s;
 }
 
 .form-control::placeholder,
@@ -1817,7 +1814,6 @@ body.acrylic-on .bottom-nav {
     backdrop-filter: blur(30px) saturate(140%) contrast(105%) !important;
     -webkit-backdrop-filter: blur(30px) saturate(140%) contrast(105%) !important;
     border: 0.5px solid var(--glass-border) !important;
-    box-shadow: var(--glass-shadow);
 }
 
 body.acrylic-on .card::before,
@@ -2767,10 +2763,10 @@ body.high-contrast .blue-h3 {
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-appearance: none;
-    background-color: var(--surface);
+    background-color: color-mix(in srgb, var(--surface) 30%, transparent);
     background-image: none;
-    border: 0.5px solid #747775;
-    border-radius: 1px; /* Matches your UI */
+    border: 0.5px solid var(--glass-border);
+    border-radius: 999px; /* Matches your UI */
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: var(--onSurface);
@@ -2778,7 +2774,6 @@ body.high-contrast .blue-h3 {
     font-family: var(--fontPrimary); /* Matches your UI */
     font-size: 20px;
     height: 60px; /* Matches your UI */
-    letter-spacing: 0.25px;
     outline: none;
     overflow: hidden;
     padding: 0 20px;
@@ -3126,7 +3121,7 @@ body.theme-dark {
 
 /* Force thin, lowercase text */
 .metro-list-btn .button-text {
-    font-size: 1.2rem !important;
+    font-size: 1.4rem !important;
     font-weight: 400 !important;
     letter-spacing: -0.5px;
     text-transform: lowercase;

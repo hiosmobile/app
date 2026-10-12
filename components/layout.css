@@ -306,19 +306,14 @@ body.background-off .app-container {
     color: var(--primary);
     display: flex;
     align-items: center;
-    border: 1px solid var(--border-color); /* Full border to trace the pill shape */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); /* Lift it off the scrolling content */
+    border: 1px solid var(--glass-border); /* Full border to trace the pill shape */
     z-index: 1000;
     flex-shrink: 0;
     transition: all 0.3s ease;
 }
 
 .back-button {
-    background-color: color-mix(
-        in srgb,
-        var(--primaryContainer) 50%,
-        transparent
-    );
+    background-color: transparent;
     border: none;
     color: var(--primary);
     cursor: pointer;
@@ -370,7 +365,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: 43px;
+        padding-top: calc(44px + var(--statusbar-pad));
     }
 
     .top-app-bar {

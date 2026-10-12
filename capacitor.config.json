@@ -1,6 +1,6 @@
 {
   "appId": "com.nugget.hiosunified",
-  "appName": "HiOS",
+  "appName": "Harmony",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "plugins": {

@@ -67,7 +67,7 @@ export default function AppFeedback() {
             <Card className="joinBottom text-center">
               <h2 className="card-title">App Feedback</h2>
               <p className="card-text">
-                Have any feedback on the new HiOS mobile app that you would like
+                Have any feedback on the new Harmony app that you would like
                 to share with us? Please fill in the form below :)
               </p>
               <RippleButton
@@ -118,7 +118,7 @@ export default function AppFeedback() {
             <Card className="joinBottom text-center">
               <h2 className="card-title">Bug Report</h2>
               <p className="card-text">
-                Have you noticed a bug in HiOSMobile? Then please fill in the
+                Have you noticed a bug in Harmony? Then please fill in the
                 form below and we'll see to it ASAP!
               </p>
               <RippleButton
