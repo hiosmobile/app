@@ -53,11 +53,9 @@ export default function Login() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row className="mb-1">
         <Col size={12}>
-          <Back backPath="/" />
           <PageHeader
-            icon="login"
             title="Log-in"
             subtitle="To get started, please enter your login details below."
             className="joinBottom"
@@ -65,7 +63,7 @@ export default function Login() {
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         <Col size={12} md={6}>
           <Card title="Log-in with email">
             {successMessage && (
@@ -86,7 +84,7 @@ export default function Login() {
             >
               <TextInput
                 type="email"
-                className="joinTop"
+                className="mb-1"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -95,7 +93,7 @@ export default function Login() {
 
               <TextInput
                 type="password"
-                className="joinMiddle"
+                className="mb-1"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -107,7 +105,7 @@ export default function Login() {
                 type="submit"
                 disabled={isLoading}
               >
-                <span className="material-symbols-rounded">arrow_forward</span>
+                <span className="material-symbols-rounded">arrow_forward_ios</span>
                 <span className="button-text">
                   {isLoading ? "Logging in..." : "Continue"}
                 </span>

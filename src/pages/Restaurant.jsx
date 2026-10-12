@@ -14,20 +14,20 @@ export default function Restaurant() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row>
         <Col size={12}>
           <PageHeader
-            icon="restaurant"
             title="Eat"
             subtitle="Pick an action below."
+            className="mb-1 metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         {/* Left column */}
         <Col size={12} md={6}>
-          <Card title="Dining">
+          <Card title="Dining" className="metro-anim-list-item delay-2 mb-1">
             <MenuActionBtn
               icon="dining"
               text="Your HiCafe™ visit"
@@ -36,14 +36,14 @@ export default function Restaurant() {
             />
             <InfoBubble
               className="joinBottom"
-              title="Your new go-to restaurant."
+              title="Your go-to restaurant."
             >
               Experience the best meal of your life at The Highland Cafe™. What
               are you waiting for? Book a table now!
             </InfoBubble>
           </Card>
 
-          <Card className="mt-2" title="Coffee">
+          <Card title="Coffee" className="metro-anim-list-item delay-3">
             <MenuActionBtn
               icon="local_cafe"
               text="CafeFiesta™"
@@ -62,12 +62,19 @@ export default function Restaurant() {
 
         {/* Right column */}
         <Col size={12} md={6}>
-          <Card title="Breakfast">
+          <Card title="Breakfast" className="mb-1 metro-anim-list-item delay-4">
             <MenuActionBtn
               icon="egg_alt"
               text="Breakfast check-in"
               className="joinTop"
-              onClick={() => navigate("/restaurant/breakfast")}
+              onClick={() =>
+                navigate("/viewer", {
+                  state: {
+                    src: "https://docs.google.com/forms/d/e/1FAIpQLSdjJ0yto-VHoTjDtkYlbvr4XjI2wwd_XN-g7vuRP9aNwF1wwg/viewform?embedded=true",
+                    title: "Breakfast check-in",
+                  },
+                })
+              }
             />
             <InfoBubble
               className="joinBottom"
@@ -78,12 +85,19 @@ export default function Restaurant() {
             </InfoBubble>
           </Card>
 
-          <Card className="mt-2" title="Find us">
+          <Card title="Find us" className="metro-anim-list-item delay-5">
             <MenuActionBtn
               icon="pin_drop"
               text="Locations"
               className="joinTop"
-              onClick={() => navigate("/restaurant/locations")}
+              onClick={() =>
+                navigate("/viewer", {
+                  state: {
+                    src: "https://www.google.com/maps/d/embed?mid=1uifQD-IGknh0jPlri0xvZJ6WTnUOt2k&ehbc=2E312F&noprof=1",
+                    title: "Locations",
+                  },
+                })
+              }
             />
             <InfoBubble
               className="joinBottom"

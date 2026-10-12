@@ -16,21 +16,21 @@ export default function Sync() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row className="mb-1">
         <Col size={12}>
           <PageHeader
-            icon="cloud_sync"
             title="Backup and sync"
             subtitle="Choose what settings to sync with your HiAccount below."
+            className="metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         <Col size={12} md={6}>
-          <Card title="Appearance">
+          <Card title="Appearance" className="metro-anim-list-item delay-2">
             <Switch
-              label="Sync HiOS appearance"
+              label="Sync appearance"
               checked={syncEnabled}
               onChange={setSyncEnabled}
               className="joinTop"
@@ -40,7 +40,7 @@ export default function Sync() {
               title="Sync your themes like a pro."
               className="joinBottom"
             >
-              Save your HiOS appearance preferences with your HiAccount so they
+              Save your HiOSMobile appearance preferences with your HiAccount so they
               auto-apply on all your devices with HiOS installed. How fancy is
               that?!
             </InfoBubble>
@@ -48,7 +48,7 @@ export default function Sync() {
         </Col>
 
         <Col size={12} md={6}>
-          <Card>
+          <Card className="metro-anim-list-item delay-3">
             <InfoBubble
               icon="backup"
               title="This is cool, isn't it?!"
@@ -64,7 +64,7 @@ export default function Sync() {
               title="More syncs coming soon"
               className="joinBottom"
             >
-              We're still in the process of adding more ways to sync HiOS with
+              We're still in the process of adding more ways to sync HiOSMobile with
               your HiAccount, so watch this space as we progress with our
               updates! We plan to very soon add a toggle for syncing the
               dashboard.

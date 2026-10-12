@@ -6,6 +6,7 @@ import {
   Row,
   Col,
   InfoBubble,
+  PageHeader
 } from "../../components/HiMaterial";
 
 export default function HelpCenter() {
@@ -13,27 +14,20 @@ export default function HelpCenter() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row>
         <Col size={12}>
-          <Card>
-            <div className="top-container">
-              <h1 className="blue-h2">
-                <span className="titleIcon material-symbols-rounded">help</span>
-                Help
-              </h1>
-              <p id="para" className="subtitle mb-0">
-                Choose a help article from below.
-              </p>
-            </div>
-          </Card>
+          <PageHeader
+            title="help"
+            subtitle="Choose a help article from below."
+            className="pb-3 joinTop metro-anim-list-item delay-1"
+          />
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         {/*Left col*/}
         <Col size={12} md={6}>
-          <Card>
-            <h1 className="card-title">How to use HiOS</h1>
+          <Card title="How to use HiOSMobile" className="metro-anim-list-item delay-2 joinMiddle">
             <MenuActionBtn
               icon="developer_guide"
               text="Navigation tutorial"
@@ -51,8 +45,7 @@ export default function HelpCenter() {
             </InfoBubble>
           </Card>
 
-          <Card className="mt-2">
-            <h1 className="card-title">General</h1>
+          <Card className="joinBottom metro-anim-list-item delay-3" title="General">
             <MenuActionBtn
               icon="restaurant"
               text="Food"
@@ -85,8 +78,7 @@ export default function HelpCenter() {
 
         {/*Right col*/}
         <Col className="col-12 col-md-6">
-          <Card>
-            <h1 className="card-title">More</h1>
+          <Card className="metro-anim-list-item delay-4" title="More">
             <MenuActionBtn
               icon="support_agent"
               text="Customer Support"

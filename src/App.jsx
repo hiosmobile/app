@@ -63,8 +63,8 @@ function AppRoutes() {
     return (
       <Routes>
         <Route path="/" element={<Gateway />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login" element={<TopBarWrapper><Login /></TopBarWrapper>} />
+        <Route path="/forgot-password" element={<TopBarWrapper><ForgotPassword /></TopBarWrapper>} />
         <Route path="/signup" element={<Signup />} />
         {/* Redirect any unknown route back to Gateway */}
         <Route path="*" element={<Navigate to="/" replace />} />
@@ -116,15 +116,31 @@ function AppRoutes() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/restaurant" element={<Restaurant />} />
-        <Route path="/restaurant/hicafe" element={<HiCafe />} />
         <Route path="/restaurant/breakfast" element={<Breakfast />} />
-        <Route path="/restaurant/cafefiesta" element={<CafeFiesta />} />
         <Route path="/restaurant/locations" element={<Locations />} />
         <Route path="/hotelactivities" element={<HotelActivities />} />
         <Route path="/hirewards" element={<HiRewards />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/viewer" element={<FullscreenViewer />} />
       </Route>
+
+      <Route
+        path="/restaurant/hicafe"
+        element={
+          <TopBarWrapper title="Your HiCafe™ visit">
+            <HiCafe />
+          </TopBarWrapper>
+        }
+      />
+
+      <Route
+        path="/restaurant/cafefiesta"
+        element={
+          <TopBarWrapper title="CafeFiesta">
+            <CafeFiesta />
+          </TopBarWrapper>
+        }
+      />
 
       {/* TOP BAR LAYOUT (Settings & Help Center) */}
       <Route
@@ -146,7 +162,7 @@ function AppRoutes() {
       <Route
         path="/settings/appearance"
         element={
-          <TopBarWrapper title="Appearance">
+          <TopBarWrapper title="Look and feel">
             <Appearance />
           </TopBarWrapper>
         }
@@ -154,7 +170,7 @@ function AppRoutes() {
       <Route
         path="/settings/accessibility"
         element={
-          <TopBarWrapper title="Accessibility">
+          <TopBarWrapper title="Ease of access">
             <Accessibility />
           </TopBarWrapper>
         }

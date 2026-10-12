@@ -5,6 +5,10 @@ import {
   PageNavHeader,
   RippleButton,
   PageHeader,
+  Row,
+  Col,
+  MenuActionBtn,
+  InfoBubble
 } from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
 
@@ -28,59 +32,59 @@ export default function HiCafe() {
 
   return (
     <main className="container mt-4 mb-5">
-      <PageNavHeader
-        backPath="/restaurant"
-        tabs={mainTabs}
-        activeTab={activeMainTab}
-        setActiveTab={setActiveMainTab}
-      />
+      <Card className="mt-1 joinTop metro-anim-list-item delay-1" bodyClass="p-2">
+        <div className="sub-nav-pills-header">
+          {mainTabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`sub-header-tab ripple-button ${activeMainTab === tab.id ? "active" : ""}`}
+              onClick={() => setActiveMainTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </Card>
 
       <div className="tab-content">
         {/* --- BOOK TAB CONTENT --- */}
         {activeMainTab === "book" && (
           <div className="fade show active">
             <PageHeader
-              icon="table_restaurant"
-              title="Book a table"
+              title="Book"
               subtitle="Fill in the below form to book a table, and we'll reply within an hour by email."
-              className="joinBottom"
+              className="joinMiddle metro-anim-list-item delay-2"
             />
-            <Card className="mt-2 full">
-              <RippleButton
-                className="form-button joinTop"
-                onClick={() =>
-                  navigate("/viewer", {
-                    state: {
-                      src: "https://docs.google.com/forms/d/e/1FAIpQLSfeP-cO7te979Dc-QRmUsBwQTzIojYRtg7Yx3OufiiUcn2r2g/viewform?embedded=true",
-                      title: "Book a Table",
-                    },
-                  })
-                }
-              >
-                <span className="form-button-icon material-symbols-rounded">
-                  fullscreen
-                </span>
-                Open Form Fullscreen
-              </RippleButton>
-              <div className="iframe-wrapper">
-                <iframe
-                  className="menu-iframe roundedImage joinBottom"
-                  src="https://docs.google.com/forms/d/e/1FAIpQLSfeP-cO7te979Dc-QRmUsBwQTzIojYRtg7Yx3OufiiUcn2r2g/viewform?embedded=true"
-                  width="100%"
-                  height="600"
-                  frameBorder="0"
-                >
-                  Loading…
-                </iframe>
-              </div>
-              <img
-                src={ScrollTop}
-                alt="Scroll Top"
-                className="mt-4 roundedImage"
-                style={{ cursor: "pointer" }}
-                onClick={scrollToTop}
-              />
-            </Card>
+            <Row className="g-1">
+              <Col size={12} md={6}>
+                <Card className="metro-anim-list-item delay-3">
+                  <MenuActionBtn
+                    icon="book"
+                    text="Open booking form"
+                    className="joinTop"
+                    onClick={() =>
+                      navigate("/viewer", {
+                        state: {
+                          src: "https://docs.google.com/forms/d/e/1FAIpQLSfeP-cO7te979Dc-QRmUsBwQTzIojYRtg7Yx3OufiiUcn2r2g/viewform?embedded=true",
+                          title: "Book a Table",
+                        },
+                      })
+                    }
+                  />
+                  <InfoBubble className="joinBottom" title="Book your table at one of our restaurants.">
+                    We'd be so chuffed to have you!
+                  </InfoBubble>
+                </Card>
+              </Col>
+
+              <Col size={12} md={6}>
+                <Card className="metro-anim-list-item delay-4">
+                  <InfoBubble title="Note about booking a table">
+                    The restaurant you book at will try and get back to you within an hour, but if they don't, assume they're either really busy or there's no tables free, or you've been banned from the location.
+                  </InfoBubble>
+                </Card>
+              </Col>
+            </Row>
           </div>
         )}
 
@@ -88,206 +92,108 @@ export default function HiCafe() {
         {activeMainTab === "menus" && (
           <div className="fade show active">
             <PageHeader
-              icon="menu_book"
               title="Menus"
               subtitle="Take a look at our menus below."
-              className="joinBottom"
+              className="joinMiddle metro-anim-list-item delay-2"
             />
 
-            <Card className="mt-2 joinTop" bodyClass="p-2">
-              <div className="sub-nav-pills-header">
-                <button
-                  className={`sub-header-tab ripple-button ${activeMenuTab === "normal" ? "active" : ""}`}
-                  onClick={() => setActiveMenuTab("normal")}
-                >
-                  Normal
-                </button>
-                <button
-                  className={`sub-header-tab ripple-button ${activeMenuTab === "worldwide" ? "active" : ""}`}
-                  onClick={() => setActiveMenuTab("worldwide")}
-                >
-                  Worldwide
-                </button>
-                <button
-                  className={`sub-header-tab ripple-button ${activeMenuTab === "pizza" ? "active" : ""}`}
-                  onClick={() => setActiveMenuTab("pizza")}
-                >
-                  Pizza
-                </button>
-                <button
-                  className={`sub-header-tab ripple-button ${activeMenuTab === "gastro" ? "active" : ""}`}
-                  onClick={() => setActiveMenuTab("gastro")}
-                >
-                  Gastro
-                </button>
-              </div>
-            </Card>
-
-            <div>
-              {activeMenuTab === "normal" && (
-                <Card
-                  className="joinBottom fade show active"
-                  title="Normal menu"
-                >
+            <Row className="g-1">
+              <Col size={12} md={6}>
+                <Card title="Regular" className="joinMiddle metro-anim-list-item delay-3">
                   <p>This menu includes Lunch, Dinner, and more.</p>
-                  <RippleButton
-                    className="form-button joinTop"
+                  <MenuActionBtn
+                    icon="dinner_dining"
+                    text="Open regular menu"
+                    className="joinTop"
                     onClick={() =>
                       navigate("/viewer", {
                         state: {
-                          src: "https://drive.google.com/file/d/13dZ895jMZmA6D-We0z2Z7fxfnqYPcoa2/preview",
-                          title: "Main Menu",
+                          src: "https://drive.google.com/file/d/1Smu3eEMsNc_ToWfnSDiEZEsF-upo1OWV/preview?usp=embed_googleplus",
+                          title: "Regular"
                         },
                       })
                     }
-                  >
-                    <span className="form-button-icon material-symbols-rounded">
-                      fullscreen
-                    </span>
-                    Open Menu Fullscreen
-                  </RippleButton>
-                  <div className="iframe-wrapper">
-                    <iframe
-                      className="menu-iframe roundedImage joinBottom"
-                      src="https://drive.google.com/file/d/13dZ895jMZmA6D-We0z2Z7fxfnqYPcoa2/preview"
-                      width="100%"
-                      height="600"
-                      frameBorder="0"
-                    ></iframe>
-                  </div>
-                  <img
-                    src={ScrollTop}
-                    alt="Scroll Top"
-                    className="mt-4 ripple-button roundedImage"
-                    style={{ cursor: "pointer" }}
-                    onClick={scrollToTop}
                   />
+                  <InfoBubble
+                    className="joinBottom"
+                    title="All the classics you love."
+                  >
+                    View all your The Highland Cafe™ favourites here, from the classic Breakfast menu, to the newer Gormet menu!
+                  </InfoBubble>
                 </Card>
-              )}
 
-              {activeMenuTab === "worldwide" && (
-                <Card
-                  className="joinBottom fade show active"
-                  title="Worldwide menu"
-                >
-                  <p>This is our brand new worldwide foods menu.</p>
-                  <RippleButton
-                    className="form-button joinTop"
+                <Card title="Worldwide" className="joinBottom metro-anim-list-item delay-4">
+                  <p>Our brand new worldwide foods menu</p>
+                  <MenuActionBtn
+                    icon="connecting_airports"
+                    text="Open worldwide menu"
+                    className="joinTop"
                     onClick={() =>
                       navigate("/viewer", {
                         state: {
-                          src: "https://drive.google.com/file/d/1ZTnLTPCGjV0MdHNjTP9JJBSW_WdtSm8i/preview",
-                          title: "Worldwide Menu",
+                          src: "https://drive.google.com/file/d/1pXK9euCFK9bvbgIwBJv_wSNRMFPikAg9/view?usp=drive_link",
+                          title: "Worldwide"
                         },
                       })
                     }
-                  >
-                    <span className="form-button-icon material-symbols-rounded">
-                      fullscreen
-                    </span>
-                    Open Menu Fullscreen
-                  </RippleButton>
-                  <div className="iframe-wrapper">
-                    <iframe
-                      className="menu-iframe roundedImage joinBottom"
-                      src="https://drive.google.com/file/d/1ZTnLTPCGjV0MdHNjTP9JJBSW_WdtSm8i/preview"
-                      width="100%"
-                      height="1000"
-                      frameBorder="0"
-                    ></iframe>
-                  </div>
-                  <img
-                    src={ScrollTop}
-                    alt="Scroll Top"
-                    className="mt-4 ripple-button roundedImage"
-                    style={{ cursor: "pointer" }}
-                    onClick={scrollToTop}
                   />
+                  <InfoBubble
+                    className="joinBottom"
+                    title="Taste our exotic food."
+                  >
+                    Our worldwide food is amazing. There is nothing else on the planet that can compete with this much range of countries that we have represented so well in our Worldwide menu. Go on, have a try!
+                  </InfoBubble>
                 </Card>
-              )}
+              </Col>
 
-              {activeMenuTab === "pizza" && (
-                <Card
-                  className="joinBottom fade show active"
-                  title="Pizza menu"
-                >
+              <Col size={12} md={6}>
+                <Card className="joinMiddle metro-anim-list-item delay-5" title="Pizza">
                   <p>Take a look at our majestic new pizza menu below now.</p>
-                  <RippleButton
-                    className="form-button joinTop"
+                  <MenuActionBtn
+                    icon="local_pizza"
+                    text="Open pizza menu"
+                    className="joinTop"
                     onClick={() =>
                       navigate("/viewer", {
                         state: {
-                          src: "https://drive.google.com/file/d/1YezhyJuuUg-sghImzB-zWn-wGnI6l8Ww/preview",
-                          title: "Pizza Menu",
+                          src: "https://drive.google.com/file/d/1tZH3a5TPs74N8nfz0rhfdMfuEOdsY4LL/preview?usp=embed_googleplus",
+                          title: "Pizza"
                         },
                       })
                     }
-                  >
-                    <span className="form-button-icon material-symbols-rounded">
-                      fullscreen
-                    </span>
-                    Open Menu Fullscreen
-                  </RippleButton>
-                  <div className="iframe-wrapper">
-                    <iframe
-                      className="menu-iframe roundedImage joinBottom"
-                      src="https://drive.google.com/file/d/1YezhyJuuUg-sghImzB-zWn-wGnI6l8Ww/preview"
-                      width="100%"
-                      height="1000"
-                      frameBorder="0"
-                    ></iframe>
-                  </div>
-                  <img
-                    src={ScrollTop}
-                    alt="Scroll Top"
-                    className="mt-4 ripple-button roundedImage"
-                    style={{ cursor: "pointer" }}
-                    onClick={scrollToTop}
                   />
+                  <InfoBubble
+                    className="joinBottom"
+                    title="Buy our pizza."
+                  >
+                    Our pizza is some of the best you can get ever. Nothing beats it. It ranges from classics like hawain all the way to exotics like margarita and pepperoni. Taste the quality.
+                  </InfoBubble>
                 </Card>
-              )}
 
-              {activeMenuTab === "gastro" && (
-                <Card
-                  className="joinBottom fade show active"
-                  title="Gastro menu"
-                >
+                <Card className="joinBottom metro-anim-list-item delay-6" title="Gastro">
                   <p>This is our most premium menu that you will love!</p>
-                  <RippleButton
-                    className="form-button joinTop"
+                  <MenuActionBtn
+                    icon="local_dining"
+                    text="Open gastro menu"
+                    className="joinTop"
                     onClick={() =>
                       navigate("/viewer", {
                         state: {
-                          src: "https://drive.google.com/file/d/1iHoe-pBMn0niY9R2IoZgYmhgXLaz7Mrz/preview",
-                          title: "Gastro Menu",
+                          src: "https://drive.google.com/file/d/1JMqzGzobo50nPBlqFNs1cx6Ce3JPE9fc/preview?usp=embed_googleplus",
+                          title: "Gastro"
                         },
                       })
                     }
-                  >
-                    <span className="form-button-icon material-symbols-rounded">
-                      fullscreen
-                    </span>
-                    Open Menu Fullscreen
-                  </RippleButton>
-                  <div className="iframe-wrapper">
-                    <iframe
-                      className="menu-iframe roundedImage joinBottom"
-                      src="https://drive.google.com/file/d/1iHoe-pBMn0niY9R2IoZgYmhgXLaz7Mrz/preview"
-                      width="100%"
-                      height="1000"
-                      frameBorder="0"
-                    ></iframe>
-                  </div>
-                  <img
-                    src={ScrollTop}
-                    alt="Scroll Top"
-                    className="mt-4 ripple-button roundedImage"
-                    style={{ cursor: "pointer" }}
-                    onClick={scrollToTop}
                   />
+                  <InfoBubble
+                    className="joinBottom"
+                    title="We know food."
+                  >
+                    That's why we've taken it upon ourselves over the past few years to create some of the best ever Gastro pub favourites for our customers that we know you are bound to love and enjoy :D
+                  </InfoBubble>
                 </Card>
-              )}
-            </div>
+              </Col>
+            </Row>
           </div>
         )}
 
@@ -295,48 +201,41 @@ export default function HiCafe() {
         {activeMainTab === "order" && (
           <div className="fade show active">
             <PageHeader
-              icon="edit"
               title="Order"
               subtitle="Order the food you would like below."
-              className="joinBottom"
+              className="joinMiddle metro-anim-list-item delay-2"
             />
 
-            <Card className="mt-2 full">
-              <RippleButton
-                className="form-button joinTop"
-                onClick={() =>
-                  navigate("/viewer", {
-                    state: {
-                      src: "https://docs.google.com/forms/d/e/1FAIpQLSfGzW5su4bVmpeRVGRbDDeudfZkvhbyuXi-pySKLW4qA8WnaA/viewform?embedded=true",
-                      title: "Order",
-                    },
-                  })
-                }
-              >
-                <span className="form-button-icon material-symbols-rounded">
-                  fullscreen
-                </span>
-                Open Form Fullscreen
-              </RippleButton>
-              <div className="iframe-wrapper">
-                <iframe
-                  className="menu-iframe roundedImage joinBottom"
-                  src="https://docs.google.com/forms/d/e/1FAIpQLSfGzW5su4bVmpeRVGRbDDeudfZkvhbyuXi-pySKLW4qA8WnaA/viewform?embedded=true"
-                  width="100%"
-                  height="600"
-                  frameBorder="0"
-                >
-                  Loading…
-                </iframe>
-              </div>
-              <img
-                src={ScrollTop}
-                alt="Scroll Top"
-                className="mt-4 ripple-button roundedImage"
-                style={{ cursor: "pointer" }}
-                onClick={scrollToTop}
-              />
-            </Card>
+            <Row className="g-1">
+              <Col size={12} md={6}>
+                <Card className="metro-anim-list-item delay-3">
+                  <MenuActionBtn
+                    icon="book"
+                    text="Open ordering form"
+                    className="joinTop"
+                    onClick={() =>
+                      navigate("/viewer", {
+                        state: {
+                          src: "https://docs.google.com/forms/d/e/1FAIpQLSfGzW5su4bVmpeRVGRbDDeudfZkvhbyuXi-pySKLW4qA8WnaA/viewform?embedded=true",
+                          title: "Order your food",
+                        },
+                      })
+                    }
+                  />
+                  <InfoBubble className="joinBottom" title="Order your food from your table.">
+                    The standard but lazy option in our restaurants.
+                  </InfoBubble>
+                </Card>
+              </Col>
+
+              <Col size={12} md={6}>
+                <Card className="metro-anim-list-item delay-4">
+                  <InfoBubble title="Note about ordering your food online">
+                    You will need to pay for your meal upon leaving the restaurant. If we don't have a menu item in stock, we'll replace it with what our chef thinks is the best substitution. Otherwise, our waiting staff will let you know.
+                  </InfoBubble>
+                </Card>
+              </Col>
+            </Row>
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "../../../components/HiMaterial";
+import { Card, PageHeader } from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
 
 export default function PrivacyPolicy() {
@@ -12,18 +12,13 @@ export default function PrivacyPolicy() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Card bodyClass="text-start">
-        <div className="top-container">
-          <h1 className="blue-h2 mb-0">
-            <span className="titleIcon material-symbols-rounded">
-              shield_person
-            </span>
-            Privacy Policy
-          </h1>
-        </div>
-      </Card>
+      <PageHeader
+        title="Privacy Policy"
+        subtitle="Take a look at how we process your personal data below."
+        className="pb-3 joinTop"
+      />
 
-      <Card className="mt-2 joinTop" bodyClass="text-start p-4">
+      <Card className="joinBottom" bodyClass="text-start p-4">
         <h6 className="mb-4">
           <b>Last Updated:</b> April 8th, 2025
         </h6>

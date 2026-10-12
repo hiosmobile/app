@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,1,0');
+
 @font-face {
-    font-family: "Material Symbols Rounded";
+    font-family: "Material Symbols Sharp";
     font-style: normal;
     font-weight: 400;
     src: url("../src/fonts/icons.woff2") format("woff2");
 }
 
 .material-symbols-rounded {
-    font-family: "Material Symbols Rounded";
+    font-family: "Material Symbols Sharp";
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
@@ -105,21 +107,20 @@
 
 * {
     -webkit-tap-highlight-color: transparent;
-    font-family: "Google Sans Flex Variable", sans-serif;
+    font-family: "Noto Sans Variable", sans-serif;
     box-sizing: border-box;
 }
 
 .app-container {
-    display: flex;
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
-    background-color: var(--background);
-    color: var(--text-color);
-    padding-left: max(env(safe-area-inset-left, 0px), 0px);
-    padding-right: max(env(safe-area-inset-right, 0px), 0px);
-    box-sizing: border-box;
+    background-color: transparent; /* <-- Allows the wallpaper behind it to show through */
 }
+
+body.background-off .app-container {
+    background-color: var(--background); /* <-- Only solid when wallpaper is off */
+}
+
 
 .main-content {
     flex-grow: 1;
@@ -175,7 +176,7 @@
 
 .bottom-sheet {
     position: fixed;
-    bottom: 20px;
+    bottom: calc(10px + var(--nav-pad-bottom));
     left: 16px;
     right: 16px;
     border: 1px solid var(--glass-border);
@@ -266,7 +267,7 @@
     }
 
     .bottom-sheet {
-        bottom: 100px;
+        bottom: calc(10px + var(--nav-pad-bottom));
     }
 
     .fab {
@@ -283,7 +284,7 @@
     .main-content {
         border-radius: var(--radius-card);
         padding-top: calc(
-            64px + var(--statusbar-pad)
+            52px
         ); /* Pushes content below the 60px floating rail */
     }
 
@@ -302,7 +303,7 @@
     background-color: color-mix(in srgb, var(--surface) 85%, transparent);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    color: var(--text-color);
+    color: var(--primary);
     display: flex;
     align-items: center;
     border: 1px solid var(--border-color); /* Full border to trace the pill shape */
@@ -345,10 +346,9 @@
 
 .top-bar-title {
     font-size: 1.25rem;
-    font-weight: 700; /* Bolder, premium look */
+    font-weight: 400; /* Bolder, premium look */
     color: var(--primary); /* Ties into your app's theme */
     margin: 0;
-    letter-spacing: -0.5px;
 }
 
 .top-bar-wrapper-container {
@@ -357,7 +357,7 @@
     height: 100vh;
     width: 100vw;
     box-sizing: border-box;
-    background-color: var(--background);
+    background-color: transparent;
     transition:
         background-color 0.3s ease,
         color 0.3s ease,
@@ -370,7 +370,7 @@
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(56px + var(--statusbar-pad));
+        padding-top: 43px;
     }
 
     .top-app-bar {
@@ -384,7 +384,7 @@
         width: calc(100% - 12px);
         padding: 0 24px;
         justify-content: center;
-        border-radius: 60px; /* Perfect pill shape */
+        border-radius: 999px; /* Perfect pill shape */
         z-index: 1000;
     }
 
@@ -424,7 +424,7 @@
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(64px + var(--statusbar-pad));
+        padding-top: calc(52px + var(--statusbar-pad));
     }
 
     .top-bar-wrapper-container main.container {
@@ -441,7 +441,7 @@
         max-width: 1108px;
         padding: 0 24px;
         justify-content: center;
-        border-radius: 60px;
+        border-radius: 25px;
         z-index: 1000;
     }
 

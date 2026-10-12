@@ -21,12 +21,6 @@ export default function FullscreenViewer() {
             error
           </span>
           <h2 className="mt-2">No document found</h2>
-          <MenuActionBtn
-            icon="arrow_back"
-            text="Go back"
-            className="joinTop"
-            onClick={() => navigate(-1)}
-          />
         </Card>
       </main>
     );

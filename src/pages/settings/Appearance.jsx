@@ -68,19 +68,19 @@ export default function Appearance() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row>
         <Col size={12}>
           <PageHeader
-            icon="palette"
-            title="Appearance"
-            subtitle="Customise the look and feel of HiOS to your taste below."
+            title="Look and feel"
+            subtitle="Customise the look and feel of HiOSMobile to your taste below."
+            className="pb-3 joinTop metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         <Col size={12} md={6}>
-          <Card title="Wallpaper settings">
+          <Card title="Wallpaper settings" className="joinMiddle metro-anim-list-item delay-2">
             <div className="settings-group mt-3">
               <Switch
                 label="Wallpaper"
@@ -96,8 +96,9 @@ export default function Appearance() {
                 For the sake of accessibility, or just your personal preference.
               </InfoBubble>
             </div>
+          </Card>
 
-            <h3 className="card-title mb-3 mt-4">Pick a wallpaper</h3>
+          <Card className="joinMiddle metro-anim-list-item delay-3" title="Pick a wallpaper">
             <div className="settings-group">
               <Dropdown
                 value={wallpaperTheme}
@@ -116,8 +117,9 @@ export default function Appearance() {
                 them, for HiOSMobile.
               </InfoBubble>
             </div>
+          </Card>
 
-            <h3 className="card-title mb-3 mt-4">Wallpaper Time of Day</h3>
+          <Card className="joinBottom metro-anim-list-item delay-4" title="Wallpaper time-of-day">
             <div className="settings-group">
               <Dropdown
                 value={darkModePref}
@@ -141,7 +143,7 @@ export default function Appearance() {
 
         {/*Right column*/}
         <Col size={12} md={6}>
-          <Card title="Dynamic colour">
+          <Card title="Dynamic colour" className="joinTop metro-anim-list-item delay-5">
             <div className="settings-group">
               <Switch
                 label="Dynamic colour"
@@ -156,11 +158,12 @@ export default function Appearance() {
                 className="joinBottom"
               >
                 This allows you to use a basic default colour scheme, and
-                disable the colours which match the wallpapers.
+                disable the colours which match the wallpapers, or use wallpaper-matching colours.
               </InfoBubble>
             </div>
+          </Card>
 
-            <h3 className="card-title mb-3 mt-4">Basic colours</h3>
+          <Card className="joinMiddle metro-anim-list-item delay-6" title="Basic colours">
             <div className="settings-group">
               <Dropdown
                 value={genericColor}
@@ -178,11 +181,12 @@ export default function Appearance() {
                 to enjoy our very boring basic-ahh colours.
               </InfoBubble>
             </div>
+          </Card>
 
-            <h3 className="card-title mb-3 mt-4">Materials</h3>
+          <Card className="joinBottom metro-anim-list-item delay-7" title="Glass and transparency">
             <div className="settings-group">
               <Switch
-                label="ZenGlass"
+                label="Glass"
                 checked={acrylicEnabled}
                 onChange={setAcrylicEnabled}
                 disabled={!backgroundEnabled}
@@ -190,20 +194,20 @@ export default function Appearance() {
               />
               <InfoBubble
                 icon="blur_on"
-                title="Turn on or off ZenGlass."
+                title="Turn glass on or off."
                 className="joinBottom"
               >
-                ZenGlass is the beautiful glass effect used throughout HiOS.
+                Glass is the beautiful effect used throughout HiOSMobile.
                 It's our spiritual tribute to beautiful UI designs the '00s, and
                 stands out amoungst the rather dull and plain designs used in
                 today's apps. Find out more on our HiMaterial page.
                 <MenuActionBtn
                   icon="open_in_new"
                   text="HiMaterial page"
-                  className="full mt-3"
+                  className="mt-3"
                   onClick={() =>
                     openExternalLink(
-                      "https://hienterprises.github.io/hiosmobile/himaterial",
+                      "https://hienterprises.github.io/#/hiosmobile/himaterial",
                     )
                   }
                 />

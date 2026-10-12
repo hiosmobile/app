@@ -141,7 +141,7 @@ export const MenuActionBtn = ({ icon, text, className = "", onClick }) => {
   return (
     <RippleButton
       delay={150}
-      className={`roundedImage button ${className}`.trim()}
+      className={`metro-list-btn ${className}`.trim()}
       onClick={onClick}
     >
       <span className="material-symbols-rounded">{icon}</span>
@@ -159,7 +159,8 @@ export const SubNavPills = ({ tabs, activeTab, setActiveTab }) => {
       {tabs.map((tab) => (
         <RippleButton
           key={tab.id}
-          className={`sub-header-tab ${activeTab === tab.id ? "active" : ""}`}
+          // Added metro-tile-btn here for the 3D click effect
+          className={`sub-header-tab metro-tile-btn ${activeTab === tab.id ? "active" : ""}`}
           onClick={() => setActiveTab(tab.id)}
         >
           {tab.label}
@@ -202,14 +203,14 @@ export const PageHeader = ({ icon, title, subtitle, className = "" }) => {
   return (
     <Card className={className}>
       <div className="top-container">
-        <h1 className="blue-h2">
+        <h1 className="blue-h2 mb-0">
           {icon && (
             <span className="titleIcon material-symbols-rounded">{icon}</span>
           )}
           {title}
         </h1>
         {subtitle && (
-          <p id="para" className="subtitle mb-0">
+          <p id="para" className="subtitle mb-0 mt-0">
             {subtitle}
           </p>
         )}
@@ -221,7 +222,6 @@ export const PageHeader = ({ icon, title, subtitle, className = "" }) => {
 /**
  * PageNavHeader
  */
-
 export const PageNavHeader = ({
   backPath,
   tabs,
@@ -239,7 +239,8 @@ export const PageNavHeader = ({
     >
       <RippleButton
         delay={150}
-        className="nav-icon-btn"
+        // Added metro-tile-btn to the back button
+        className="nav-icon-btn metro-tile-btn"
         onClick={() => navigate(backPath)}
         style={{ width: "40px", height: "40px", padding: 0 }}
       >
@@ -250,7 +251,8 @@ export const PageNavHeader = ({
         {tabs.map((tab) => (
           <RippleButton
             key={tab.id}
-            className={`header-tab ${activeTab === tab.id ? "active" : ""}`}
+            // Added metro-tile-btn here for the 3D click effect
+            className={`header-tab metro-tile-btn ${activeTab === tab.id ? "active" : ""}`}
             onClick={() => setActiveTab(tab.id)}
           >
             <span className="material-symbols-rounded">{tab.icon}</span>
@@ -372,6 +374,7 @@ export const InfoBubble = ({ icon, title, children, className = "" }) => {
             display: "flex",
             alignItems: "center",
             gap: "10px",
+            fontWeight: 300
           }}
         >
           {icon && (
@@ -469,41 +472,57 @@ export const GoogleAuthButton = ({
 /**
  * Modal
  */
-export const Modal = ({ isOpen, title, children }) => {
+export function Modal({
+  isOpen,
+  onClose,
+  appName = "hios",
+  title,
+  color = "var(--primary)",
+  children,
+}) {
   if (!isOpen) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.4)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "15px",
-      }}
-    >
-      <Card className="full p-4" style={{ maxWidth: "450px", width: "100%" }}>
+    <div className="metro-modal-overlay" onClick={onClose}>
+      <div
+        className="metro-modal-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{ borderTopColor: color }}
+      >
+        {appName && (
+          <p className="wp7-app-title" style={{ color }}>
+            {appName}
+          </p>
+        )}
+
         {title && (
           <h2
-            className="card-title mb-3"
-            style={{ fontSize: "1.5rem", textAlign: "left" }}
+            className="wp7-app-header"
+            style={{
+              fontSize: "3rem",
+              marginBottom: "20px",
+              whiteSpace: "normal",
+            }}
           >
             {title}
           </h2>
         )}
-        {children}
-      </Card>
+
+        <div
+          style={{
+            color: "var(--onBackground)",
+            fontSize: "1.2rem",
+            fontWeight: 300,
+            maxHeight: "60vh",
+            overflowY: "auto",
+          }}
+        >
+          {children}
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 /**
  * ProfileHeader
@@ -555,7 +574,7 @@ export const ProfileHeader = ({ name, email, className = "" }) => {
           </span>
         </div>
         <h2
-          className="card-title mb-1"
+          className="card-title mb-1 text-center"
           style={{ fontSize: "1.5rem", fontWeight: "bold" }}
         >
           {name || "HiOS User"}

@@ -7,6 +7,8 @@ import {
   PageHeader,
   Row,
   Col,
+  MenuActionBtn,
+  InfoBubble,
 } from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
 
@@ -24,11 +26,9 @@ export default function CafeFiesta() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row>
         <Col size={12}>
-          <Back backPath="/restaurant" />
-
-          <Card className="joinBottom" bodyClass="text-start">
+          <Card className="joinMiddle metro-anim-list-item delay-1" bodyClass="text-start">
             <div className="top-container">
               <h1
                 className="blue-h2"
@@ -47,124 +47,47 @@ export default function CafeFiesta() {
         </Col>
       </Row>
 
-      <Row>
-        <Col size={12}>
-          <Card className="joinTop" bodyClass="p-2">
-            <div className="sub-nav-pills-header">
-              <button
-                className={`sub-header-tab ripple-button ${activeTab === "menu" ? "active" : ""}`}
-                onClick={() => setActiveTab("menu")}
-              >
-                Menu
-              </button>
-              <button
-                className={`sub-header-tab ripple-button ${activeTab === "order" ? "active" : ""}`}
-                onClick={() => setActiveTab("order")}
-              >
-                Order
-              </button>
-            </div>
+      <Row className="g-1">
+        <Col size={12} md={6}>
+          <Card title="Menu" className="metro-anim-list-item delay-2">
+            <MenuActionBtn
+              icon="menu_book"
+              text="View menu"
+              className="joinTop"
+              onClick={() =>
+                navigate("/viewer", {
+                  state: {
+                    src: "https://drive.google.com/file/d/1v6kWr813fKLS25FprgLu0sklpXpjB2Gy/preview",
+                    title: "CafeFiesta Menu",
+                  },
+                })
+              }
+            />
+            <InfoBubble title="View our amazing drinks selection.">
+              Our drinks absolutely trump any other coffee shop that claims to be coffee specialists. ✨ NEWSFLASH ✨ the only coffee specialists are US.
+            </InfoBubble>
           </Card>
+        </Col>
 
-          <div className="tab-content">
-            {/* --- MENU TAB CONTENT --- */}
-            {activeTab === "menu" && (
-              <div className="fade show active">
-                <Card className="joinBottom text-center">
-                  <h2
-                    className="card-title"
-                    style={{ fontFamily: "Playfair Display, serif" }}
-                  >
-                    Menu
-                  </h2>
-                  <RippleButton
-                    className="form-button joinTop"
-                    onClick={() =>
-                      navigate("/viewer", {
-                        state: {
-                          src: "https://drive.google.com/file/d/1v6kWr813fKLS25FprgLu0sklpXpjB2Gy/preview",
-                          title: "CafeFiesta Menu",
-                        },
-                      })
-                    }
-                  >
-                    <span className="form-button-icon material-symbols-rounded">
-                      fullscreen
-                    </span>
-                    Open Menu Fullscreen
-                  </RippleButton>
-                  <div className="iframe-wrapper">
-                    <iframe
-                      className="menu-iframe roundedImage joinBottom"
-                      src="https://drive.google.com/file/d/1v6kWr813fKLS25FprgLu0sklpXpjB2Gy/preview"
-                      frameBorder="0"
-                      allow="autoplay"
-                      title="CafeFiesta Menu"
-                    ></iframe>
-                  </div>
-                  <div className="text-center">
-                    <img
-                      src={ScrollTop}
-                      alt="Scroll Top"
-                      className="mt-4 roundedImage"
-                      style={{ cursor: "pointer" }}
-                      onClick={scrollToTop}
-                      role="button"
-                    />
-                  </div>
-                </Card>
-              </div>
-            )}
-
-            {/* --- ORDER TAB CONTENT --- */}
-            {activeTab === "order" && (
-              <div className="fade show active">
-                <Card className="joinBottom text-center">
-                  <h2
-                    className="card-title"
-                    style={{ fontFamily: "Playfair Display, serif" }}
-                  >
-                    Order
-                  </h2>
-                  <RippleButton
-                    className="form-button joinTop"
-                    onClick={() =>
-                      navigate("/viewer", {
-                        state: {
-                          src: "https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAYAABORJhBUQkdCUEhHOTJDMUpIRVVKRzBWNjdNVVQ3QS4u&embed=true",
-                          title: "CafeFiesta Order Form",
-                        },
-                      })
-                    }
-                  >
-                    <span className="form-button-icon material-symbols-rounded">
-                      fullscreen
-                    </span>
-                    Open Form Fullscreen
-                  </RippleButton>
-                  <div className="iframe-wrapper">
-                    <iframe
-                      className="menu-iframe roundedImage joinBottom"
-                      src="https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAYAABORJhBUQkdCUEhHOTJDMUpIRVVKRzBWNjdNVVQ3QS4u&embed=true"
-                      frameBorder="0"
-                      allow="autoplay"
-                      title="CafeFiesta Order Form"
-                    ></iframe>
-                  </div>
-                  <div className="text-center">
-                    <img
-                      src={ScrollTop}
-                      alt="Scroll Top"
-                      className="mt-4 roundedImage"
-                      style={{ cursor: "pointer" }}
-                      onClick={scrollToTop}
-                      role="button"
-                    />
-                  </div>
-                </Card>
-              </div>
-            )}
-          </div>
+        <Col size={12} md={6}>
+          <Card className="metro-anim-list-item delay-3" title="Order">
+            <MenuActionBtn
+              icon="menu_book"
+              text="Order drinks"
+              className="joinTop"
+              onClick={() =>
+                navigate("/viewer", {
+                  state: {
+                    src: "https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAYAABORJhBUQkdCUEhHOTJDMUpIRVVKRzBWNjdNVVQ3QS4u&embed=true",
+                    title: "Order from CafeFiesta",
+                  },
+                })
+              }
+            />
+            <InfoBubble title="Order our amazing drinks now.">
+              You like the look of our amazing coffee selection? Order now at the location you're at to experience coffee bliss.
+            </InfoBubble>
+          </Card>
         </Col>
       </Row>
     </main>

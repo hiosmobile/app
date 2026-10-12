@@ -7,7 +7,8 @@ import {
   Row,
   Col,
   InfoBubble,
-  Modal, // <-- Imported the new Modal component
+  Modal,
+  MenuActionBtn, // <-- Imported the new Modal component
 } from "../../components/HiMaterial";
 
 import { RewardsCodeWidget } from "../../components/Widgets";
@@ -135,13 +136,15 @@ export default function Rewards() {
     setRedeemOffer(null);
   };
 
-  const renderOfferCard = (offer, isExpired, isLast) => {
+  const renderOfferCard = (offer, isExpired, isLast, index) => {
     const showRedeemButton = offer.points !== null && !isExpired;
     const formattedDate = offer.postedDate
       ? offer.postedDate.toLocaleDateString("en-GB")
       : "";
 
-    const cardClass = isLast ? "joinBottom" : "joinMiddle";
+    const joinClass = isLast ? "joinBottom" : "joinMiddle";
+    const delayNum = index + 4;
+    const cardClass = `${joinClass} metro-anim-list-item delay-${delayNum}`;
 
     return (
       <Card key={offer.id} className={cardClass} bodyClass="p-3 text-start">
@@ -252,27 +255,32 @@ export default function Rewards() {
   return (
     <>
       <main className="container mt-4 mb-5">
-        <Row className="mb-2">
+        <Row>
           <Col size={12}>
             <PageHeader
-              icon="award_star"
-              title="HiRewards"
-              subtitle={`The more money you spend at our brands, the more money we make,
-            and eventually the more money you save. Time to dig deep in that
-            wallet of yours, ${firstName}.`}
+              title="Rewards"
+              subtitle={`Get rewarded for visiting and spending money at our awesome brands!`}
+              className="pb-3 joinTop metro-anim-list-item delay-1"
             />
           </Col>
         </Row>
 
-        <Row className="mb-2">
+        <Row>
           <Col size={12}>
-            <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />
+            <RewardsCodeWidget
+              code={membershipCode}
+              imageSrc={frameImg}
+              className="joinBottom metro-anim-list-item delay-2"
+            />
           </Col>
         </Row>
 
         <Row className="g-2">
           <Col size={12}>
-            <Card className="mt-2 joinTop" bodyClass="p-2">
+            <Card
+              className="mt-1 joinTop metro-anim-list-item delay-3"
+              bodyClass="p-2"
+            >
               <div className="sub-nav-pills-header">
                 <button
                   className={`sub-header-tab ripple-button ${activeTab === "active" ? "active" : ""}`}
@@ -291,13 +299,13 @@ export default function Rewards() {
 
             <div className="tab-content">
               {isLoading ? (
-                <Card className="joinBottom text-center py-5">
+                <Card className="joinBottom text-center py-5 metro-anim-list-item delay-4">
                   <div className="spinner-border text-primary" role="status">
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </Card>
               ) : error ? (
-                <Card className="joinBottom text-center py-5">
+                <Card className="joinBottom text-center py-5 metro-anim-list-item delay-4">
                   <span
                     className="material-symbols-rounded"
                     style={{ fontSize: "48px" }}
@@ -316,9 +324,9 @@ export default function Rewards() {
               ) : (
                 <>
                   {activeTab === "active" && (
-                    <div className="fade show active">
+                    <div>
                       {activeOffers.length === 0 ? (
-                        <Card className="joinBottom text-center py-5">
+                        <Card className="joinBottom text-center py-5 metro-anim-list-item delay-4">
                           <span
                             className="material-symbols-rounded"
                             style={{ fontSize: "48px" }}
@@ -336,6 +344,7 @@ export default function Rewards() {
                             offer,
                             false,
                             index === activeOffers.length - 1,
+                            index,
                           ),
                         )
                       )}
@@ -343,9 +352,9 @@ export default function Rewards() {
                   )}
 
                   {activeTab === "expired" && (
-                    <div className="fade show active">
+                    <div>
                       {expiredOffers.length === 0 ? (
-                        <Card className="joinBottom text-center py-5">
+                        <Card className="joinBottom text-center py-5 metro-anim-list-item delay-4">
                           <span
                             className="material-symbols-rounded"
                             style={{ fontSize: "48px" }}
@@ -363,6 +372,7 @@ export default function Rewards() {
                             offer,
                             true,
                             index === expiredOffers.length - 1,
+                            index,
                           ),
                         )
                       )}
@@ -376,23 +386,18 @@ export default function Rewards() {
       </main>
 
       {/* Reusable Modal Component */}
-      <Modal isOpen={!!redeemOffer} title="Redeem Offer">
+      <Modal isOpen={!!redeemOffer} title="Redeem Offer" appName="rewards">
         <p className="text-start mb-4" style={{ fontSize: "1.1rem" }}>
           To redeem <strong>"{redeemOffer?.title}"</strong>, please scan your QR
           code at the till.
         </p>
 
         <div className="d-flex gap-2 mt-4">
-          <RippleButton
-            className="form-button m-0 flex-grow-1"
+          <MenuActionBtn
+            icon="check"
             onClick={closeRedeemModal}
-            style={{
-              backgroundColor: "var(--primary)",
-              color: "var(--onPrimary)",
-            }}
-          >
-            Got it
-          </RippleButton>
+            text="Got it"
+            />
         </div>
       </Modal>
     </>

@@ -41,22 +41,19 @@ export default function ForgotPassword() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row className="mb-1 metro-anim-list-item delay-1">
         <Col size={12}>
-          <Back backPath="/login" />
           <PageHeader
-            icon="lock_reset"
-            title="Reset your password"
-            subtitle="Enter your email address and we'll send you a recovery link if the
-            account exists."
+            title="Forgot your password?"
+            subtitle="No worries, we'll help you out. Just follow the steps below."
             className="joinBottom"
           />
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         <Col size={12} md={6}>
-          <Card>
+          <Card className="metro-anim-list-item delay-2">
             {message && (
               <div
                 className="infoBubble text-start"
@@ -87,8 +84,8 @@ export default function ForgotPassword() {
             >
               <TextInput
                 type="email"
-                className="joinTop"
-                placeholder="Email Address"
+                className="mb-1"
+                placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -109,7 +106,7 @@ export default function ForgotPassword() {
         </Col>
 
         <Col size={12} md={6}>
-          <Card>
+          <Card className="metro-anim-list-item delay-3">
             <InfoBubble
               icon="digital_wellbeing"
               title="We've got your back."

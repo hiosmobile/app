@@ -126,11 +126,12 @@ export default function Profile() {
   return (
     <>
       <main className="container mt-4 mb-5">
-        <Row className="mb-1">
+        <Row>
           <Col size={12}>
             <PageHeader
               title="Profile"
               subtitle="See your account overview and more below."
+              className="joinTop pb-3 metro-anim-list-item delay-1"
             />
           </Col>
         </Row>
@@ -141,9 +142,9 @@ export default function Profile() {
             <ProfileHeader
               name={currentUser?.displayName}
               email={currentUser?.email}
-              className="joinTop"
+              className="joinMiddle metro-anim-list-item delay-2"
             />
-            <Card className="joinMiddle" title="Profile settings">
+            <Card className="joinBottomLeft metro-anim-list-item delay-3" title="Profile settings">
               <div className="text-start mt-1">
                 <MenuActionBtn
                   icon="badge"
@@ -166,14 +167,8 @@ export default function Profile() {
                 <MenuActionBtn
                   icon="warning"
                   text="Delete HiAccount"
-                  className="joinMiddle"
+                  className="red joinBottom"
                   onClick={() => setActiveModal("delete")}
-                />
-              <MenuActionBtn
-                icon="cloud_sync"
-                  text="Backup and sync"
-                  className="joinBottom"
-                onClick={() => navigate("/settings/sync")}
                 />
               </div>
             </Card>
@@ -181,31 +176,30 @@ export default function Profile() {
 
           {/* Right Column: Settings Categories */}
           <Col size={12} md={6}>
-            <Card title="Customisation" className="joinMiddle">
+            <Card title="Sync your settings" className="rightColJoinTop metro-anim-list-item delay-4">
+              <MenuActionBtn
+                icon="cloud_sync"
+                  text="Backup and sync"
+                onClick={() => navigate("/settings/sync")}
+                />
+            </Card>
+
+            <Card title="Customisation" className="joinMiddle metro-anim-list-item delay-5">
               <MenuActionBtn
                 icon="palette"
-                text="Appearance"
+                text="Look and feel"
                 className="joinTop"
                 onClick={() => navigate("/settings/appearance")}
               />
               <MenuActionBtn
                 icon="accessibility"
-                text="Accessibility"
+                text="Ease of access"
                 className="joinBottom"
                 onClick={() => navigate("/settings/accessibility")}
               />
             </Card>
 
-            <Card className="joinMiddle" title="General">
-              <MenuActionBtn
-                icon="dashboard_customize"
-                text="Apps and websites"
-                className="full"
-                onClick={() => navigate("/settings/apps")}
-              />
-            </Card>
-
-            <Card className="joinMiddle" title="Updates and more">
+            <Card className="joinBottomRight metro-anim-list-item delay-6" title="Updates and more">
               <MenuActionBtn
                 icon="help"
                 text="Help"
@@ -232,6 +226,7 @@ export default function Profile() {
       {/* Dynamic Modal Overlay */}
       <Modal
         isOpen={!!activeModal}
+        appName="Account Settings"
         title={
           activeModal === "name"
             ? "Change Name"

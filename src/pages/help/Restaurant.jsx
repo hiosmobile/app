@@ -1,27 +1,22 @@
 import React from "react";
-import { Card } from "../../../components/HiMaterial";
+import { Card, PageHeader, Row, Col } from "../../../components/HiMaterial";
 
 export default function Restaurant() {
   return (
     <main className="container mt-4 mb-5">
-      <Card>
-        <div class="top-container">
-          <h1 className="blue-h2">
-            <span className="titleIcon material-symbols-rounded">
-              restaurant
-            </span>
-            Hotel
-          </h1>
-          <p id="para" className="subtitle mb-0">
-            Unsure on how to do certain things with this app for visiting The
-            Highland Cafe™️? Take a look below.
-          </p>
-        </div>
-      </Card>
+      <Row className="mb-1">
+        <Col size={12}>
+          <PageHeader
+            title="Food"
+            subtitle="Unsure on how to do certain things with this app for visiting The
+            Highland Cafe™️? Take a look below."
+            />
+        </Col>
+      </Row>
 
-      <div className="row g-2">
-        <div className="col-12 col-md-6">
-          <Card className="mt-2" title="Booking a table">
+      <Row className="g-1">
+        <Col size={12} md={6}>
+          <Card className="metro-anim-list-item delay-1" title="Booking a table">
             <ol className="text-start">
               <li>
                 First, tap the
@@ -80,7 +75,7 @@ export default function Restaurant() {
               </li>
             </ol>
           </Card>
-        </div>
+        </Col>
 
         <div className="col-12 col-md-6">
           <Card className="mt-2" title="Checking-in to breakfast">
@@ -119,7 +114,7 @@ export default function Restaurant() {
             </ol>
           </Card>
         </div>
-      </div>
+      </Row>
     </main>
   );
 }

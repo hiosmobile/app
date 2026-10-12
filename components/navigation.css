@@ -1,39 +1,52 @@
 /* Navigation Items (Shared) */
 .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--onPrimaryContainer);
-    cursor: pointer;
-    transition: color 0.3s ease;
-    z-index: 2; /* Keeps links above the glass sheen */
-    flex: 1; /* Distributes items equally to fix the off-center margin */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--onPrimaryContainer);
+  cursor: pointer;
+  z-index: 2;
+  flex: 1;
+  min-width: 0; /* Prevents flex children blowout on narrow screens */
+  height: 100%;
+  padding: 4px 0;
+  gap: 3px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.activeIcon,
+.inactiveIcon {
+  width: 48px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 9999px; /* Pill / rounded capsule shape */
+  transition:
+    background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.15s ease;
 }
 
 .activeIcon {
-    background-color: var(--primary);
-    color: var(--onPrimary);
-    width: 64px;
-    height: 32px;
-    border-radius: var(--radius-card);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
+  background-color: var(--primary);
+  color: var(--onPrimary);
+  transform: scale(1.02);
 }
 
 .inactiveIcon {
-    width: 64px;
-    height: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--onPrimaryContainer);
-    transition: color 0.3s ease;
+  background-color: transparent;
+  color: var(--onPrimaryContainer);
+  opacity: 0.75;
+}
+
+/* Tap feedback */
+.nav-item:active .activeIcon,
+.nav-item:active .inactiveIcon {
+  transform: scale(0.92);
 }
 
 /* =========================================
@@ -150,34 +163,46 @@
 /* =========================================
    MOBILE BOTTOM NAV
    ========================================= */
-.bottom-nav {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    height: 60px;
-    border-radius: 600px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+   .bottom-nav {
+     position: fixed;
+     left: 50%;
+     transform: translateX(-50%);
+     width: min(calc(100% - 24px), 440px);
+     height: 64px;
+     border-radius: 36px;
+     display: flex;
+     align-items: center;
+     justify-content: space-around;
+     z-index: 1000;
+     box-sizing: border-box;
+     padding: 0 6px;
+     margin: 0;
 
-    /* Glass Effect matching style.css */
-    background-color: var(--glass-tint);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    will-change: transform, backdrop-filter;
+     /* Glassmorphism */
+     background-color: var(--glass-tint);
+     backdrop-filter: blur(24px) saturate(180%);
+     -webkit-backdrop-filter: blur(24px) saturate(180%);
+     border: 1px solid var(--glass-border);
+     box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), var(--glass-shadow);
+     will-change: transform;
+     isolation: isolate;
 
-    /* Crucial for keeping the sheen contained */
-    isolation: isolate;
-    bottom: calc(10px + var(--nav-pad-bottom));
-}
+     /* Bottom positioning supporting iOS Home Indicator */
+     bottom: max(12px, env(safe-area-inset-bottom, 12px));
+   }
+
+   /* Glass Sheen Layer */
+   .bottom-nav::after,
+   .side-rail::after {
+     content: "";
+     position: absolute;
+     inset: 0;
+     pointer-events: none;
+     background-image: var(--glass-sheen);
+     opacity: 0.3;
+     z-index: -1;
+     border-radius: inherit;
+   }
 
 /* =========================================
    RESPONSIVE TOGGLES

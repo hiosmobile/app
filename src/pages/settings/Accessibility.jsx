@@ -43,20 +43,20 @@ export default function Accessibility() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-2">
+      <Row>
         <Col size={12}>
           <PageHeader
-            icon="accessibility_new"
-            title="Accessibility"
-            subtitle="Adjust the ease of access of HiOS below."
+            title="Ease of access"
+            subtitle="Adjust the accessibility of HiOSMobile below."
+            className="pb-3 joinTop metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
 
-      <Row className="g-2">
+      <Row className="g-1">
         {/* Left column */}
         <Col size={12} md={6}>
-          <Card title="Vision">
+          <Card title="Vision" className="joinBottom metro-anim-list-item delay-2">
             <Switch
               label="High-contrast UI"
               checked={highContrastEnabled}
@@ -76,7 +76,7 @@ export default function Accessibility() {
 
         {/* Right column */}
         <div className="col-12 col-md-6">
-          <Card>
+          <Card className="metro-anim-list-item delay-3">
             <InfoBubble
               icon="accessible_forward"
               title="At nuggetdev, we like to cater for everyone."

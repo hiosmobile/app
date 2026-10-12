@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
-import { PageHeader, Card } from "../../../components/HiMaterial";
-import logoNew from "../../assets/pics/logos/logo_hiosunified3.png";
+import { PageHeader, Card, Row, Col, InfoBubble } from "../../../components/HiMaterial";
+import logoNew from "../../assets/pics/logos/logo_new.png";
 import pkg from "../../../package.json";
 
 export default function About() {
@@ -16,7 +16,7 @@ export default function About() {
         setAppVersion(`${info.version} (${info.build})`);
       } else {
         // Fallback for Web/Browser using package.json
-        setAppVersion(`${pkg.version} (Web Build)`);
+        setAppVersion(`${pkg.version}`);
       }
     };
     getVersion();
@@ -24,40 +24,40 @@ export default function About() {
 
   return (
     <main className="container mt-4 mb-5">
-      <div className="row mb-2">
-        <div className="col-12">
+      <Row>
+        <Col size={12}>
           <PageHeader
-            icon="info"
             title="About"
-            subtitle="Find out the technical details about HiOS below."
+            subtitle="Find out the technical details about HiOSMobile below."
+            className="pb-3 joinTop"
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="row g-2">
-        <div className="col-12">
-          <Card>
+      <Row className="g-1">
+        <Col size={12}>
+          <Card className="joinMiddle">
             <img
               src={logoNew}
               width="300"
               className="img-fluid roundedImage"
               alt="New Logo"
             />
-            <div className="text-start mt-4 translucentAboutBox">
-              <div className="card-body">
-                <h2>HiOS by The Highland Cafe™</h2>
-                <h5 className="card-title mt-4">Version</h5>
-                <p className="card-text">{appVersion}</p>
-                <h5 className="card-title mt-3">HiMaterial Version</h5>
-                <p className="card-text">7.1</p>
-              </div>
-            </div>
-            <p className="mt-4 small">
+          </Card>
+          <Card className="joinBottom">
+            <InfoBubble className="full" title="HiOSMobile by The Highland Cafe™">
+              <h5 className="card-title mb-0">Version</h5>
+              <p className="card-text">{appVersion}</p>
+              <hr></hr>
+              <h5 className="card-title mb-0">HiMaterial Version</h5>
+              <p className="card-text">7.1</p>
+            </InfoBubble>
+            <p className="mt-4 small mb-0">
               This webapp was made entirely with ReactJS.
             </p>
           </Card>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </main>
   );
 }
