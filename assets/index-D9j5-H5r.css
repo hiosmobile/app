@@ -287,6 +287,7 @@ body.background-off .app-container {
 
 @media (max-width: 767px) {
     .main-content {
+        padding-top: var(--statusbar-pad);
         padding-bottom: 120px;
     }
 
@@ -390,7 +391,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(44px + var(--statusbar-pad));
+        padding-top: calc(72px + var(--statusbar-pad));
     }
 
     .top-app-bar {
@@ -425,6 +426,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container .main-content {
+        padding-top: 0;
         padding-bottom: var(--nav-pad-bottom);
     }
 
@@ -728,8 +730,8 @@ body.background-off .app-container {
 /*Variables*/
 
 :root {
-    --statusbar-pad: max(env(safe-area-inset-top));
-    --nav-pad-bottom: max(env(safe-area-inset-bottom), 24px);
+    --statusbar-pad: env(safe-area-inset-top, 0px);
+    --nav-pad-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
 
     --radius-card: 25px;
     --radius-button: 35px;
@@ -1876,7 +1878,6 @@ main.container {
         margin-bottom: 3px !important;
     }
 
-    /*on Desktop, it appears as a joinTopLeft*/
 }
 
 .joinBottom {
