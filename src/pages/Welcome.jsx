@@ -23,8 +23,9 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 const WIDGET_REGISTRY = {
   rewardsCode: {
     id: "rewardsCode",
-    label: "Rewards QR Code",
+    label: "Your Code",
     icon: "qr_code_2",
+    appName: "Rewards",
   },
   progress: { id: "progress", label: "Rewards Progress", icon: "donut_large" },
   weather: {
@@ -169,11 +170,16 @@ export default function Home() {
       switch (id) {
         case "rewardsCode":
           return (
-            <RewardsCodeWidget
-              code={membershipCode}
-              imageSrc={frameImg}
-              className={animClass}
-            />
+            <div
+              onClick={() => openApp("rewardsCode")}
+              style={{ cursor: isEditing ? "default" : "pointer" }}
+            >
+              <RewardsCodeWidget
+                code={membershipCode}
+                imageSrc={frameImg}
+                className={animClass}
+              />
+            </div>
           );
 
         case "progress":
@@ -439,7 +445,8 @@ export default function Home() {
         color={activeAppData?.color || "var(--subtext)"}
       >
         {activeApp === "weather" && <WeatherWidget isExpanded={true} />}
-        {activeApp === "calendar" && <DateWidget isExpanded={true} />}
+        {activeApp === "calendar" && <DateWidget isExpanded={false} />}
+        {activeApp === "rewardsCode" && <RewardsCodeWidget code={membershipCode} imageSrc={frameImg} />}
 
         <div
           style={{

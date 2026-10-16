@@ -263,6 +263,7 @@ body.background-off .app-container {
 /* App Shell Layout Toggles */
 @media (max-width: 767px) {
     .main-content {
+        padding-top: var(--statusbar-pad);
         padding-bottom: 120px;
     }
 
@@ -365,7 +366,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(44px + var(--statusbar-pad));
+        padding-top: calc(72px + var(--statusbar-pad));
     }
 
     .top-app-bar {
@@ -400,6 +401,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container .main-content {
+        padding-top: 0;
         padding-bottom: var(--nav-pad-bottom);
     }
 

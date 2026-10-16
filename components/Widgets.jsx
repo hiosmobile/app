@@ -177,7 +177,7 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
           <form onSubmit={handleSearch} className="d-flex align-items-center" style={{ gap: "8px" }}>
             <input
               type="text"
-              className="form-control"
+              className="form-control full"
               placeholder="search city..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
@@ -191,18 +191,7 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
 
           <button
             onClick={getUserLocation}
-            style={{
-              backgroundColor: "color-mix(in srgb, var(--primary) 40%, transparent)",
-              padding: "12px",
-              color: "var(--onBackground)",
-              textAlign: "left",
-              cursor: "pointer",
-              fontSize: "14px",
-              display: "flex",
-              alignItems: "center",
-              border: "none",
-              gap: "12px",
-            }}
+            className="metro-list-btn"
           >
             <i className="material-symbols-rounded" style={{ fontSize: "18px" }}>my_location</i> use current location
           </button>
@@ -247,7 +236,7 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
         </span>
         {isExpanded && (
           <button onClick={() => setIsEditing(true)} className="nav-icon-btn" style={{ padding: "0", color: "var(--onBackground)", zIndex: 2 }}>
-            <i className="material-symbols-rounded" style={{ fontSize: "28px", fontWeight: "300" }}>edit</i>
+            <i className="material-symbols-rounded" style={{ fontSize: "12px", fontWeight: "300" }}>edit</i>
           </button>
         )}
       </div>

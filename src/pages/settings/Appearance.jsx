@@ -44,6 +44,7 @@ export default function Appearance() {
     { value: "default", label: "Montenegrin Lake (Default)" },
     { value: "dobrota", label: "Dobrota, Montenegro" },
     { value: "spain", label: "Montefrío, Spain" },
+    { value: "almeria", label: "Almeria, Spain" },
     { value: "france", label: "Terrasson, France" },
     { value: "turkey", label: "Tlos, Turkey" },
     { value: "morocco", label: "Dades Gorge, Morocco" },
@@ -80,8 +81,8 @@ export default function Appearance() {
 
       <Row className="g-1">
         <Col size={12} md={6}>
-          <Card title="Wallpaper settings" className="joinMiddle metro-anim-list-item delay-2">
-            <div className="settings-group mt-3">
+          <Card className="joinMiddle metro-anim-list-item delay-2">
+            <div className="settings-group">
               <Switch
                 label="Wallpaper"
                 checked={backgroundEnabled}
@@ -143,7 +144,7 @@ export default function Appearance() {
 
         {/*Right column*/}
         <Col size={12} md={6}>
-          <Card title="Dynamic colour" className="joinTop metro-anim-list-item delay-5">
+          <Card className="joinTop metro-anim-list-item delay-5">
             <div className="settings-group">
               <Switch
                 label="Dynamic colour"
