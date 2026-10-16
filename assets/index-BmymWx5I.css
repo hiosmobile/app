@@ -984,6 +984,86 @@ body.spain.theme-dark {
     --outline: #8d9199;
 }
 
+body.almeria {
+    --primary: #0052ff;
+    --onPrimary: #ffffff;
+    --primaryContainer: #cfe0ff;
+    --onPrimaryContainer: #0038b8;
+    --secondary: #3b5ba9;
+    --onSecondary: #ffffff;
+    --secondaryContainer: #d9e2ff;
+    --onSecondaryContainer: #1e3f8c;
+    --tertiary: #855318;
+    --onTertiary: #ffffff;
+    --tertiaryContainer: #ffdcbe;
+    --onTertiaryContainer: #693c00;
+    --error: #ba1a1a;
+    --onError: #ffffff;
+    --errorContainer: #ffdad6;
+    --onErrorContainer: #93000a;
+    --background: #f8f9ff;
+    --onBackground: #171b23;
+    --surface: #f8f9ff;
+    --onSurface: #171b23;
+    --surfaceVarient: #dce2f3;
+    --onSurfaceVarient: #414654;
+    --outline: #717786;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.almeria:not(.theme-light) {
+        --primary: #82b1ff;
+        --onPrimary: #002987;
+        --primaryContainer: #0043d6;
+        --onPrimaryContainer: #dce8ff;
+        --secondary: #b1c5ff;
+        --onSecondary: #002c71;
+        --secondaryContainer: #21428f;
+        --onSecondaryContainer: #d9e2ff;
+        --tertiary: #ffb870;
+        --onTertiary: #4a2800;
+        --tertiaryContainer: #693c00;
+        --onTertiaryContainer: #ffdcbe;
+        --error: #ffb4ab;
+        --onError: #690005;
+        --errorContainer: #93000a;
+        --onErrorContainer: #ffdad6;
+        --background: #0e131d;
+        --onBackground: #dfe2ee;
+        --surface: #0e131d;
+        --onSurface: #dfe2ee;
+        --surfaceVarient: #414654;
+        --onSurfaceVarient: #c1c6d7;
+        --outline: #8b91a0;
+    }
+}
+
+body.almeria.theme-dark {
+    --primary: #82b1ff;
+    --onPrimary: #002987;
+    --primaryContainer: #0043d6;
+    --onPrimaryContainer: #dce8ff;
+    --secondary: #b1c5ff;
+    --onSecondary: #002c71;
+    --secondaryContainer: #21428f;
+    --onSecondaryContainer: #d9e2ff;
+    --tertiary: #ffb870;
+    --onTertiary: #4a2800;
+    --tertiaryContainer: #693c00;
+    --onTertiaryContainer: #ffdcbe;
+    --error: #ffb4ab;
+    --onError: #690005;
+    --errorContainer: #93000a;
+    --onErrorContainer: #ffdad6;
+    --background: #0e131d;
+    --onBackground: #dfe2ee;
+    --surface: #0e131d;
+    --onSurface: #dfe2ee;
+    --surfaceVarient: #414654;
+    --onSurfaceVarient: #c1c6d7;
+    --outline: #8b91a0;
+}
+
 body.france {
     --primary: #38608f;
     --onPrimary: #ffffff;
