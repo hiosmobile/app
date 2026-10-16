@@ -806,6 +806,10 @@ body.high-contrast .activeIcon {
     --outline: #73777f;
     --surfaceVarient: #dfe2eb;
     --onSurfaceVarient: #43474e;
+    --error: #ba1a1a;
+    --onError: #ffffff;
+    --errorContainer: #ffdad6;
+    --onErrorContainer: #93000a;
 
     /*Fonts*/
     --fontPrimary: "Noto Sans Variable", sans-serif;
@@ -817,7 +821,7 @@ body.high-contrast .activeIcon {
         "GRAD" 0;
 }
 
-- {
+* {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
 }
@@ -1316,7 +1320,7 @@ body.clouds {
     --onSecondaryContainer: rgb(0 25 65);
     --tertiary: rgb(135 60 150);
     --onTertiary: rgb(255 255 255);
-    --tertiaryContainer: rgb(f7d4ff);
+    --tertiaryContainer: #f7d4ff;
     --onTertiaryContainer: rgb(45 0 55);
     --error: rgb(186 26 26);
     --onError: rgb(255 255 255);
@@ -2581,6 +2585,10 @@ body {
         --outline: #8d9199;
         --surfaceVarient: #43474e;
         --onSurfaceVarient: #c3c6cf;
+        --error: #ffb4ab;
+        --onError: #690005;
+        --errorContainer: #93000a;
+        --onErrorContainer: #ffdad6;
     }
     .button:hover {
         background-color: #5a6b74;
