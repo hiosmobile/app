@@ -309,7 +309,7 @@ body.background-off .app-container {
     .main-content {
         border-radius: var(--radius-card);
         padding-top: calc(
-            52px
+            42px
         ); /* Pushes content below the 60px floating rail */
     }
 
@@ -339,9 +339,9 @@ body.background-off .app-container {
 }
 
 .back-button {
-    background-color: transparent;
+    background-color: var(--primary);
     border: none;
-    color: var(--primary);
+    color: var(--onPrimary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -353,7 +353,11 @@ body.background-off .app-container {
 }
 
 .back-button:hover {
-    background-color: var(--primaryContainer);
+    background-color: var(--secondary);
+
+    .material-symbols-rounded {
+        color: var(--onSecondary);
+    }
 }
 
 .back-button:active {
@@ -391,17 +395,17 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(72px + var(--statusbar-pad));
+        padding-top: calc(40px + var(--statusbar-pad));
     }
 
     .top-app-bar {
         position: fixed;
         top: calc(
-            8px + var(--statusbar-pad)
+            10px + var(--statusbar-pad)
         ); /* Slightly more top breathing room */
         left: 50%;
         transform: translateX(-50%);
-        height: 56px; /* Fixed height for uniformity */
+        height: 50px; /* Fixed height for uniformity */
         width: calc(100% - 12px);
         padding: 0 24px;
         justify-content: center;
@@ -415,7 +419,7 @@ body.background-off .app-container {
 
     .top-bar-wrapper-container .back-button {
         position: absolute;
-        left: 8px; /* Snug against the left edge of the pill */
+        left: 4px; /* Snug against the left edge of the pill */
         margin: 0;
     }
 
@@ -447,7 +451,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(52px + var(--statusbar-pad));
+        padding-top: calc(42px + var(--statusbar-pad));
     }
 
     .top-bar-wrapper-container main.container {
@@ -459,12 +463,12 @@ body.background-off .app-container {
         top: calc(12px + var(--statusbar-pad));
         left: 50%;
         transform: translateX(-50%);
-        height: 60px;
+        height: 50px;
         width: calc(100% - 32px);
         max-width: 1108px;
         padding: 0 24px;
         justify-content: center;
-        border-radius: 25px;
+        border-radius: 999px;
         z-index: 1000;
     }
 
@@ -474,7 +478,7 @@ body.background-off .app-container {
 
     .top-bar-wrapper-container .back-button {
         position: absolute;
-        left: 10px;
+        left: 4px;
         margin: 0;
     }
 
@@ -630,10 +634,10 @@ body.high-contrast .activeIcon {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  height: 60px;
+  height: 50px;
   width: calc(100% - 32px);
   max-width: 1108px;
-  padding: 6px 8px;
+  padding: 6px 4px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -672,7 +676,7 @@ body.high-contrast .activeIcon {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 6px 16px;
   width: 100%;
   color: var(--onPrimaryContainer);
   background-color: color-mix(in srgb, var(--glass-tint) 40%, transparent);
@@ -1950,7 +1954,7 @@ body {
     margin-right: auto;
     z-index: 1;
     border-radius: var(--radius-card) !important;
-    border: 0.5px solid var(--outline);
+    border: 0.5px solid var(--tertiary);
 }
 
 .joinTop {
@@ -3398,6 +3402,7 @@ img[src$="scrolltop.bmp"] {
     transition: all 0.3s ease;
     cursor: pointer;
     flex-shrink: 0;
+    border-radius: 6px;
 }
 
 .sub-header-tab:hover {
@@ -3448,11 +3453,12 @@ img[src$="scrolltop.bmp"] {
         transparent
     );
     color: var(--onTertiaryContainer);
+    border: 0.5px solid var(--tertiary);
 }
 
 .switchContainer {
     padding-right: 20px;
-    border: 1px solid var(--glass-border);
+    border: 0.5px solid var(--secondary);
     border-radius: var(--radius-card);
     background-color: color-mix(in srgb, var(--surface) 30%, transparent) !important;
     text-transform: lowercase;
@@ -3460,7 +3466,7 @@ img[src$="scrolltop.bmp"] {
 
 .form-select {
     padding-left: 15px !important;
-    border: 1px solid var(--glass-border);
+    border: 0.5px solid var(--secondary);
     border-radius: var(--radius-card);
     background-color: color-mix(in srgb, var(--surface) 30%, transparent) !important;
     color: var(--onSecondaryContainer) !important;
@@ -3908,8 +3914,8 @@ body.theme-dark {
 
 .metro-list-btn {
     width: 100%;
-    background-color: color-mix(in srgb, var(--surface) 30%, transparent);
-    border: 1px solid var(--glass-border);
+    background-color: color-mix(in srgb, var(--secondaryContainer) 70%, transparent);
+    border: 0.5px solid var(--secondary);
     color: var(--onBackground);
     padding: 16px 20px;
     display: flex;
@@ -3924,7 +3930,7 @@ body.theme-dark {
 }
 
 .metro-list-btn:hover {
-    background-color: color-mix(in srgb, var(--surface) 50%, transparent);
+    background-color: color-mix(in srgb, var(--tertiaryContainer) 50%, transparent);
 }
 
 .metro-list-btn:active {
