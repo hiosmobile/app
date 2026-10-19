@@ -542,16 +542,9 @@ body.background-off .app-container {
 
 /* Active Pill - iOS 26 Geometry with HiOS Glass & Theme Tokens */
 .activeIcon {
-  background-color: color-mix(
-    in srgb,
-    var(--primaryContainer) 65%,
-    var(--glass-tint)
-  );
-  color: var(--onPrimaryContainer);
+  background-color: var(--primary);
+  color: var(--onPrimary);
   border: 0.5px solid var(--glass-border);
-  box-shadow:
-    inset 0 1px 1px 0 var(--glass-border),
-    0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 /* Specular glass sheen inside the active pill */
@@ -570,8 +563,7 @@ body.background-off .app-container {
 .inactiveIcon {
   background-color: transparent;
   border: 0.5px solid transparent;
-  color: var(--onPrimaryContainer);
-  opacity: 0.65;
+  color: var(--primary);
 }
 
 /* Override global !important icon rules for Filled vs. Outlined states */
