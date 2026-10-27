@@ -3922,7 +3922,8 @@ body.theme-dark {
 }
 
 .metro-list-btn:hover {
-    background-color: color-mix(in srgb, var(--tertiaryContainer) 50%, transparent);
+    background-color: var(--secondary);
+    color: var(--onSecondary)
 }
 
 .metro-list-btn:active {
