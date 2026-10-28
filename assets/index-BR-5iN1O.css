@@ -498,8 +498,7 @@ body.background-off .app-container {
 .main-content {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
-}
-/* =========================================
+}/* =========================================
    NAVIGATION ITEMS (Bottom Nav Buttons)
    ========================================= */
 .nav-item {
@@ -2511,7 +2510,7 @@ body {
     padding: 12px 18px;
     background-color: color-mix(in srgb, var(--surface) 30%, transparent);
     color: var(--onSurface) !important;
-    border: 0.5px solid var(--glass-border) !important;
+    border: 0.5px solid var(--secondary);
     width: 100%;
     font-weight: 400;
     outline: none;
@@ -2774,9 +2773,9 @@ body:not(.acrylic-on) .bottom-sheet,
 body:not(.acrylic-on) .top-app-bar,
 body:not(.acrylic-on) .side-rail,
 body:not(.acrylic-on) .bottom-nav {
-    background: #eeeeee !important;
-    color: #000000 !important;
-    border: none !important;
+    background: var(--primaryContainer) !important;
+    color: var(--onPrimaryContainer) !important;
+    border: 0.5px solid var(--outline) !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -3457,11 +3456,12 @@ img[src$="scrolltop.bmp"] {
 }
 
 .form-select {
+    font-size: 1.3rem !important;
+    font-weight: 400;
     padding-left: 15px !important;
     border: 0.5px solid var(--secondary);
     border-radius: var(--radius-card);
     background-color: color-mix(in srgb, var(--surface) 30%, transparent) !important;
-    color: var(--onSecondaryContainer) !important;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -3775,6 +3775,10 @@ body.theme-dark {
     animation: fade-in 0.2s ease forwards;
 }
 
+body:not(.acrylic-on) .metro-modal-overlay {
+    background-color: grey;
+}
+
 .metro-modal-content {
     background: var(--glass-tint) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
@@ -3791,6 +3795,11 @@ body.theme-dark {
     position: relative;
     overflow: hidden;
     isolation: isolate;
+}
+
+body:not(.acrylic-on) .metro-modal-content {
+    background-color: var(--secondaryContainer) !important;
+    color: var(--onSecondaryContainer) !important
 }
 
 .metro-modal-content::after {
@@ -3947,6 +3956,10 @@ body.theme-dark {
     text-transform: lowercase;
     margin: 0 !important;
     line-height: 1 !important;
+}
+
+.full-btn {
+    border-radius: 999px !important;
 }/* google-sans-flex-canadian-aboriginal-wght-normal */
 @font-face {
   font-family: 'Google Sans Flex Variable';
