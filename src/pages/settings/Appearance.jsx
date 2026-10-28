@@ -120,7 +120,7 @@ export default function Appearance() {
             </div>
           </Card>
 
-          <Card className="joinBottom metro-anim-list-item delay-4" title="Wallpaper time-of-day">
+          <Card className="joinBottomLeft metro-anim-list-item delay-4" title="Wallpaper time-of-day">
             <div className="settings-group">
               <Dropdown
                 value={darkModePref}
@@ -144,7 +144,7 @@ export default function Appearance() {
 
         {/*Right column*/}
         <Col size={12} md={6}>
-          <Card className="joinTop metro-anim-list-item delay-5">
+          <Card className="rightColJoinTop metro-anim-list-item delay-5">
             <div className="settings-group">
               <Switch
                 label="Dynamic colour"
@@ -184,7 +184,7 @@ export default function Appearance() {
             </div>
           </Card>
 
-          <Card className="joinBottom metro-anim-list-item delay-7" title="Glass and transparency">
+          <Card className="joinBottomRight metro-anim-list-item delay-7" title="Glass and transparency">
             <div className="settings-group">
               <Switch
                 label="Glass"

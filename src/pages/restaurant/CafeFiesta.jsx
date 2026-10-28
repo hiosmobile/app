@@ -28,7 +28,7 @@ export default function CafeFiesta() {
     <main className="container mt-4 mb-5">
       <Row>
         <Col size={12}>
-          <Card className="joinMiddle metro-anim-list-item delay-1" bodyClass="text-start">
+          <Card className="joinTop pb-3 metro-anim-list-item delay-1" bodyClass="text-start">
             <div className="top-container">
               <h1
                 className="blue-h2"
@@ -49,7 +49,7 @@ export default function CafeFiesta() {
 
       <Row className="g-1">
         <Col size={12} md={6}>
-          <Card title="Menu" className="metro-anim-list-item delay-2">
+          <Card title="Menu" className="joinBottomLeft metro-anim-list-item delay-2">
             <MenuActionBtn
               icon="menu_book"
               text="View menu"
@@ -63,14 +63,14 @@ export default function CafeFiesta() {
                 })
               }
             />
-            <InfoBubble title="View our amazing drinks selection.">
+            <InfoBubble className="joinBottom" title="View our amazing drinks selection.">
               Our drinks absolutely trump any other coffee shop that claims to be coffee specialists. ✨ NEWSFLASH ✨ the only coffee specialists are US.
             </InfoBubble>
           </Card>
         </Col>
 
         <Col size={12} md={6}>
-          <Card className="metro-anim-list-item delay-3" title="Order">
+          <Card className="joinBottomRight-mobile metro-anim-list-item delay-3" title="Order">
             <MenuActionBtn
               icon="menu_book"
               text="Order drinks"

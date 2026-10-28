@@ -4,19 +4,20 @@ import { Card, PageHeader, Row, Col } from "../../../components/HiMaterial";
 export default function Restaurant() {
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-1">
+      <Row>
         <Col size={12}>
           <PageHeader
-            title="Food"
+            title="Restaurant"
             subtitle="Unsure on how to do certain things with this app for visiting The
             Highland Cafe™️? Take a look below."
+            className="joinTop pb-3 metro-anim-list-item delay-1"
             />
         </Col>
       </Row>
 
       <Row className="g-1">
         <Col size={12} md={6}>
-          <Card className="metro-anim-list-item delay-1" title="Booking a table">
+          <Card className="joinMiddle metro-anim-list-item delay-2" title="Booking a table">
             <ol className="text-start">
               <li>
                 First, tap the
@@ -35,7 +36,7 @@ export default function Restaurant() {
             </ol>
           </Card>
 
-          <Card className="mt-2" title="Viewing our menus">
+          <Card title="Viewing our menus" className="joinMiddle metro-anim-list-item delay-3">
             <ol className="text-start">
               <li>
                 First, tap the
@@ -54,7 +55,7 @@ export default function Restaurant() {
             </ol>
           </Card>
 
-          <Card className="mt-2" title="Ordering food">
+          <Card className="joinBottomLeft" title="Ordering food">
             <ol className="text-start">
               <li>
                 First, tap the
@@ -78,7 +79,7 @@ export default function Restaurant() {
         </Col>
 
         <div className="col-12 col-md-6">
-          <Card className="mt-2" title="Checking-in to breakfast">
+          <Card className="rightColJoinTop" title="Checking-in to breakfast">
             <ol className="text-start">
               <li>
                 First, tap the
@@ -96,7 +97,7 @@ export default function Restaurant() {
             </ol>
           </Card>
 
-          <Card className="mt-2" title="Viewing our locations">
+          <Card className="joinBottomRight-mobile" title="Viewing our locations">
             <ol className="text-start">
               <li>
                 First, tap the

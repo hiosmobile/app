@@ -56,7 +56,7 @@ export default function Accessibility() {
       <Row className="g-1">
         {/* Left column */}
         <Col size={12} md={6}>
-          <Card title="Vision" className="joinBottom metro-anim-list-item delay-2">
+          <Card title="Vision" className="joinBottomLeft metro-anim-list-item delay-2">
             <Switch
               label="High-contrast UI"
               checked={highContrastEnabled}
@@ -76,7 +76,7 @@ export default function Accessibility() {
 
         {/* Right column */}
         <div className="col-12 col-md-6">
-          <Card className="metro-anim-list-item delay-3">
+          <Card className="joinBottomRight-mobile metro-anim-list-item delay-3">
             <InfoBubble
               icon="accessible_forward"
               title="At nuggetdev, we like to cater for everyone."

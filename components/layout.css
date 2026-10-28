@@ -285,7 +285,7 @@ body.background-off .app-container {
     .main-content {
         border-radius: var(--radius-card);
         padding-top: calc(
-            52px
+            42px
         ); /* Pushes content below the 60px floating rail */
     }
 
@@ -314,9 +314,9 @@ body.background-off .app-container {
 }
 
 .back-button {
-    background-color: transparent;
+    background-color: var(--primary);
     border: none;
-    color: var(--primary);
+    color: var(--onPrimary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -328,7 +328,11 @@ body.background-off .app-container {
 }
 
 .back-button:hover {
-    background-color: var(--primaryContainer);
+    background-color: var(--secondary);
+
+    .material-symbols-rounded {
+        color: var(--onSecondary);
+    }
 }
 
 .back-button:active {
@@ -366,17 +370,17 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(72px + var(--statusbar-pad));
+        padding-top: calc(40px + var(--statusbar-pad));
     }
 
     .top-app-bar {
         position: fixed;
         top: calc(
-            8px + var(--statusbar-pad)
+            10px + var(--statusbar-pad)
         ); /* Slightly more top breathing room */
         left: 50%;
         transform: translateX(-50%);
-        height: 56px; /* Fixed height for uniformity */
+        height: 50px; /* Fixed height for uniformity */
         width: calc(100% - 12px);
         padding: 0 24px;
         justify-content: center;
@@ -390,7 +394,7 @@ body.background-off .app-container {
 
     .top-bar-wrapper-container .back-button {
         position: absolute;
-        left: 8px; /* Snug against the left edge of the pill */
+        left: 4px; /* Snug against the left edge of the pill */
         margin: 0;
     }
 
@@ -421,7 +425,7 @@ body.background-off .app-container {
     }
 
     .top-bar-wrapper-container {
-        padding-top: calc(52px + var(--statusbar-pad));
+        padding-top: calc(42px + var(--statusbar-pad));
     }
 
     .top-bar-wrapper-container main.container {
@@ -433,12 +437,12 @@ body.background-off .app-container {
         top: calc(12px + var(--statusbar-pad));
         left: 50%;
         transform: translateX(-50%);
-        height: 60px;
+        height: 50px;
         width: calc(100% - 32px);
         max-width: 1108px;
         padding: 0 24px;
         justify-content: center;
-        border-radius: 25px;
+        border-radius: 999px;
         z-index: 1000;
     }
 
@@ -448,7 +452,7 @@ body.background-off .app-container {
 
     .top-bar-wrapper-container .back-button {
         position: absolute;
-        left: 10px;
+        left: 4px;
         margin: 0;
     }
 

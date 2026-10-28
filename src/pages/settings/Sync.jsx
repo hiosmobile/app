@@ -16,19 +16,19 @@ export default function Sync() {
 
   return (
     <main className="container mt-4 mb-5">
-      <Row className="mb-1">
+      <Row>
         <Col size={12}>
           <PageHeader
             title="Backup and sync"
             subtitle="Choose what settings to sync with your HiAccount below."
-            className="metro-anim-list-item delay-1"
+            className="joinTop pb-3 metro-anim-list-item delay-1"
           />
         </Col>
       </Row>
 
       <Row className="g-1">
         <Col size={12} md={6}>
-          <Card title="Appearance" className="metro-anim-list-item delay-2">
+          <Card title="Appearance" className="joinBottomLeft metro-anim-list-item delay-2">
             <Switch
               label="Sync appearance"
               checked={syncEnabled}
@@ -48,7 +48,7 @@ export default function Sync() {
         </Col>
 
         <Col size={12} md={6}>
-          <Card className="metro-anim-list-item delay-3">
+          <Card className="joinBottomRight-mobile metro-anim-list-item delay-3">
             <InfoBubble
               icon="backup"
               title="This is cool, isn't it?!"

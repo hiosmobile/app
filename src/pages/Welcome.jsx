@@ -166,32 +166,34 @@ export default function Home() {
     (w) => !usedWidgets.includes(w.id)
   );
 
-  const renderWidgetContent = (id, animClass) => {
+  const renderWidgetContent = (id, combinedClass) => {
       switch (id) {
         case "rewardsCode":
           return (
             <div
+              className="m-0 p-0"
               onClick={() => openApp("rewardsCode")}
               style={{ cursor: isEditing ? "default" : "pointer" }}
             >
               <RewardsCodeWidget
                 code={membershipCode}
                 imageSrc={frameImg}
-                className={animClass}
+                className={combinedClass}
               />
             </div>
           );
 
         case "progress":
-          return <ProgressWidget className={animClass} />;
+          return <ProgressWidget className={combinedClass} />;
 
         case "weather":
           return (
             <div
+              className="m-0 p-0"
               onClick={() => openApp("weather")}
               style={{ cursor: isEditing ? "default" : "pointer" }}
             >
-              <Card className={`${animClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
+              <Card className={`${combinedClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
                 <WeatherWidget isExpanded={false} />
               </Card>
             </div>
@@ -200,10 +202,11 @@ export default function Home() {
         case "calendar":
           return (
             <div
+              className="m-0 p-0"
               onClick={() => openApp("calendar")}
               style={{ cursor: isEditing ? "default" : "pointer" }}
             >
-              <Card className={`${animClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
+              <Card className={`${combinedClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
                 <DateWidget isExpanded={false} />
               </Card>
             </div>
@@ -214,7 +217,7 @@ export default function Home() {
             <QuickActionsWidget
               isEditing={isEditing}
               currentUser={currentUser}
-              className={animClass}
+              className={combinedClass}
             />
           );
 
@@ -225,6 +228,7 @@ export default function Home() {
 
   const renderColumn = (colName) => {
     const baseDelay = colName === "left" ? 2 : layout.left.length + 2;
+    const totalItems = layout[colName].length;
 
     return (
       <Col size={12} md={6}>
@@ -249,8 +253,32 @@ export default function Home() {
             ? `metro-anim-list-item delay-${delayNum}`
             : "";
 
+          let joinClass = "full";
+          if (!isEditing && totalItems > 0) {
+            if (colName === "left") {
+                if (totalItems === 1) {
+                    joinClass = "joinBottomLeft";
+                } else {
+                    if (index === 0) joinClass = "joinMiddle";
+                    else if (index === totalItems - 1) joinClass = "joinBottomLeft";
+                    else joinClass = "joinMiddle";
+                }
+            } else {
+                if (totalItems === 1) {
+                    joinClass = "joinBottomRight";
+                } else {
+                    if (index === 0) joinClass = "rightColJoinTop";
+                    else if (index === totalItems - 1) joinClass = "joinBottomRight";
+                    else joinClass = "joinMiddle";
+                }
+            }
+          }
+
+          // mt-0 overrides internal margins set by individual widgets
+          const combinedClass = `${animClass} ${joinClass} mt-0`.trim();
+
           return (
-            <div key={widgetId} className={index > 0 && !isEditing ? "mt-1" : ""}>
+            <div key={widgetId}>
               {isEditing && (
                 <div
                   className="d-flex justify-content-between align-items-center mb-1 px-2 py-1 mt-3"
@@ -306,7 +334,7 @@ export default function Home() {
                 </div>
               )}
               <div style={{ transition: "opacity 0.2s" }}>
-                {renderWidgetContent(widgetId, animClass)}
+                {renderWidgetContent(widgetId, combinedClass)}
               </div>
             </div>
           );
@@ -320,48 +348,46 @@ export default function Home() {
   return (
     <>
       <main className="container mt-4 mb-5">
-        <Row className="mb-1">
+        <Row>
           <Col size={12}>
             <Card
-              className="metro-anim-list-item delay-1"
-              bodyClass="text-start d-flex justify-content-between align-items-center p-6"
+              className={`metro-anim-list-item delay-1 ${!isEditing ? "joinTop pb-3" : "full pb-3"}`}
+              bodyClass="d-flex justify-content-between align-items-center"
             >
-              <div>
-                <p className="blue-h2 mb-0" style={{ fontSize: "2rem" }}>
-                  <b>
-                    {getGreeting()}, {name}!
-                  </b>
-                </p>
-                <p
-                  className="gradientHeadingSmall mb-0"
-                  style={{ fontSize: "1.2rem", opacity: 0.8 }}
-                >
+              <div className="top-container m-0 text-start" style={{ minWidth: "auto", flex: 1 }}>
+                {/* Uses standard PageHeader formatting: blue-h2 without bold overrides */}
+                <h1 className="blue-h2 mb-0">
+                  {getGreeting()}, {name}!
+                </h1>
+                {/* Uses standard PageHeader formatting: subtitle class and id="para" */}
+                <p id="para" className="subtitle mb-0 mt-0">
                   {getMessage()}
                 </p>
               </div>
 
               <RippleButton
-                className="nav-icon-btn"
+                className="nav-icon-btn metro-tile-btn ms-3 flex-shrink-0"
                 onClick={() => setIsEditing(!isEditing)}
                 style={{
                   backgroundColor: isEditing
                     ? "var(--primary)"
-                    : "var(--tertiaryContainer)",
+                    : "color-mix(in srgb, var(--surface) 30%, transparent)",
                   color: isEditing
                     ? "var(--onPrimary)"
-                    : "var(--onTertiaryContainer)",
+                    : "var(--onSurface)",
                   border: "0.5px solid var(--outline)",
                   width: "50px",
                   height: "50px",
                 }}
               >
                 <span className="material-symbols-rounded">
-                  {isEditing ? "check" : "edit"}
+                  {isEditing ? "check" : "edit_square"}
                 </span>
               </RippleButton>
             </Card>
           </Col>
         </Row>
+
 
         <Row className="g-1">
           {renderColumn("left")}

@@ -30,7 +30,7 @@ export default function HelpCenter() {
           <Card title="How to use Harmony" className="metro-anim-list-item delay-2 joinMiddle">
             <MenuActionBtn
               icon="developer_guide"
-              text="Navigation tutorial"
+              text="Tutorial"
               className="joinTop"
               onClick={() => navigate("/help/tutorial")}
             />
@@ -45,7 +45,7 @@ export default function HelpCenter() {
             </InfoBubble>
           </Card>
 
-          <Card className="joinBottom metro-anim-list-item delay-3" title="General">
+          <Card className="joinBottomLeft metro-anim-list-item delay-3" title="General">
             <MenuActionBtn
               icon="restaurant"
               text="Food"
@@ -78,7 +78,7 @@ export default function HelpCenter() {
 
         {/*Right col*/}
         <Col className="col-12 col-md-6">
-          <Card className="metro-anim-list-item delay-4" title="More">
+          <Card className="joinBottomRight-mobile metro-anim-list-item delay-4" title="More">
             <MenuActionBtn
               icon="support_agent"
               text="Customer Support"

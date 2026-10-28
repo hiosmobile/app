@@ -11,6 +11,7 @@ import {
   InfoBubble
 } from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
+import BookTable from "../../../components/forms/restaurant/BookTable";
 
 export default function HiCafe() {
   const [activeMainTab, setActiveMainTab] = useState("book");
@@ -53,33 +54,18 @@ export default function HiCafe() {
             <PageHeader
               title="Book"
               subtitle="Fill in the below form to book a table, and we'll reply within an hour by email."
-              className="joinMiddle metro-anim-list-item delay-2"
+              className="joinMiddle pb-3 metro-anim-list-item delay-2"
             />
             <Row className="g-1">
               <Col size={12} md={6}>
-                <Card className="metro-anim-list-item delay-3">
-                  <MenuActionBtn
-                    icon="book"
-                    text="Open booking form"
-                    className="joinTop"
-                    onClick={() =>
-                      navigate("/viewer", {
-                        state: {
-                          src: "https://docs.google.com/forms/d/e/1FAIpQLSfeP-cO7te979Dc-QRmUsBwQTzIojYRtg7Yx3OufiiUcn2r2g/viewform?embedded=true",
-                          title: "Book a Table",
-                        },
-                      })
-                    }
-                  />
-                  <InfoBubble className="joinBottom" title="Book your table at one of our restaurants.">
-                    We'd be so chuffed to have you!
-                  </InfoBubble>
+                <Card className="joinBottomLeft metro-anim-list-item delay-3">
+                  <BookTable />
                 </Card>
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="metro-anim-list-item delay-4">
-                  <InfoBubble title="Note about booking a table">
+                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4">
+                  <InfoBubble className="full" title="Note about booking a table">
                     The restaurant you book at will try and get back to you within an hour, but if they don't, assume they're either really busy or there's no tables free, or you've been banned from the location.
                   </InfoBubble>
                 </Card>
@@ -94,13 +80,12 @@ export default function HiCafe() {
             <PageHeader
               title="Menus"
               subtitle="Take a look at our menus below."
-              className="joinMiddle metro-anim-list-item delay-2"
+              className="joinMiddle pb-3 metro-anim-list-item delay-2"
             />
 
             <Row className="g-1">
               <Col size={12} md={6}>
-                <Card title="Regular" className="joinMiddle metro-anim-list-item delay-3">
-                  <p>This menu includes Lunch, Dinner, and more.</p>
+                <Card title="Classics" className="joinMiddle metro-anim-list-item delay-3">
                   <MenuActionBtn
                     icon="dinner_dining"
                     text="Open regular menu"
@@ -122,8 +107,7 @@ export default function HiCafe() {
                   </InfoBubble>
                 </Card>
 
-                <Card title="Worldwide" className="joinBottom metro-anim-list-item delay-4">
-                  <p>Our brand new worldwide foods menu</p>
+                <Card title="Worldwide" className="joinBottomLeft metro-anim-list-item delay-4">
                   <MenuActionBtn
                     icon="connecting_airports"
                     text="Open worldwide menu"
@@ -147,8 +131,7 @@ export default function HiCafe() {
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="joinMiddle metro-anim-list-item delay-5" title="Pizza">
-                  <p>Take a look at our majestic new pizza menu below now.</p>
+                <Card className="rightColJoinTop metro-anim-list-item delay-5" title="Pizza">
                   <MenuActionBtn
                     icon="local_pizza"
                     text="Open pizza menu"
@@ -170,8 +153,7 @@ export default function HiCafe() {
                   </InfoBubble>
                 </Card>
 
-                <Card className="joinBottom metro-anim-list-item delay-6" title="Gastro">
-                  <p>This is our most premium menu that you will love!</p>
+                <Card className="joinBottomRight metro-anim-list-item delay-6" title="Gastro">
                   <MenuActionBtn
                     icon="local_dining"
                     text="Open gastro menu"
@@ -203,12 +185,12 @@ export default function HiCafe() {
             <PageHeader
               title="Order"
               subtitle="Order the food you would like below."
-              className="joinMiddle metro-anim-list-item delay-2"
+              className="joinMiddle pb-3 metro-anim-list-item delay-2"
             />
 
             <Row className="g-1">
               <Col size={12} md={6}>
-                <Card className="metro-anim-list-item delay-3">
+                <Card className="joinBottomLeft metro-anim-list-item delay-3">
                   <MenuActionBtn
                     icon="book"
                     text="Open ordering form"
@@ -229,8 +211,8 @@ export default function HiCafe() {
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="metro-anim-list-item delay-4">
-                  <InfoBubble title="Note about ordering your food online">
+                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4">
+                  <InfoBubble className="full" title="Note about ordering your food online">
                     You will need to pay for your meal upon leaving the restaurant. If we don't have a menu item in stock, we'll replace it with what our chef thinks is the best substitution. Otherwise, our waiting staff will let you know.
                   </InfoBubble>
                 </Card>

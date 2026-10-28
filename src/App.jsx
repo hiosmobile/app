@@ -127,7 +127,7 @@ function AppRoutes() {
       <Route
         path="/restaurant/hicafe"
         element={
-          <TopBarWrapper title="Your HiCafe™ visit">
+          <TopBarWrapper title="The Highland Cafe™">
             <HiCafe />
           </TopBarWrapper>
         }
