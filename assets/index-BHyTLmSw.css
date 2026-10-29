@@ -3393,7 +3393,7 @@ img[src$="scrolltop.bmp"] {
     transition: all 0.3s ease;
     cursor: pointer;
     flex-shrink: 0;
-    border-radius: 6px;
+    border-radius: 6px !important;
 }
 
 .sub-header-tab:hover {
@@ -3402,11 +3402,11 @@ img[src$="scrolltop.bmp"] {
 }
 
 .sub-header-tab:first-child {
-    border-radius: var(--radius-card) 6px 6px var(--radius-card);
+    border-radius: var(--radius-card) 6px 6px var(--radius-card) !important;
 }
 
 .sub-header-tab:last-child {
-    border-radius: 6px var(--radius-card) var(--radius-card) 6px;
+    border-radius: 6px var(--radius-card) var(--radius-card) 6px !important;
 }
 
 .sub-header-tab:first-child:last-child {
@@ -3491,7 +3491,8 @@ img[src$="scrolltop.bmp"] {
 }
 
 .form-check-label {
-    font-weight: 500;
+    font-size: 1.3rem !important;
+    font-weight: 400;
 }
 
 .switch {
