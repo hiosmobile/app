@@ -176,12 +176,23 @@ export default function Profile() {
 
           {/* Right Column: Settings Categories */}
           <Col size={12} md={6}>
-            <Card title="Sync your settings" className="rightColJoinTop metro-anim-list-item delay-4">
+          {/* ADMIN ONLY PORTAL */}
+            {currentUser?.email === "jefaar80@gmail.com" && (
+              <Card title="Staff Portal" className="rightColJoinTop mb-1 metro-anim-list-item delay-3">
+                <MenuActionBtn
+                  icon="admin_panel_settings"
+                  text="Admin Dashboard"
+                  onClick={() => navigate("/admin")}
+                />
+              </Card>
+            )}
+
+            <Card title="Sync your settings" className={currentUser?.email === "jefaar80@gmail.com" ? "joinMiddle metro-anim-list-item delay-4" : "rightColJoinTop metro-anim-list-item delay-4"}>
               <MenuActionBtn
                 icon="cloud_sync"
-                  text="Backup and sync"
+                text="Backup and sync"
                 onClick={() => navigate("/settings/sync")}
-                />
+              />
             </Card>
 
             <Card title="Customisation" className="joinMiddle metro-anim-list-item delay-5">

@@ -53,6 +53,8 @@ import AppFeedback from "./pages/help/AppFeedback.jsx";
 
 import FullscreenViewer from "./pages/FullscreenViewer";
 
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+
 function AppRoutes() {
   const { currentUser, logout } = useAuth();
 
@@ -244,6 +246,15 @@ function AppRoutes() {
         element={
           <TopBarWrapper title="Send Feedback">
             <AppFeedback />
+          </TopBarWrapper>
+        }
+      />
+
+      <Route
+        path="/admin"
+        element={
+          <TopBarWrapper title="Staff Portal">
+            <AdminDashboard />
           </TopBarWrapper>
         }
       />

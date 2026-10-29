@@ -67,14 +67,7 @@ export default function Restaurant() {
               icon="egg_alt"
               text="Breakfast check-in"
               className="joinTop"
-              onClick={() =>
-                navigate("/viewer", {
-                  state: {
-                    src: "https://docs.google.com/forms/d/e/1FAIpQLSdjJ0yto-VHoTjDtkYlbvr4XjI2wwd_XN-g7vuRP9aNwF1wwg/viewform?embedded=true",
-                    title: "Breakfast check-in",
-                  },
-                })
-              }
+              onClick={() => navigate("/restaurant/breakfast")}
             />
             <InfoBubble
               className="joinBottom"

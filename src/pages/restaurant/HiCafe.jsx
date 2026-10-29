@@ -11,7 +11,11 @@ import {
   InfoBubble
 } from "../../../components/HiMaterial";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
+
 import BookTable from "../../../components/forms/restaurant/BookTable";
+import MyActivity from "../../../components/forms/restaurant/MyActivity";
+
+import OrderFood from "../../../components/forms/restaurant/OrderFood";
 
 export default function HiCafe() {
   const [activeMainTab, setActiveMainTab] = useState("book");
@@ -29,6 +33,12 @@ export default function HiCafe() {
     document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
     const rootDiv = document.getElementById("root");
     if (rootDiv) rootDiv.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const isPastBooking = (dateStr, timeStr) => {
+    if (!dateStr || !timeStr) return false; // Fallback if data is missing
+    const bookingDateTime = new Date(`${dateStr}T${timeStr}`);
+    return bookingDateTime < new Date();
   };
 
   return (
@@ -58,16 +68,14 @@ export default function HiCafe() {
             />
             <Row className="g-1">
               <Col size={12} md={6}>
-                <Card className="joinBottomLeft metro-anim-list-item delay-3">
+                <Card className="joinBottomLeft metro-anim-list-item delay-3" title="New booking">
                   <BookTable />
                 </Card>
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4">
-                  <InfoBubble className="full" title="Note about booking a table">
-                    The restaurant you book at will try and get back to you within an hour, but if they don't, assume they're either really busy or there's no tables free, or you've been banned from the location.
-                  </InfoBubble>
+                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4" title="Previous bookings">
+                  <MyActivity targetCollection="restaurant_bookings" />
                 </Card>
               </Col>
             </Row>
@@ -190,31 +198,14 @@ export default function HiCafe() {
 
             <Row className="g-1">
               <Col size={12} md={6}>
-                <Card className="joinBottomLeft metro-anim-list-item delay-3">
-                  <MenuActionBtn
-                    icon="book"
-                    text="Open ordering form"
-                    className="joinTop"
-                    onClick={() =>
-                      navigate("/viewer", {
-                        state: {
-                          src: "https://docs.google.com/forms/d/e/1FAIpQLSfGzW5su4bVmpeRVGRbDDeudfZkvhbyuXi-pySKLW4qA8WnaA/viewform?embedded=true",
-                          title: "Order your food",
-                        },
-                      })
-                    }
-                  />
-                  <InfoBubble className="joinBottom" title="Order your food from your table.">
-                    The standard but lazy option in our restaurants.
-                  </InfoBubble>
+                <Card className="joinBottomLeft metro-anim-list-item delay-3" title="New order">
+                  <OrderFood />
                 </Card>
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4">
-                  <InfoBubble className="full" title="Note about ordering your food online">
-                    You will need to pay for your meal upon leaving the restaurant. If we don't have a menu item in stock, we'll replace it with what our chef thinks is the best substitution. Otherwise, our waiting staff will let you know.
-                  </InfoBubble>
+                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4" title="Previous orders">
+                  <MyActivity targetCollection="restaurant_orders" />
                 </Card>
               </Col>
             </Row>
