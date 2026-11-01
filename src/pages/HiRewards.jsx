@@ -65,7 +65,8 @@ export default function Rewards() {
   };
 
   const fetchOffersByLabel = async (label) => {
-    const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?fetchBodies=true&labels=${label}&key=${API_KEY}`;
+    // Added &maxResults=500 to the query string
+    const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?fetchBodies=true&labels=${label}&maxResults=500&key=${API_KEY}`;
     const response = await fetch(url);
 
     if (response.ok) {
@@ -78,6 +79,7 @@ export default function Rewards() {
       throw new Error(`Google API Error: ${errorMsg}`);
     }
   };
+
 
   const parseBloggerPost = (post) => {
     let rawContent = post.content || "";
