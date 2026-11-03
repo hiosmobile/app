@@ -128,7 +128,7 @@
 
 * {
     -webkit-tap-highlight-color: transparent;
-    font-family: "Noto Sans Variable", sans-serif;
+    font-family: "Google Sans Flex Variable", sans-serif;
     box-sizing: border-box;
 }
 
@@ -807,8 +807,8 @@ body.high-contrast .activeIcon {
     --onErrorContainer: #93000a;
 
     /*Fonts*/
-    --fontPrimary: "Noto Sans Variable", sans-serif;
-    --fontCode: "Noto Sans Variable", sans-serif;
+    --fontPrimary: "Google Sans Flex Variable", sans-serif;
+    --fontCode: "Google Sans Flex Variable", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
