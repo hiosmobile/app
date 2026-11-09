@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   PageHeader,
   InfoBubble,
@@ -26,32 +26,36 @@ export default function Appearance() {
     setGenericColor,
     darkModePref,
     setDarkModePref,
-    syncEnabled,
-    setSyncEnabled,
   } = useContext(ThemeContext);
+
+  const [activeMainTab, setActiveMainTab] = useState("themes");
+
+  const mainTabs = [
+    { id: "themes", label: "Themes" },
+    { id: "advanced", label: "Advanced" },
+  ];
 
   const effectiveAuto = backgroundEnabled ? autoColor : false;
 
-  const handleBackgroundToggle = (isChecked) => {
-    setBackgroundEnabled(isChecked);
-    if (!isChecked) {
-      setAutoColor(false);
-      setAcrylicEnabled(false);
-    }
-  };
+  const glassThemes = [
+    { value: "default", label: "Montenegrin Lake" },
+    { value: "dobrota", label: "Dobrota" },
+    { value: "spain", label: "Montefrío" },
+    { value: "almeria", label: "Almeria" },
+    { value: "france", label: "Terrasson" },
+    { value: "turkey", label: "Tlos" },
+    { value: "morocco", label: "Dades Gorge" },
+    { value: "clouds", label: "Cloudy Sunrise" },
+    { value: "london", label: "Tower Bridge" },
+    { value: "yorkshire", label: "Keld" },
+    { value: "scotland", label: "Knockan Crag" },
+  ];
 
-  const wallpaperOptions = [
-    { value: "default", label: "Montenegrin Lake (Default)" },
-    { value: "dobrota", label: "Dobrota, Montenegro" },
-    { value: "spain", label: "Montefrío, Spain" },
-    { value: "almeria", label: "Almeria, Spain" },
-    { value: "france", label: "Terrasson, France" },
-    { value: "turkey", label: "Tlos, Turkey" },
-    { value: "morocco", label: "Dades Gorge, Morocco" },
-    { value: "clouds", label: "Cloudy Sunrise, Liverpool" },
-    { value: "london", label: "Tower Bridge, London" },
-    { value: "yorkshire", label: "Keld, North Yorkshire" },
-    { value: "scotland", label: "Knockan Crag, Scotland" },
+  const plainThemes = [
+    { value: "default-light", label: "Default blue", preview: "#0061a6" },
+    { value: "generic-cyan", label: "HiOSMobile v1.3", preview: "#00687a" },
+    { value: "generic-green", label: "Green", preview: "rgb(63 104 54)" },
+    { value: "generic-orange", label: "Orange", preview: "rgb(129 85 18)" },
   ];
 
   const wallpaperModeOptions = [
@@ -61,162 +65,283 @@ export default function Appearance() {
   ];
 
   const genericColourOptions = [
-    { value: "default-light", label: "Harmony 2.x (Default)" },
-    { value: "generic-cyan", label: "Harmony v1.3.2 (Cyan)" },
+    { value: "default-light", label: "Blue (default)" },
+    { value: "generic-cyan", label: "HiOSMobile v1.3 (Cyan)" },
     { value: "generic-green", label: "Green" },
     { value: "generic-orange", label: "Orange" },
   ];
 
+  const handleGlassThemeSelect = (themeValue) => {
+    setBackgroundEnabled(true);
+    setWallpaperTheme(themeValue);
+    setAutoColor(true);
+    setAcrylicEnabled(true);
+  };
+
+  const handlePlainThemeSelect = (themeValue) => {
+    setBackgroundEnabled(false);
+    setAcrylicEnabled(false);
+    setAutoColor(false);
+    setGenericColor(themeValue);
+  };
+
+  const getThumbnailUrl = (themeValue) => {
+    const basePath = "assets/backgrounds/";
+    let isDark = false;
+
+    if (darkModePref === "dark") {
+      isDark = true;
+    } else if (
+      darkModePref === "auto" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      isDark = true;
+    }
+
+    const themeName = themeValue === "default" ? "backgroundimage" : themeValue;
+    return `url('${basePath}${themeName}${isDark ? "-dark.webp" : ".webp"}')`;
+  };
+
   return (
     <main className="container mt-4 mb-5">
-      <Row>
-        <Col size={12}>
-          <PageHeader
-            title="Themes"
-            subtitle="Customise the look and feel of Harmony to your taste below."
-            className="pb-3 joinTop metro-anim-list-item delay-1"
-          />
-        </Col>
-      </Row>
+      {/* Tab Navigation */}
+      <Card className="mt-1 joinTop metro-anim-list-item delay-1" bodyClass="p-2">
+        <div className="sub-nav-pills-header">
+          {mainTabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`sub-header-tab ripple-button ${activeMainTab === tab.id ? "active" : ""}`}
+              onClick={() => setActiveMainTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </Card>
 
-      <Row className="g-1">
-        <Col size={12} md={6}>
-          <Card className="joinMiddle metro-anim-list-item delay-2">
-            <div className="settings-group">
-              <Switch
-                label="Wallpaper"
-                checked={backgroundEnabled}
-                onChange={handleBackgroundToggle}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="wallpaper"
-                title="Turn on or off the background image"
-                className="joinBottom"
-              >
-                For the sake of accessibility, or just your personal preference.
-              </InfoBubble>
-            </div>
-          </Card>
+      <div className="tab-content">
+        {/* --- THEMES TAB --- */}
+        {activeMainTab === "themes" && (
+          <div className="fade show active">
+            <PageHeader
+              title="Themes"
+              subtitle="Pick a theme for Harmony from our amazing collection below."
+              className="joinMiddle pb-3 metro-anim-list-item delay-2"
+            />
 
-          <Card className="joinMiddle metro-anim-list-item delay-3" title="Pick a wallpaper">
-            <div className="settings-group">
-              <Dropdown
-                value={wallpaperTheme}
-                onChange={setWallpaperTheme}
-                options={wallpaperOptions}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="photo_prints"
-                title="Pick a background. Our backgrounds are stunning."
-                className="joinBottom"
-              >
-                All our background photos were taken by us. We took the light
-                mode photos, and Google Gemini generated dark mode versions of
-                them, for Harmony.
-              </InfoBubble>
-            </div>
-          </Card>
+            <Row className="g-1">
+              <Col size={12}>
+                <Card className="joinMiddle metro-anim-list-item delay-3 text-start" title="Landscape collection">
+                  <p className="text-start" style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+                    Beautiful wallpapers paired with our signature glass effect and dynamic colors.
+                  </p>
 
-          <Card className="joinBottomLeft metro-anim-list-item delay-4" title="Wallpaper time-of-day">
-            <div className="settings-group">
-              <Dropdown
-                value={darkModePref}
-                onChange={setDarkModePref}
-                options={wallpaperModeOptions}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="brightness_4"
-                title="Pick a colour of wallpaper."
-                className="joinBottom"
-              >
-                We have a colour of wallpaper for day or night. And you get the
-                choice. Have us change the mode automatically with your app
-                theme, or manually set it yourself. Fully up to you.
-              </InfoBubble>
-            </div>
-          </Card>
-        </Col>
+                  <div
+                    className="translucentAboutBox d-flex overflow-auto py-3"
+                    style={{
+                      scrollSnapType: "x mandatory",
+                      gap: "12px",
+                      msOverflowStyle: "none",
+                      scrollbarWidth: "none",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      scrollPaddingLeft: "16px"
+                    }}
+                  >
+                    {glassThemes.map((theme) => {
+                      const isActive = backgroundEnabled && wallpaperTheme === theme.value;
+                      return (
+                        <div
+                          key={theme.value}
+                          className="flex-shrink-0 text-center"
+                          style={{ width: "120px", scrollSnapAlign: "start" }}
+                          onClick={() => handleGlassThemeSelect(theme.value)}
+                        >
+                          <div
+                            style={{
+                              height: "160px",
+                              borderRadius: "var(--radius-card)",
+                              backgroundColor: "var(--secondaryContainer)",
+                              backgroundImage: getThumbnailUrl(theme.value),
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              border: isActive ? "3px solid var(--primary)" : "1px solid transparent",
+                              cursor: "pointer",
+                              transition: "all 0.2s"
+                            }}
+                          />
+                          <span className="d-block mt-2" style={{ fontSize: "0.85rem" }}>
+                            {theme.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Card>
 
-        {/*Right column*/}
-        <Col size={12} md={6}>
-          <Card className="rightColJoinTop metro-anim-list-item delay-5">
-            <div className="settings-group">
-              <Switch
-                label="Dynamic colour"
-                checked={effectiveAuto}
-                onChange={setAutoColor}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="colors"
-                title="Turn on or off the dynamic wallpaper colours."
-                className="joinBottom"
-              >
-                This allows you to use a basic default colour scheme, and
-                disable the colours which match the wallpapers, or use wallpaper-matching colours.
-              </InfoBubble>
-            </div>
-          </Card>
+                <Card className="joinBottom metro-anim-list-item delay-4" title="Basic colours">
+                  <p className="text-start" style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+                    Clean, distraction-free basic color schemes.
+                  </p>
 
-          <Card className="joinMiddle metro-anim-list-item delay-6" title="Basic colours">
-            <div className="settings-group">
-              <Dropdown
-                value={genericColor}
-                onChange={setGenericColor}
-                options={genericColourOptions}
-                disabled={effectiveAuto}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="colorize"
-                title="Pick a basic colour."
-                className="joinBottom"
-              >
-                To pick a basic colour, please disable dynamic wallpaper colours
-                to enjoy our very boring basic-ahh colours.
-              </InfoBubble>
-            </div>
-          </Card>
+                  <div
+                    className="translucentAboutBox d-flex overflow-auto py-3"
+                    style={{
+                      scrollSnapType: "x mandatory",
+                      gap: "12px",
+                      msOverflowStyle: "none",
+                      scrollbarWidth: "none",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      scrollPaddingLeft: "16px"
+                    }}
+                  >
+                    {plainThemes.map((theme) => {
+                      const isActive = !backgroundEnabled && genericColor === theme.value;
+                      return (
+                        <div
+                          key={theme.value}
+                          className="flex-shrink-0 text-center"
+                          style={{ width: "120px", scrollSnapAlign: "start" }}
+                          onClick={() => handlePlainThemeSelect(theme.value)}
+                        >
+                          <div
+                            style={{
+                              height: "160px",
+                              borderRadius: "var(--radius-card)",
+                              backgroundColor: theme.preview,
+                              border: isActive ? "3px solid var(--onBackground)" : "1px solid var(--outline)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                              transition: "all 0.2s"
+                            }}
+                          >
+                            {isActive && (
+                              <span className="material-symbols-rounded fs-1" style={{ color: "var(--background)", textShadow: "0px 2px 5px rgba(0,0,0,0.2)" }}>
+                                check_circle
+                              </span>
+                            )}
+                          </div>
+                          <span className="d-block mt-2 fw-bold" style={{ fontSize: "0.85rem" }}>
+                            {theme.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        )}
 
-          <Card className="joinBottomRight metro-anim-list-item delay-7" title="Glass and transparency">
-            <div className="settings-group">
-              <Switch
-                label="Glass"
-                checked={acrylicEnabled}
-                onChange={setAcrylicEnabled}
-                disabled={!backgroundEnabled}
-                className="joinTop"
-              />
-              <InfoBubble
-                icon="blur_on"
-                title="Turn glass on or off."
-                className="joinBottom"
-              >
-                Glass is the beautiful effect used throughout Harmony.
-                It's our spiritual tribute to beautiful UI designs the '00s, and
-                stands out amoungst the rather dull and plain designs used in
-                today's apps. Find out more on our HiMaterial page.
-                <MenuActionBtn
-                  icon="open_in_new"
-                  text="HiMaterial page"
-                  className="mt-3"
-                  onClick={() =>
-                    openExternalLink(
-                      "https://hienterprises.github.io/#/hiosmobile/himaterial",
-                    )
-                  }
-                />
-              </InfoBubble>
-            </div>
-          </Card>
-        </Col>
-      </Row>
+        {/* --- ADVANCED TAB --- */}
+        {activeMainTab === "advanced" && (
+          <div className="fade show active">
+            <PageHeader
+              title="Advanced"
+              subtitle="Further customise the look and feel of Harmony to your taste below."
+              className="joinMiddle pb-3 metro-anim-list-item delay-2"
+            />
+
+            <Row className="g-1">
+              <Col size={12} md={6}>
+                <Card className="joinMiddle metro-anim-list-item delay-3" title="Wallpaper time-of-day">
+                  <div className="settings-group">
+                    <Dropdown
+                      value={darkModePref}
+                      onChange={setDarkModePref}
+                      options={wallpaperModeOptions}
+                      disabled={!backgroundEnabled}
+                      className="joinTop"
+                    />
+                    <InfoBubble
+                      icon="brightness_4"
+                      title="Pick a colour of wallpaper."
+                      className="joinBottom"
+                    >
+                      We have a colour of wallpaper for day or night. Have us change the mode automatically with your app theme, or manually set it yourself.
+                    </InfoBubble>
+                  </div>
+                </Card>
+
+                <Card className="joinBottomLeft metro-anim-list-item delay-4" title="Glass and transparency">
+                  <div className="settings-group">
+                    <Switch
+                      label="Glass"
+                      checked={acrylicEnabled}
+                      onChange={setAcrylicEnabled}
+                      disabled={!backgroundEnabled}
+                      className="joinTop"
+                    />
+                    <InfoBubble
+                      icon="blur_on"
+                      title="Turn glass on or off."
+                      className="joinBottom"
+                    >
+                      Glass is the beautiful effect used throughout Harmony. It stands out amongst the rather dull and plain designs used in today's apps.
+                      <MenuActionBtn
+                        icon="open_in_new"
+                        text="HiMaterial page"
+                        className="mt-3"
+                        onClick={() => openExternalLink("https://hienterprises.github.io/#/hiosmobile/himaterial")}
+                      />
+                    </InfoBubble>
+                  </div>
+                </Card>
+              </Col>
+
+              <Col size={12} md={6}>
+                <Card
+                  className={`${!effectiveAuto ? "rightColJoinTop" : "joinBottomRight"} metro-anim-list-item delay-5`}
+                  title="Colours"
+                >
+                  <div className="settings-group">
+                    <Switch
+                      label="Enable basic colours"
+                      checked={!effectiveAuto}
+                      onChange={(checked) => setAutoColor(!checked)}
+                      disabled={!backgroundEnabled}
+                      className="joinTop"
+                    />
+                    <InfoBubble
+                      icon="colors"
+                      title="Turn off dynamic wallpaper colours."
+                      className="joinBottom"
+                    >
+                      Toggle this on if you want to turn off the matching wallpaper colours and use a basic static color scheme instead.
+                    </InfoBubble>
+                  </div>
+                </Card>
+
+                {/* Only renders when Bypass is toggled ON */}
+                {!effectiveAuto && (
+                  <Card className="joinBottomRight metro-anim-list-item delay-6" title="Basic colours">
+                    <div className="settings-group">
+                      <Dropdown
+                        value={genericColor}
+                        onChange={setGenericColor}
+                        options={genericColourOptions}
+                        className="joinTop"
+                      />
+                      <InfoBubble
+                        icon="colorize"
+                        title="Pick a basic colour."
+                        className="joinBottom"
+                      >
+                        Pick the basic colour you want to use when dynamic colours are bypassed.
+                      </InfoBubble>
+                    </div>
+                  </Card>
+                )}
+              </Col>
+            </Row>
+          </div>
+        )}
+      </div>
     </main>
   );
 }
