@@ -13,12 +13,12 @@ export default function PrivacyPolicy() {
   return (
     <main className="container mt-4 mb-5">
       <PageHeader
-        title="Privacy Policy"
+        title="Privacy"
         subtitle="Take a look at how we process your personal data below."
-        className="pb-3 joinTop"
+        className="pb-3 joinTop delay-1 metro-anim-list-item"
       />
 
-      <Card className="joinBottom" bodyClass="text-start p-4">
+      <Card className="joinBottom d-none" bodyClass="text-start p-4">
         <h6 className="mb-4">
           <b>Last Updated:</b> April 8th, 2025
         </h6>
@@ -139,6 +139,13 @@ export default function PrivacyPolicy() {
             role="button"
           />
         </div>
+      </Card>
+
+      <Card className="joinBottom delay-2 metro-anim-list-item text-start">
+        <h3>
+          How we process your details
+        </h3>
+        <p>We do not share your personal information or details with anyone. Your account details are safely stored on servers owned by Google, and neither us nor Google can view your full name or password.<br /><br />Your synced settings preferences are also anonymised so that your preferences cannot be personally linked to you.<br /><br />This is the end of the Harmony privacy policy.</p>
       </Card>
     </main>
   );

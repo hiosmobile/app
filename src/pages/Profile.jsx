@@ -195,10 +195,10 @@ export default function Profile() {
               />
             </Card>
 
-            <Card title="Customisation" className="joinMiddle metro-anim-list-item delay-5">
+            <Card title="Customise Harmony" className="joinMiddle metro-anim-list-item delay-5">
               <MenuActionBtn
                 icon="palette"
-                text="Look and feel"
+                text="Themes"
                 className="joinTop"
                 onClick={() => navigate("/settings/appearance")}
               />
@@ -225,7 +225,7 @@ export default function Profile() {
               />
               <MenuActionBtn
                 icon="security"
-                text="Privacy policy"
+                text="Privacy"
                 className="joinBottom"
                 onClick={() => navigate("/settings/privacy")}
               />

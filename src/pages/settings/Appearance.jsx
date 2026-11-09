@@ -72,7 +72,7 @@ export default function Appearance() {
       <Row>
         <Col size={12}>
           <PageHeader
-            title="Look and feel"
+            title="Themes"
             subtitle="Customise the look and feel of Harmony to your taste below."
             className="pb-3 joinTop metro-anim-list-item delay-1"
           />

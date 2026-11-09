@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { MenuActionBtn } from "./HiMaterial";
+import { InfoBubble, MenuActionBtn } from "./HiMaterial";
 
-export default function FabMenu({ isOpen, onClose }) {
+export default function FabMenu({ isOpen, onClose, onEditDashboard }) {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
     onClose();
     setTimeout(() => {
       navigate(path);
+    }, 300);
+  };
+
+  const handleEditDashboard = () => {
+    onClose();
+    setTimeout(() => {
+      if (onEditDashboard) onEditDashboard();
     }, 300);
   };
 
@@ -22,7 +29,7 @@ export default function FabMenu({ isOpen, onClose }) {
         <div className="bottom-sheet-drag-handle" />
 
         <div className="bottom-sheet-header">
-          <h2 className="blue-h2">Menu</h2>
+          <h2 className="blue-h2">Customise</h2>
           <button className="close-button" onClick={onClose}>
             <i
               className="material-symbols-rounded"
@@ -35,25 +42,24 @@ export default function FabMenu({ isOpen, onClose }) {
 
         <div className="sheet-content">
           <MenuActionBtn
-            icon="settings"
-            text="Settings"
+            icon="dashboard_customize"
+            text="Edit widgets"
             className="joinTop"
-            onClick={() => handleNavigation("/settings")}
+            onClick={handleEditDashboard}
           />
+          <InfoBubble title="Tweak what's shown on your dashboard." className="joinBottom">
+            This means you can tailor your dash to make the info more relevant to you.
+          </InfoBubble>
 
           <MenuActionBtn
-            icon="help"
-            text="Help"
-            className="joinMiddle"
-            onClick={() => handleNavigation("/help")}
+            icon="palette"
+            text="Themes"
+            className="joinTop"
+            onClick={() => handleNavigation("/settings/appearance")}
           />
-
-          <MenuActionBtn
-            icon="feedback"
-            text="Send feedback"
-            className="joinBottom"
-            onClick={() => handleNavigation("/help/feedback")}
-          />
+          <InfoBubble title="Change Harmony's appearance." className="joinBottom">
+            You can change your wallpaper, colour, and glass preferences here.
+          </InfoBubble>
         </div>
       </div>
     </>

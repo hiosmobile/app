@@ -3,9 +3,8 @@ import { createPortal } from "react-dom";
 import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../src/firebase"; 
 import { useAuth } from "../../../src/AuthContext"; 
-import { RippleButton, InfoBubble, Modal, TextInput, Dropdown } from "../../HiMaterial";
+import { RippleButton, InfoBubble, Modal, TextInput, Dropdown } from "../../../components/HiMaterial"; // Adjusted to match your HiCafe imports
 
-// Accept targetCollection as a prop
 export default function MyActivity({ targetCollection }) {
   const { currentUser } = useAuth();
   const [activities, setActivities] = useState([]);
@@ -14,7 +13,8 @@ export default function MyActivity({ targetCollection }) {
   const [editingItem, setEditingItem] = useState(null);
   const [editForm, setEditForm] = useState({ 
     dateBooked: "", timeBooked: "", peopleCount: 1, 
-    menu: "", foodItems: "", drinkItems: "", tableNumber: "" 
+    menu: "", foodItems: "", drinkItems: "", tableNumber: "",
+    roomNo: "", breakfastType: [], specialRequest: ""
   });
 
   const menus = [
@@ -22,11 +22,19 @@ export default function MyActivity({ targetCollection }) {
     "Desserts", "Children's", "Specials", "Gourmet"
   ].map(m => ({ label: m, value: m }));
 
+  const breakfastOptions = [
+    "Continental breakfast",
+    "Cooked breakfast",
+    "Breakfast rolls",
+    "Other"
+  ];
+
   const fetchMyActivity = async () => {
-    if (!targetCollection) return; // Guard clause
+    if (!currentUser || !targetCollection) return;
     
     setLoading(true);
     try {
+      // Query ONLY the collection passed in via the targetCollection prop
       const q = query(
         collection(db, targetCollection),
         where("email", "==", currentUser.email)
@@ -35,7 +43,6 @@ export default function MyActivity({ targetCollection }) {
       const snapshot = await getDocs(q);
       const fetched = [];
       snapshot.forEach((document) => {
-        // Tag it with the targetCollection so the edit modal knows how to render
         fetched.push({ id: document.id, type: targetCollection, ...document.data() });
       });
       
@@ -49,14 +56,15 @@ export default function MyActivity({ targetCollection }) {
     }
   };
 
+  // Re-fetch automatically if the prop changes
   useEffect(() => {
-    if (currentUser) fetchMyActivity();
-  }, [currentUser, targetCollection]); // Re-fetch if the prop changes
+    fetchMyActivity();
+  }, [currentUser, targetCollection]); 
 
   const handleCancel = async (item) => {
     if (window.confirm("Are you sure you want to cancel this?")) {
       try {
-        await deleteDoc(doc(db, item.type, item.id));
+        await deleteDoc(doc(db, targetCollection, item.id));
         setActivities(prev => prev.filter(a => a.id !== item.id));
       } catch (err) {
         alert("Could not cancel item.");
@@ -64,24 +72,45 @@ export default function MyActivity({ targetCollection }) {
     }
   };
 
+  const handleCheckboxChange = (option) => {
+    setEditForm(prev => {
+      const currentTypes = prev.breakfastType;
+      if (currentTypes.includes(option)) {
+        return { ...prev, breakfastType: currentTypes.filter(item => item !== option) };
+      } else {
+        return { ...prev, breakfastType: [...currentTypes, option] };
+      }
+    });
+  };
+
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     try {
-      const docRef = doc(db, editingItem.type, editingItem.id);
-      
-      // Build the payload dynamically based on what type of order it is
-      const payload = editingItem.type === "restaurant_bookings" 
-        ? {
+      const docRef = doc(db, targetCollection, editingItem.id);
+      let payload = {};
+
+      if (targetCollection === "restaurant_bookings") {
+        payload = {
             dateBooked: editForm.dateBooked,
             timeBooked: editForm.timeBooked,
             peopleCount: Number(editForm.peopleCount)
-          }
-        : {
+        };
+      } else if (targetCollection === "restaurant_orders") {
+        payload = {
             menu: editForm.menu,
             foodItems: editForm.foodItems,
             drinkItems: editForm.drinkItems,
             tableNumber: editForm.tableNumber
-          };
+        };
+      } else if (targetCollection === "breakfast_checkin") {
+        payload = {
+            date: editForm.dateBooked, 
+            time: editForm.timeBooked,
+            roomNumber: editForm.roomNo,
+            breakfastType: editForm.breakfastType,
+            additionalNotes: editForm.breakfastType.includes("Other") ? editForm.specialRequest : ""
+        };
+      }
 
       await updateDoc(docRef, payload);
       setEditingItem(null);
@@ -93,13 +122,16 @@ export default function MyActivity({ targetCollection }) {
 
   const openEditModal = (item) => {
     setEditForm({
-      dateBooked: item.dateBooked || "",
-      timeBooked: item.timeBooked || "",
+      dateBooked: item.dateBooked || item.date || "",
+      timeBooked: item.timeBooked || item.time || "",
       peopleCount: item.peopleCount || 1,
       menu: item.menu || "Breakfast",
       foodItems: item.foodItems || "",
       drinkItems: item.drinkItems || "",
-      tableNumber: item.tableNumber || ""
+      tableNumber: item.tableNumber || "",
+      roomNo: item.roomNumber || "",
+      breakfastType: item.breakfastType || [],
+      specialRequest: item.additionalNotes || ""
     });
     setEditingItem(item);
   };
@@ -118,7 +150,7 @@ export default function MyActivity({ targetCollection }) {
     return (
       <div className="text-center mt-4 mb-3 opacity-50">
         <span className="material-symbols-rounded fs-1 mb-2">inbox</span>
-        <p>You have no recent activity.</p>
+        <p>You have no recent {targetCollection === "restaurant_bookings" ? "bookings" : (targetCollection === "restaurant_orders" ? "orders" : "check-ins")}.</p>
       </div>
     );
   }
@@ -126,12 +158,25 @@ export default function MyActivity({ targetCollection }) {
   return (
     <div className="d-flex flex-column gap-3 mt-2">
       {activities.map((item) => {
-        const isBooking = item.type === "restaurant_bookings";
-        const isPast = isBooking ? isPastBooking(item.dateBooked, item.timeBooked) : false;
+        const isBooking = targetCollection === "restaurant_bookings";
+        const isOrder = targetCollection === "restaurant_orders";
+        const isBreakfast = targetCollection === "breakfast_checkin";
         
-        // Use different icons and titles based on the type
-        const icon = isBooking ? "table_restaurant" : "room_service";
-        const title = isBooking ? `Table at ${item.restaurant}` : `Food Order at ${item.restaurant}`;
+        const isPast = (isBooking || isBreakfast) ? isPastBooking(item.dateBooked || item.date, item.timeBooked || item.time) : false;
+        
+        let icon = "room_service";
+        let title = "Kitchen Order";
+        let subtitle = "Order details";
+        
+        if (isBooking) {
+            icon = "table_restaurant";
+            title = `Table at ${item.restaurant || "The Highland Cafe"}`;
+            subtitle = "Reservation";
+        } else if (isBreakfast) {
+            icon = "free_breakfast";
+            title = "Breakfast Check-in";
+            subtitle = `Room ${item.roomNumber || "Unknown"}`;
+        }
 
         return (
           <div key={item.id} className="position-relative">
@@ -139,21 +184,21 @@ export default function MyActivity({ targetCollection }) {
               
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <span className="fw-bold opacity-75" style={{ fontSize: "0.85rem", textTransform: "uppercase" }}>
-                  {isBooking ? "Reservation" : "Kitchen Order"}
+                  {subtitle}
                 </span>
                 <span 
                   className="badge rounded-pill" 
                   style={{ 
-                    backgroundColor: item.status === "pending" ? "var(--secondaryContainer)" : "var(--tertiaryContainer)", 
-                    color: item.status === "pending" ? "var(--onSecondaryContainer)" : "var(--onTertiaryContainer)" 
+                    backgroundColor: (item.status === "pending" || !item.status) ? "var(--secondaryContainer)" : "var(--tertiaryContainer)", 
+                    color: (item.status === "pending" || !item.status) ? "var(--onSecondaryContainer)" : "var(--onTertiaryContainer)" 
                   }}
                 >
-                  {item.status}
+                  {item.status || "pending"}
                 </span>
               </div>
 
-              {/* Conditional Data Display */}
-              {isBooking ? (
+              {/* Conditional Data Display Based on targetCollection */}
+              {isBooking && (
                 <>
                   <p className="mb-1 fw-bold" style={{ fontSize: "0.95rem" }}>
                     {item.dateBooked} at {item.timeBooked}
@@ -162,7 +207,20 @@ export default function MyActivity({ targetCollection }) {
                     Table for {item.peopleCount} {item.peopleCount === 1 ? "person" : "people"}
                   </p>
                 </>
-              ) : (
+              )}
+              
+              {isBreakfast && (
+                <>
+                  <p className="mb-1 fw-bold" style={{ fontSize: "0.95rem" }}>
+                    {item.date} at {item.time}
+                  </p>
+                  <p className="mb-2 opacity-75" style={{ fontSize: "0.85rem" }}>
+                    Choices: {Array.isArray(item.breakfastType) ? item.breakfastType.join(", ") : item.breakfastType}
+                  </p>
+                </>
+              )}
+
+              {isOrder && (
                 <>
                   {item.tableNumber && <p className="mb-1 fw-bold" style={{ fontSize: "0.95rem" }}>Table {item.tableNumber}</p>}
                   {item.foodItems && item.foodItems !== "None" && <p className="mb-1" style={{ fontSize: "0.85rem" }}><strong>Food:</strong> {item.foodItems}</p>}
@@ -171,7 +229,7 @@ export default function MyActivity({ targetCollection }) {
               )}
 
               {/* Action Buttons */}
-              {!isPast && item.status === "pending" ? (
+              {!isPast && (item.status === "pending" || !item.status) ? (
                 <div className="d-flex gap-2 mt-2 pt-2 border-top border-secondary border-opacity-25">
                   <RippleButton 
                     type="button"
@@ -192,7 +250,7 @@ export default function MyActivity({ targetCollection }) {
                 </div>
               ) : (
                 <p className="text-end mb-0 mt-2 pt-2 border-top border-secondary border-opacity-25 opacity-50 fw-bold" style={{ fontSize: "0.75rem" }}>
-                  {item.status !== "pending" ? "This order is being processed and cannot be altered." : "This booking has passed."}
+                  {item.status && item.status !== "pending" ? "This item is being processed and cannot be altered." : "This booking has passed."}
                 </p>
               )}
             </InfoBubble>
@@ -205,13 +263,13 @@ export default function MyActivity({ targetCollection }) {
         <Modal 
           isOpen={!!editingItem} 
           onClose={() => setEditingItem(null)} 
-          title={editingItem?.type === "restaurant_bookings" ? "Edit Booking" : "Edit Order"}
+          title={targetCollection === "restaurant_bookings" ? "Edit Booking" : (targetCollection === "breakfast_checkin" ? "Edit Breakfast Check-in" : "Edit Order")}
           appName="hi cafe"
         >
           <form onSubmit={handleSaveEdit} className="d-flex flex-column gap-3 text-start mt-2">
             
             {/* BOOKING INPUTS */}
-            {editingItem?.type === "restaurant_bookings" && (
+            {targetCollection === "restaurant_bookings" && (
               <>
                 <div>
                   <label className="form-check-label mb-1 fw-bold">Date</label>
@@ -228,8 +286,57 @@ export default function MyActivity({ targetCollection }) {
               </>
             )}
 
+            {/* BREAKFAST CHECKIN INPUTS */}
+            {targetCollection === "breakfast_checkin" && (
+              <>
+                <div>
+                  <label className="form-check-label mb-1 fw-bold">Room</label>
+                  <TextInput type="text" className="full-btn" required value={editForm.roomNo} onChange={(e) => setEditForm({...editForm, roomNo: e.target.value})} />
+                </div>
+                <div>
+                  <label className="form-check-label mb-1 fw-bold">Date</label>
+                  <TextInput type="date" className="full-btn" min={today} required value={editForm.dateBooked} onChange={(e) => setEditForm({...editForm, dateBooked: e.target.value})} />
+                </div>
+                <div>
+                  <label className="form-check-label mb-1 fw-bold">Time</label>
+                  <TextInput type="time" className="full-btn" required value={editForm.timeBooked} onChange={(e) => setEditForm({...editForm, timeBooked: e.target.value})} />
+                </div>
+                <div>
+                    <label className="form-check-label mb-2 fw-bold">What kind of breakfast?</label>
+                    <div className="d-flex flex-column gap-2 ms-2 mt-1">
+                        {breakfastOptions.map(option => (
+                        <div key={option} className="d-flex flex-column gap-1">
+                            <label className="d-flex align-items-center gap-2" style={{ cursor: "pointer" }}>
+                            <input
+                                type="checkbox"
+                                value={option}
+                                checked={editForm.breakfastType.includes(option)}
+                                onChange={() => handleCheckboxChange(option)}
+                                style={{ width: "20px", height: "20px", accentColor: "var(--primary)" }}
+                            />
+                            <span style={{ fontSize: "1rem" }}>{option}</span>
+                            </label>
+                            
+                            {/* Dynamically render text input if 'Other' is checked */}
+                            {option === "Other" && editForm.breakfastType.includes("Other") && (
+                            <TextInput
+                                className="full-btn mt-1"
+                                type="text"
+                                placeholder="Specify request"
+                                value={editForm.specialRequest}
+                                onChange={(e) => setEditForm({...editForm, specialRequest: e.target.value})}
+                                style={{ width: "calc(100% - 28px)", marginLeft: "28px" }}
+                            />
+                            )}
+                        </div>
+                        ))}
+                    </div>
+                </div>
+              </>
+            )}
+
             {/* FOOD ORDER INPUTS */}
-            {editingItem?.type === "restaurant_orders" && (
+            {targetCollection === "restaurant_orders" && (
               <>
                 <div>
                   <label className="form-check-label mb-1 fw-bold">Table Number</label>

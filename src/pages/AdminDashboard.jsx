@@ -16,18 +16,17 @@ export default function AdminDashboard() {
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [showHidden, setShowHidden] = useState(false); 
   
-  // New state to manage the custom delete modal
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const ADMIN_EMAIL = "jefaar80@gmail.com";
 
   const tabs = [
-    { id: "restaurant_bookings", label: "Table Bookings" },
-    { id: "restaurant_orders", label: "Food Orders" },
-    { id: "breakfast_checkin", label: "Breakfast Check-in" },
-    { id: "hotel_bookings", label: "Hotel Bookings" },
-    { id: "hotel_checkin", label: "Hotel Check-in" },
-    { id: "hotel_checkout", label: "Hotel Check-out" }
+    { id: "restaurant_bookings", label: "Table bookings" },
+    { id: "restaurant_orders", label: "Food orders" },
+    { id: "breakfast_checkin", label: "Breakfast check-in" },
+    { id: "hotel_bookings", label: "weB&B bookings" },
+    { id: "hotel_checkin", label: "weB&B check-in" },
+    { id: "hotel_checkout", label: "weB&B check-out" }
   ];
 
   useEffect(() => {
@@ -68,17 +67,15 @@ export default function AdminDashboard() {
     }
   };
 
-  // Opens the custom modal instead of a browser popup
   const handleDeleteClick = (docId) => {
     setItemToDelete(docId);
   };
 
-  // Executes the deletion when confirmed inside the modal
   const confirmDelete = async () => {
     if (!itemToDelete) return;
     try {
       await deleteDoc(doc(db, activeTab, itemToDelete));
-      setItemToDelete(null); // Close modal on success
+      setItemToDelete(null); 
     } catch (err) {
       console.error("Failed to delete record: ", err);
       alert("Network error. Could not delete record.");
@@ -155,7 +152,7 @@ export default function AdminDashboard() {
                   value={locationFilter} 
                   onChange={(val) => setLocationFilter(val)} 
                   className="mb-0" 
-                  disabled={dataList.length === 0}
+                  disabled={dataList.length === 0 || uniqueLocations.length === 1}
                   style={{ margin: 0 }}
                 />
               </div>
@@ -198,23 +195,25 @@ export default function AdminDashboard() {
               filteredList.map((item, index) => {
                 const isLast = index === filteredList.length - 1;
                 const joinClass = isLast ? "joinBottom" : "joinMiddle";
-                
                 const badgeStyle = getBadgeColors(item.status);
                 const delayNum = Math.min(index + 4, 10);
 
-                const displayDate = item.dateBooked || (item.createdAt ? new Date(item.createdAt.toDate()).toLocaleDateString() : "N/A");
-                const displayTime = item.timeBooked ? ` at ${item.timeBooked}` : "";
+                // Unified Data Mapping
+                const displayDate = item.dateBooked || item.date || (item.createdAt ? new Date(item.createdAt.toDate()).toLocaleDateString() : "N/A");
+                const displayTime = item.timeBooked || item.time ? ` at ${item.timeBooked || item.time}` : "";
+                const displayName = (item.firstName && item.lastName) ? `${item.firstName} ${item.lastName}` : (item.lastName || item.customerName || "Submission");
+                const displayLocation = item.restaurant || item.location || (item.roomNumber ? `Room ${item.roomNumber}` : activeTab.replace("_", " "));
 
                 return (
                   <Card key={item.id} className={`${joinClass} text-start metro-anim-list-item delay-${delayNum}`} bodyClass="p-3">
                     
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
-                        <h2 className="blue-h3 m-0" style={{ fontSize: "1.5rem" }}>
-                          {item.lastName || item.customerName || "Submission"}
+                        <h2 className="blue-h3 m-0" style={{ fontSize: "1.5rem", textTransform: "capitalize" }}>
+                          {displayName}
                         </h2>
-                        <p className="mb-0 opacity-75 fw-bold" style={{ fontSize: "0.9rem" }}>
-                          {item.restaurant || item.location || activeTab.replace("_", " ")}
+                        <p className="mb-0 opacity-75 fw-bold" style={{ fontSize: "0.9rem", textTransform: "capitalize" }}>
+                          {displayLocation}
                         </p>
                       </div>
                       <span 
@@ -227,7 +226,7 @@ export default function AdminDashboard() {
                           textTransform: "lowercase"
                         }}
                       >
-                        {item.status}
+                        {item.status || "pending"}
                       </span>
                     </div>
 
@@ -239,23 +238,38 @@ export default function AdminDashboard() {
                       </Col>
                       <Col size={6}>
                         <InfoBubble 
-                          icon={item.tableNumber ? "table_restaurant" : "mail"} 
-                          title={item.tableNumber ? "Table & Guests" : "Contact Email"} 
+                          icon={item.roomNumber ? "meeting_room" : (item.tableNumber ? "table_restaurant" : "mail")} 
+                          title={item.roomNumber ? "Room Details" : (item.tableNumber ? "Table & Guests" : "Contact Email")} 
                           className="joinRight h-100 m-0"
                         >
-                          {item.tableNumber ? `Table ${item.tableNumber} (${item.peopleCount ? `${item.peopleCount} pax` : "Size unknown"})` : (item.email || "No email")}
+                          {item.roomNumber 
+                            ? `Room ${item.roomNumber} (${item.peopleCount ? `${item.peopleCount} pax` : "1+ pax"})` 
+                            : (item.tableNumber 
+                                ? `Table ${item.tableNumber} (${item.peopleCount ? `${item.peopleCount} pax` : "Size unknown"})` 
+                                : (item.email || "No email provided")
+                              )
+                          }
                         </InfoBubble>
                       </Col>
                     </Row>
 
-                    {(item.foodItems || item.drinkItems || item.menu || item.additionalNotes || (item.allergens && item.allergens !== "No")) && (
-                      <InfoBubble icon="room_service" title="Order Details" className="full m-0 mb-2">
+                    {/* Unified Order / Preferences Details */}
+                    {(item.foodItems || item.drinkItems || item.menu || item.additionalNotes || item.breakfastType || (item.allergens && item.allergens !== "No")) && (
+                      <InfoBubble icon="room_service" title={activeTab === "breakfast_checkin" ? "Breakfast Preferences" : "Order Details"} className="full m-0 mb-2">
                         <div className="text-start">
+                          
+                          {/* Breakfast Check-in Array Support */}
+                          {item.breakfastType && Array.isArray(item.breakfastType) && (
+                            <p className="mb-1" style={{ fontSize: "0.95rem" }}><strong>Choices:</strong> {item.breakfastType.join(", ")}</p>
+                          )}
+                          
+                          {/* Standard Restaurant Order Support */}
                           {item.menu && <p className="mb-1" style={{ fontSize: "0.95rem" }}><strong>Menu:</strong> {item.menu}</p>}
                           {item.foodItems && item.foodItems !== "None" && <p className="mb-1" style={{ fontSize: "0.95rem" }}><strong>Food:</strong> {item.foodItems}</p>}
                           {item.drinkItems && item.drinkItems !== "None" && <p className="mb-1" style={{ fontSize: "0.95rem" }}><strong>Drinks:</strong> {item.drinkItems}</p>}
                           {item.additionalNotes && <p className="mb-1" style={{ fontSize: "0.95rem" }}><strong>Notes:</strong> {item.additionalNotes}</p>}
                           
+                          {/* Allergens Warning */}
                           {item.allergens && item.allergens !== "None" && item.allergens !== "No" && (
                             <span className="text-danger fw-bold d-flex align-items-center mt-2" style={{ fontSize: "0.95rem" }}>
                               <span className="material-symbols-rounded me-1" style={{ fontSize: "18px" }}>warning</span>
@@ -266,7 +280,7 @@ export default function AdminDashboard() {
                       </InfoBubble>
                     )}
 
-                    <div className="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                    <div className="d-flex justify-content-between align-items-center mt-2 pt-2">
                       <button 
                         className="btn btn-link text-danger p-0 d-flex align-items-center" 
                         style={{ textDecoration: "none", fontSize: "0.85rem", opacity: 0.8 }}
@@ -277,7 +291,7 @@ export default function AdminDashboard() {
                       </button>
 
                       <div className="d-flex gap-2">
-                        {item.status === "pending" && (
+                        {(!item.status || item.status === "pending") && (
                           <>
                             <RippleButton 
                               className="navButtonInactive m-0" 
@@ -318,7 +332,6 @@ export default function AdminDashboard() {
         </Row>
       </main>
 
-      {/* HiMaterial Custom Delete Confirmation Modal */}
       <Modal 
         isOpen={!!itemToDelete} 
         onClose={() => setItemToDelete(null)} 

@@ -19,6 +19,7 @@ import frameImg from "../assets/media/frame.png";
 import { useAuth } from "../AuthContext";
 import { db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import FabMenu from "../../components/FabMenu";
 
 const WIDGET_REGISTRY = {
   rewardsCode: {
@@ -62,6 +63,7 @@ export default function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [addModalTarget, setAddModalTarget] = useState(null);
   const [activeApp, setActiveApp] = useState(null);
+  const [isFabOpen, setIsFabOpen] = useState(false);
 
   const name = currentUser?.displayName?.split(" ")[0] || "Harmony User";
   const membershipCode = currentUser?.uid
@@ -167,64 +169,64 @@ export default function Home() {
   );
 
   const renderWidgetContent = (id, combinedClass) => {
-      switch (id) {
-        case "rewardsCode":
-          return (
-            <div
-              className="m-0 p-0"
-              onClick={() => openApp("rewardsCode")}
-              style={{ cursor: isEditing ? "default" : "pointer" }}
-            >
-              <RewardsCodeWidget
-                code={membershipCode}
-                imageSrc={frameImg}
-                className={combinedClass}
-              />
-            </div>
-          );
-
-        case "progress":
-          return <ProgressWidget className={combinedClass} />;
-
-        case "weather":
-          return (
-            <div
-              className="m-0 p-0"
-              onClick={() => openApp("weather")}
-              style={{ cursor: isEditing ? "default" : "pointer" }}
-            >
-              <Card className={`${combinedClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
-                <WeatherWidget isExpanded={false} />
-              </Card>
-            </div>
-          );
-
-        case "calendar":
-          return (
-            <div
-              className="m-0 p-0"
-              onClick={() => openApp("calendar")}
-              style={{ cursor: isEditing ? "default" : "pointer" }}
-            >
-              <Card className={`${combinedClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
-                <DateWidget isExpanded={false} />
-              </Card>
-            </div>
-          );
-
-        case "quickActions":
-          return (
-            <QuickActionsWidget
-              isEditing={isEditing}
-              currentUser={currentUser}
+    switch (id) {
+      case "rewardsCode":
+        return (
+          <div
+            className="m-0 p-0"
+            onClick={() => openApp("rewardsCode")}
+            style={{ cursor: isEditing ? "default" : "pointer" }}
+          >
+            <RewardsCodeWidget
+              code={membershipCode}
+              imageSrc={frameImg}
               className={combinedClass}
             />
-          );
+          </div>
+        );
 
-        default:
-          return null;
-      }
-    };
+      case "progress":
+        return <ProgressWidget className={combinedClass} />;
+
+      case "weather":
+        return (
+          <div
+            className="m-0 p-0"
+            onClick={() => openApp("weather")}
+            style={{ cursor: isEditing ? "default" : "pointer" }}
+          >
+            <Card className={`${combinedClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
+              <WeatherWidget isExpanded={false} />
+            </Card>
+          </div>
+        );
+
+      case "calendar":
+        return (
+          <div
+            className="m-0 p-0"
+            onClick={() => openApp("calendar")}
+            style={{ cursor: isEditing ? "default" : "pointer" }}
+          >
+            <Card className={`${combinedClass} h-100 border-0`} bodyClass="p-0 h-100 border-0">
+              <DateWidget isExpanded={false} />
+            </Card>
+          </div>
+        );
+
+      case "quickActions":
+        return (
+          <QuickActionsWidget
+            isEditing={isEditing}
+            currentUser={currentUser}
+            className={combinedClass}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   const renderColumn = (colName) => {
     const baseDelay = colName === "left" ? 2 : layout.left.length + 2;
@@ -256,25 +258,24 @@ export default function Home() {
           let joinClass = "full";
           if (!isEditing && totalItems > 0) {
             if (colName === "left") {
-                if (totalItems === 1) {
-                    joinClass = "joinBottomLeft";
-                } else {
-                    if (index === 0) joinClass = "joinMiddle";
-                    else if (index === totalItems - 1) joinClass = "joinBottomLeft";
-                    else joinClass = "joinMiddle";
-                }
+              if (totalItems === 1) {
+                joinClass = "joinBottomLeft";
+              } else {
+                if (index === 0) joinClass = "joinMiddle";
+                else if (index === totalItems - 1) joinClass = "joinBottomLeft";
+                else joinClass = "joinMiddle";
+              }
             } else {
-                if (totalItems === 1) {
-                    joinClass = "joinBottomRight";
-                } else {
-                    if (index === 0) joinClass = "rightColJoinTop";
-                    else if (index === totalItems - 1) joinClass = "joinBottomRight";
-                    else joinClass = "joinMiddle";
-                }
+              if (totalItems === 1) {
+                joinClass = "joinBottomRight";
+              } else {
+                if (index === 0) joinClass = "rightColJoinTop";
+                else if (index === totalItems - 1) joinClass = "joinBottomRight";
+                else joinClass = "joinMiddle";
+              }
             }
           }
 
-          // mt-0 overrides internal margins set by individual widgets
           const combinedClass = `${animClass} ${joinClass} mt-0`.trim();
 
           return (
@@ -355,45 +356,55 @@ export default function Home() {
               bodyClass="d-flex justify-content-between align-items-center"
             >
               <div className="top-container m-0 text-start" style={{ minWidth: "auto", flex: 1 }}>
-                {/* Uses standard PageHeader formatting: blue-h2 without bold overrides */}
-                <h1 className="blue-h2 mb-0">
+                <h1 className="gradientHeading mb-0">
                   {getGreeting()}, {name}!
                 </h1>
-                {/* Uses standard PageHeader formatting: subtitle class and id="para" */}
                 <p id="para" className="subtitle mb-0 mt-0">
                   {getMessage()}
                 </p>
               </div>
-
-              <RippleButton
-                className="nav-icon-btn metro-tile-btn ms-3 flex-shrink-0"
-                onClick={() => setIsEditing(!isEditing)}
-                style={{
-                  backgroundColor: isEditing
-                    ? "var(--primary)"
-                    : "color-mix(in srgb, var(--surface) 30%, transparent)",
-                  color: isEditing
-                    ? "var(--onPrimary)"
-                    : "var(--onSurface)",
-                  border: "0.5px solid var(--outline)",
-                  width: "50px",
-                  height: "50px",
-                }}
-              >
-                <span className="material-symbols-rounded">
-                  {isEditing ? "check" : "edit_square"}
-                </span>
-              </RippleButton>
             </Card>
           </Col>
         </Row>
-
 
         <Row className="g-1">
           {renderColumn("left")}
           {renderColumn("right")}
         </Row>
       </main>
+
+      <RippleButton
+        className="fab-btn d-flex align-items-center justify-content-center shadow-lg"
+        onClick={() => {
+          if (isEditing) {
+            setIsEditing(false);
+          } else {
+            setIsFabOpen(true);
+          }
+        }}
+        style={{
+          position: "fixed",
+          bottom: "85px",
+          right: "20px",
+          width: "56px",
+          height: "56px",
+          borderRadius: "40%",
+          backgroundColor: "var(--primary)",
+          color: "var(--onPrimary)",
+          zIndex: 1000,
+          border: "none",
+        }}
+      >
+        <span className="material-symbols-rounded">
+          {isEditing ? "check" : "edit"}
+        </span>
+      </RippleButton>
+
+      <FabMenu
+        isOpen={isFabOpen}
+        onClose={() => setIsFabOpen(false)}
+        onEditDashboard={() => setIsEditing(true)}
+      />
 
       <Modal
         isOpen={!!addModalTarget}

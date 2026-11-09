@@ -118,7 +118,6 @@ function AppRoutes() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/restaurant" element={<Restaurant />} />
-        <Route path="/restaurant/breakfast" element={<Breakfast />} />
         <Route path="/restaurant/locations" element={<Locations />} />
         <Route path="/hotelactivities" element={<HotelActivities />} />
         <Route path="/hirewards" element={<HiRewards />} />
@@ -144,6 +143,15 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/restaurant/breakfast"
+        element={
+          <TopBarWrapper title="Breakfast check-in">
+            <Breakfast />
+          </TopBarWrapper>
+        }
+      />
+
       {/* TOP BAR LAYOUT (Settings & Help Center) */}
       <Route
         path="/settings"
@@ -164,7 +172,7 @@ function AppRoutes() {
       <Route
         path="/settings/appearance"
         element={
-          <TopBarWrapper title="Look and feel">
+          <TopBarWrapper title="Themes">
             <Appearance />
           </TopBarWrapper>
         }
@@ -204,7 +212,7 @@ function AppRoutes() {
       <Route
         path="/settings/privacy"
         element={
-          <TopBarWrapper title="Privacy policy">
+          <TopBarWrapper title="Privacy">
             <Privacy />
           </TopBarWrapper>
         }

@@ -15,11 +15,6 @@ export default function Layout() {
 
       <SideRail onOpenMenu={() => setIsMenuOpen(true)} />
       <BottomNav onOpenMenu={() => setIsMenuOpen(true)} />
-
-      <FabMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-      />
     </div>
   );
 }
