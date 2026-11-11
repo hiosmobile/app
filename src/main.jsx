@@ -8,7 +8,7 @@ import "../components/layout.css";
 import "./assets/style.css"; // style.css loads last, ensuring its theme/glass variables overrule everything else
 import "@fontsource-variable/google-sans-flex/wght.css";
 import "@fontsource-variable/noto-sans";
-import "@fontsource-variable/manrope";
+import "@fontsource-variable/outfit";
 
 // Fix for Android safe areas where env(safe-area-inset-*) might return 0px
 if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android") {

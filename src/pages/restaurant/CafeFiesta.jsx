@@ -10,7 +10,9 @@ import {
   MenuActionBtn,
   InfoBubble,
 } from "../../../components/HiMaterial";
+import MyActivity from "../../../components/forms/restaurant/MyActivity";
 import ScrollTop from "../../assets/buttons/scrolltop.bmp";
+import BaristaOrder from "../../../components/forms/restaurant/CafefiestaOrder";
 
 export default function CafeFiesta() {
   // State to manage which tab is currently active
@@ -34,7 +36,7 @@ export default function CafeFiesta() {
                 className="blue-h2"
                 style={{ fontFamily: "Playfair Display, serif" }}
               >
-                CafeFiesta
+                Barista
               </h1>
               <p
                 className="subtitle mb-0"
@@ -49,45 +51,13 @@ export default function CafeFiesta() {
 
       <Row className="g-1">
         <Col size={12} md={6}>
-          <Card title="Menu" className="joinBottomLeft metro-anim-list-item delay-2">
-            <MenuActionBtn
-              icon="menu_book"
-              text="View menu"
-              className="joinTop"
-              onClick={() =>
-                navigate("/viewer", {
-                  state: {
-                    src: "https://drive.google.com/file/d/1v6kWr813fKLS25FprgLu0sklpXpjB2Gy/preview",
-                    title: "CafeFiesta Menu",
-                  },
-                })
-              }
-            />
-            <InfoBubble className="joinBottom" title="View our amazing drinks selection.">
-              Our drinks absolutely trump any other coffee shop that claims to be coffee specialists. ✨ NEWSFLASH ✨ the only coffee specialists are US.
-            </InfoBubble>
+          <Card title="Order" className="joinBottomLeft metro-anim-list-item delay-2">
+            <BaristaOrder />
           </Card>
         </Col>
 
         <Col size={12} md={6}>
-          <Card className="joinBottomRight-mobile metro-anim-list-item delay-3" title="Order">
-            <MenuActionBtn
-              icon="menu_book"
-              text="Order drinks"
-              className="joinTop"
-              onClick={() =>
-                navigate("/viewer", {
-                  state: {
-                    src: "https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAYAABORJhBUQkdCUEhHOTJDMUpIRVVKRzBWNjdNVVQ3QS4u&embed=true",
-                    title: "Order from CafeFiesta",
-                  },
-                })
-              }
-            />
-            <InfoBubble title="Order our amazing drinks now.">
-              You like the look of our amazing coffee selection? Order now at the location you're at to experience coffee bliss.
-            </InfoBubble>
-          </Card>
+          <MyActivity targetCollection="restaurant_orders" />
         </Col>
       </Row>
     </main>

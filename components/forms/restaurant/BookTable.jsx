@@ -1,20 +1,17 @@
 import React, { useState, useRef } from "react";
-import { Card, TextInput, Dropdown, RippleButton, InfoBubble } from "../../../components/HiMaterial";
+import { Card, TextInput, Dropdown, MenuActionBtn, InfoBubble } from "../../../components/HiMaterial";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../../src/firebase"; 
-import { useAuth } from "../../../src/AuthContext"; 
+import { db } from "../../../src/firebase";
+import { useAuth } from "../../../src/AuthContext";
 
 export default function BookTable() {
   const { currentUser } = useAuth();
-  const [status, setStatus] = useState("idle"); 
+  const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const isSubmitting = useRef(false);
-  
+
   const [formData, setFormData] = useState({
-    restaurant: "Aberdeen",
-    dateBooked: "",
-    timeBooked: "",
-    people: 1,
+    restaurant: "Aberdeen", dateBooked: "", timeBooked: "", people: 1,
   });
 
   const locations = [
@@ -27,12 +24,12 @@ export default function BookTable() {
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    setErrorMessage(""); 
+    setErrorMessage("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.dateBooked === today) {
       const now = new Date();
       const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -43,7 +40,7 @@ export default function BookTable() {
     }
 
     if (isSubmitting.current) return;
-    
+
     isSubmitting.current = true;
     setStatus("submitting");
     setErrorMessage("");
@@ -51,26 +48,24 @@ export default function BookTable() {
     try {
       await addDoc(collection(db, "restaurant_bookings"), {
         restaurant: formData.restaurant,
-        // Automatically inject user details from Firebase Auth
         customerName: currentUser?.displayName || "Guest",
         email: currentUser?.email || "Unknown",
         dateBooked: formData.dateBooked,
         timeBooked: formData.timeBooked,
         peopleCount: Number(formData.people),
-        createdAt: serverTimestamp(), 
-        status: "pending" 
+        createdAt: serverTimestamp(),
+        status: "pending"
       });
 
       setStatus("success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       setFormData({ restaurant: "Aberdeen", dateBooked: "", timeBooked: "", people: 1 });
-      
+
     } catch (err) {
-      console.error("Firebase Error: ", err);
       setStatus("error");
-      setErrorMessage("Network error. Please check your connection and try again.");
+      setErrorMessage("Network error. Please try again.");
     } finally {
       isSubmitting.current = false;
-      if (status !== "success") setStatus("idle");
     }
   };
 
@@ -80,9 +75,10 @@ export default function BookTable() {
         <span className="material-symbols-rounded imageIcon mb-2" style={{ color: "var(--primary)" }}>check_circle</span>
         <h3 className="card-title text-center mb-2">booking sent!</h3>
         <p className="subtitle mb-3">We will review your request and send a confirmation email shortly.</p>
-        <RippleButton className="metro-list-btn" onClick={() => setStatus("idle")}>
-          <span className="button-text">Book another table</span>
-        </RippleButton>
+        <MenuActionBtn
+          icon="add_circle" text="Book Another" className="full m-0"
+          onClick={() => setStatus("idle")}
+        />
       </Card>
     );
   }
@@ -90,33 +86,43 @@ export default function BookTable() {
   return (
     <InfoBubble className="full text-start">
       <form onSubmit={handleSubmit} className="settings-group g-3">
-        
-        <div>
-          <label className="form-check-label mb-1">Restaurant location*</label>
-          <Dropdown className="full-btn" options={locations} value={formData.restaurant} onChange={(val) => handleChange("restaurant", val)} />
-        </div>
 
         <div>
-            <label className="form-check-label mb-1">Date*</label>
+          <h4 className="blue-h3 mb-2 mt-1" style={{ fontSize: "1.3rem" }}>Reservation Details</h4>
+          <p className="opacity-75 mb-3" style={{ fontSize: "0.85rem" }}>Where and when will you dine?</p>
+        </div>
+
+        <div className="d-flex flex-column gap-3">
+          <div>
+            <label className="form-check-label mb-1">Restaurant location *</label>
+            <Dropdown className="full-btn" options={locations} value={formData.restaurant} onChange={(val) => handleChange("restaurant", val)} />
+          </div>
+
+          <div>
+            <label className="form-check-label mb-1">Date *</label>
             <TextInput className="full-btn" type="date" required min={today} value={formData.dateBooked} onChange={(e) => handleChange("dateBooked", e.target.value)} />
-        </div>
+          </div>
 
-        <div>
-            <label className="form-check-label mb-1">Time*</label>
+          <div>
+            <label className="form-check-label mb-1">Time *</label>
             <TextInput className="full-btn" type="time" required value={formData.timeBooked} onChange={(e) => handleChange("timeBooked", e.target.value)} />
+          </div>
+
+          <div>
+            <label className="form-check-label mb-1">How many people? (8 max.) *</label>
+            <TextInput className="full-btn" type="number" min="1" max="8" required value={formData.people} onChange={(e) => handleChange("people", e.target.value)} />
+          </div>
         </div>
 
-        <div>
-          <label className="form-check-label mb-1">How many people? (8 max.)*</label>
-          <TextInput className="full-btn" type="number" min="1" max="8" required value={formData.people} onChange={(e) => handleChange("people", e.target.value)} />
+        {errorMessage && <div className="infoBubble red mt-3">{errorMessage}</div>}
+
+        <div className="mt-4 pt-3 border-top border-secondary border-opacity-25">
+          <MenuActionBtn
+            type="submit" className="full m-0" icon="how_to_reg"
+            text={status === "submitting" ? "Sending..." : "Submit Booking"}
+            disabled={status === "submitting"}
+          />
         </div>
-
-        {errorMessage && <div className="infoBubble red mt-2">{errorMessage}</div>}
-
-        <RippleButton type="submit" className="metro-list-btn mt-3" disabled={status === "submitting"}>
-          <span className="material-symbols-rounded">how_to_reg</span>
-          <span className="button-text">{status === "submitting" ? "Sending..." : "Submit Booking"}</span>
-        </RippleButton>
 
       </form>
     </InfoBubble>

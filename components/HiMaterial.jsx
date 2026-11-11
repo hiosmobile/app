@@ -527,61 +527,68 @@ export function Modal({
 /**
  * ProfileHeader
  */
-export const ProfileHeader = ({ name, email, className = "" }) => {
+export const ProfileHeader = ({ name, email, photoURL, onPfpClick, isUploading, className = "", children }) => {
+  const avatarSrc = photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "Harmony User")}&background=random&color=fff&size=200`;
+
   return (
     <Card
       className={`text-center ${className}`.trim()}
       bodyClass="p-0"
       style={{ overflow: "hidden" }}
     >
-      {/* Decorative top background */}
       <div
         style={{
-          height: "80px",
-          backgroundColor: "var(--primary)",
-          opacity: 0.15,
-          width: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: 0,
+          height: "100px", backgroundColor: "var(--primary)", opacity: 0.15,
+          width: "100%", position: "absolute", top: 0, left: 0, zIndex: 0,
         }}
       ></div>
 
       <div className="card-body position-relative z-1 pt-4 pb-4">
-        <div
-          style={{
-            width: "90px",
-            height: "90px",
-            borderRadius: "50%",
-            backgroundColor: "var(--surface)",
-            color: "var(--primary)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "4px solid var(--primaryContainer)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-            margin: "0 auto 15px",
-            position: "relative",
-            zIndex: 2,
-          }}
-        >
-          <span
-            className="material-symbols-rounded"
-            style={{ fontSize: "45px" }}
+        {/* Bigger 120px Container */}
+        <div style={{ position: "relative", width: "120px", margin: "0 auto 15px" }}>
+
+          <div
+            style={{
+              width: "120px", height: "120px", borderRadius: "50%",
+              backgroundColor: "var(--surface)", border: "4px solid var(--primaryContainer)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)", position: "relative",
+              zIndex: 2, overflow: "hidden", cursor: "pointer"
+            }}
+            onClick={onPfpClick}
           >
-            person
-          </span>
+            <img
+              src={avatarSrc}
+              alt="Profile"
+              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: isUploading ? 0.5 : 1, transition: "opacity 0.2s" }}
+            />
+          </div>
+
+          {/* Free-floating Pencil Icon (No Container) */}
+          {onPfpClick && (
+            <span
+              className="material-symbols-rounded"
+              style={{
+                position: "absolute", bottom: "4px", right: "4px",
+                backgroundColor: "var(--primary)",
+                padding: "5px",
+                fontSize: "28px", color: "var(--onPrimary)",
+                zIndex: 3, pointerEvents: "none", // Lets the click pass through to the image circle
+                borderRadius: "25px"
+              }}
+            >
+              {isUploading ? "sync" : "edit"}
+            </span>
+          )}
         </div>
-        <h2
-          className="card-title mb-1 text-center"
-          style={{ fontSize: "1.5rem", fontWeight: "bold" }}
-        >
+
+        <h2 className="card-title mb-1 text-center" style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
           {name || "Harmony User"}
         </h2>
-        <p className="mb-0" style={{ opacity: 0.7, fontSize: "0.95rem" }}>
+        <p className="mb-0" style={{ opacity: 0.7, fontSize: "1rem" }}>
           {email}
         </p>
+
+        {children && <div className="mt-4">{children}</div>}
       </div>
     </Card>
   );

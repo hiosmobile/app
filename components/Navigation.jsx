@@ -6,7 +6,7 @@ const navItems = [
   { id: "eat", path: "/restaurant", icon: "restaurant", label: "eat" },
   { id: "stay", path: "/hotelactivities", icon: "hotel", label: "stay" },
   { id: "rewards", path: "/hirewards", icon: "award_star", label: "rewards" },
-  { id: "more", path: "/profile", icon: "account_circle", label: "profile" },
+  { id: "more", path: "/profile", icon: "account_circle", label: "you" },
 ];
 
 export function BottomNav() {

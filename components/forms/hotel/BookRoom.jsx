@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Card, TextInput, Dropdown, RippleButton, InfoBubble } from "../../../components/HiMaterial";
+import { TextInput, Dropdown, MenuActionBtn, InfoBubble, Card } from "../../../components/HiMaterial";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../src/firebase";
 import { useAuth } from "../../../src/AuthContext";
@@ -10,38 +10,30 @@ export default function BookRoom() {
   const [errorMessage, setErrorMessage] = useState("");
   const isSubmitting = useRef(false);
 
-  // Tracks the current page (1, 2, or 3)
   const [currentPage, setCurrentPage] = useState(1);
 
   const defaultFirstName = currentUser?.displayName?.split(" ")[0] || "";
   const defaultLastName = currentUser?.displayName?.split(" ").slice(1).join(" ") || "";
 
   const [formData, setFormData] = useState({
-    firstName: defaultFirstName,
-    lastName: defaultLastName,
-    dob: "",
-    email: currentUser?.email || "",
-    phone: "",
-    startDate: "",
-    endDate: "",
-    nights: 1,
-    roomType: "Double En-suite",
-    roomCount: 1,
-    accessible: "No",
-    anythingElse: "No",
-    tellUs: ""
+    location: "", checkIn: "", checkOut: "", adults: "", children: "",
+    roomType: "", accessible: "", firstName: defaultFirstName,
+    lastName: defaultLastName, email: currentUser?.email || "", phone: "",
+    anythingElse: "", tellUs: ""
   });
 
   const today = new Date().toISOString().split("T")[0];
 
-  const roomOptions = [
-    "Single En-suite",
-    "Double En-suite",
-    "Twin En-suite",
-    "Family En-suite"
-  ].map(type => ({ label: type, value: type }));
+  // Injected Placeholder Options
+  const locationOptions = [{ label: "Select weB&B Location *", value: "" }, ...[
+    "Aberdeen", "Manchester", "Edinburgh", "Glasgow", "Southampton",
+    "Northampton", "Lancaster", "Inverness", "Mojácar", "Pyongyang",
+    "Las Vegas", "Los Angeles", "Phoenix", "New York"
+  ].map(loc => ({ label: loc, value: loc }))];
 
-  const yesNoOptions = ["Yes", "No"].map(opt => ({ label: opt, value: opt }));
+  const roomOptions = [{ label: "Select Room Type *", value: "" }, ...["Single En-suite", "Double En-suite", "Twin En-suite", "Family En-suite"].map(type => ({ label: type, value: type }))];
+  const accessibleOptions = [{ label: "Require Accessible Room? *", value: "" }, { label: "No", value: "No" }, { label: "Yes", value: "Yes" }];
+  const requestsOptions = [{ label: "Any special requests? *", value: "" }, { label: "No", value: "No" }, { label: "Yes", value: "Yes" }];
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -50,328 +42,129 @@ export default function BookRoom() {
 
   const handleBack = () => {
     if (currentPage > 1) {
-      setErrorMessage("");
-      setCurrentPage(prev => prev - 1);
+      setErrorMessage(""); setCurrentPage(prev => prev - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handleNextOrSubmit = async (e) => {
-    e.preventDefault(); // Prevents page reload, triggers native required validation
+    e.preventDefault();
 
     if (currentPage === 1) {
-      // Move to page 2
-      setCurrentPage(2);
+      if (!formData.location || !formData.checkIn || !formData.checkOut || !formData.adults || !formData.children) {
+        setErrorMessage("Please fill in all required fields."); return;
+      }
+      if (formData.checkOut <= formData.checkIn) {
+        setErrorMessage("Check-out date must be after check-in date."); return;
+      }
+      setErrorMessage(""); setCurrentPage(2);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (currentPage === 2) {
-      // Validate Custom Stay Rules
-      if (Number(formData.nights) < 0 || Number(formData.nights) > 14) {
-        setErrorMessage("Number of nights must be between 0 and 14.");
-        return;
-      }
-      if (Number(formData.roomCount) < 1 || Number(formData.roomCount) > 4) {
-        setErrorMessage("Number of rooms required must be between 1 and 4.");
-        return;
-      }
 
-      setErrorMessage("");
-      setCurrentPage(3);
+    } else if (currentPage === 2) {
+      if (!formData.roomType || !formData.accessible) {
+        setErrorMessage("Please complete your room selection."); return;
+      }
+      setErrorMessage(""); setCurrentPage(3);
       window.scrollTo({ top: 0, behavior: "smooth" });
+
     } else if (currentPage === 3) {
-      // Validate Anything Else Rules & Submit
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.anythingElse) {
+        setErrorMessage("Please fill in all required contact details."); return;
+      }
       if (formData.anythingElse === "Yes" && !formData.tellUs.trim()) {
-        setErrorMessage("Please provide details for your special request.");
-        return;
+        setErrorMessage("Please specify your special request."); return;
       }
 
       if (isSubmitting.current) return;
-      isSubmitting.current = true;
-      setStatus("submitting");
-      setErrorMessage("");
+      isSubmitting.current = true; setStatus("submitting"); setErrorMessage("");
+
+      const start = new Date(formData.checkIn);
+      const end = new Date(formData.checkOut);
+      const calculatedNights = Math.round((end - start) / (1000 * 60 * 60 * 24));
 
       try {
         await addDoc(collection(db, "hotel_bookings"), {
-          customerName: `${formData.firstName} ${formData.lastName}`,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          dob: formData.dob,
-          email: formData.email,
-          phone: formData.phone,
-          startDate: formData.startDate,
-          endDate: formData.endDate,
-          nights: Number(formData.nights),
-          roomType: formData.roomType,
-          roomCount: Number(formData.roomCount),
-          accessibleRoom: formData.accessible,
+          location: formData.location, customerName: `${formData.firstName} ${formData.lastName}`,
+          firstName: formData.firstName, lastName: formData.lastName, email: formData.email,
+          phone: formData.phone, startDate: formData.checkIn, endDate: formData.checkOut,
+          nights: calculatedNights, adults: Number(formData.adults), children: Number(formData.children),
+          roomType: formData.roomType, accessibleRoom: formData.accessible,
           additionalNotes: formData.anythingElse === "Yes" ? formData.tellUs : "",
-          createdAt: serverTimestamp(),
-          status: "pending"
+          createdAt: serverTimestamp(), status: "pending"
         });
 
-        setStatus("success");
+        setStatus("success"); window.scrollTo({ top: 0, behavior: "smooth" });
         setFormData({
-          firstName: defaultFirstName,
-          lastName: defaultLastName,
-          dob: "",
-          email: currentUser?.email || "",
-          phone: "",
-          startDate: "",
-          endDate: "",
-          nights: 1,
-          roomType: "Double En-suite",
-          roomCount: 1,
-          accessible: "No",
-          anythingElse: "No",
-          tellUs: ""
+          location: "", checkIn: "", checkOut: "", adults: "", children: "", roomType: "", accessible: "",
+          firstName: defaultFirstName, lastName: defaultLastName, email: currentUser?.email || "", phone: "", anythingElse: "", tellUs: ""
         });
-        setCurrentPage(1); // Reset back to page 1 for the next booking
+        setCurrentPage(1);
       } catch (error) {
-        console.error("Firebase Error:", error);
-        setStatus("error");
-        setErrorMessage("Network error. Please check your connection and try again.");
+        setStatus("error"); setErrorMessage("Network error. Please try again.");
       } finally {
         isSubmitting.current = false;
-        if (status !== "success") setStatus("idle");
       }
     }
   };
 
   if (status === "success") {
     return (
-      <Card className="text-center joinTop" bodyClass="p-4">
-        <span className="material-symbols-rounded imageIcon mb-2" style={{ color: "var(--primary)" }}>
-          check_circle
-        </span>
+      <InfoBubble className="full text-center m-0 p-4">
+        <span className="material-symbols-rounded imageIcon mb-2" style={{ color: "var(--primary)" }}>check_circle</span>
         <h3 className="card-title text-center mb-2">booking received!</h3>
-        <p className="subtitle mb-3">We look forward to hosting your stay at WorstEastern.</p>
-        <RippleButton className="metro-list-btn" onClick={() => setStatus("idle")}>
-          <span className="button-text">New Booking</span>
-        </RippleButton>
-      </Card>
+        <p className="subtitle mb-3">We look forward to hosting your stay at weB&B {formData.location}.</p>
+        <MenuActionBtn icon="add_circle" text="New Booking" className="full m-0 mt-3" onClick={() => setStatus("idle")} />
+      </InfoBubble>
     );
   }
 
   return (
-    <InfoBubble className="full text-start">
-      <form onSubmit={handleNextOrSubmit} className="settings-group g-3">
+    <form onSubmit={handleNextOrSubmit} className="settings-group m-0 p-0 text-start">
+      <span className="opacity-75 fw-bold ms-1" style={{ fontSize: "0.85rem", textTransform: "uppercase" }}>Step {currentPage} of 3</span>
+      <h4 className="blue-h3 mb-3 ms-1" style={{ fontSize: "1.3rem" }}>
+        {currentPage === 1 ? "Your Stay" : (currentPage === 2 ? "Room Selection" : "Guest Details")}
+      </h4>
 
-        {/* --- PAGE 1: YOUR DETAILS --- */}
-        <div style={{ display: currentPage === 1 ? "block" : "none" }} className="metro-anim-list-item delay-1">
-          <div>
-            <span className="opacity-75 fw-bold" style={{ fontSize: "0.85rem", textTransform: "uppercase" }}>Step 1 of 3</span>
-            <h4 className="blue-h3 mb-2 mt-1" style={{ fontSize: "1.3rem" }}>Your Details</h4>
-            <p className="opacity-75 mb-3" style={{ fontSize: "0.85rem" }}>Please enter your personal details</p>
-          </div>
+      {/* --- PAGE 1 --- */}
+      <div style={{ display: currentPage === 1 ? "block" : "none" }} className="metro-anim-list-item delay-1 mb-4">
+        <Dropdown className="joinTop" options={locationOptions} value={formData.location} onChange={(val) => handleChange("location", val)} />
+        <TextInput className="joinMiddle" type="text" placeholder="Check-in Date *" onFocus={(e) => e.target.type = "date"} onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }} required={currentPage === 1} min={today} value={formData.checkIn} onChange={(e) => handleChange("checkIn", e.target.value)} />
+        <TextInput className="joinMiddle" type="text" placeholder="Check-out Date *" onFocus={(e) => e.target.type = "date"} onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }} required={currentPage === 1} min={formData.checkIn || today} value={formData.checkOut} onChange={(e) => handleChange("checkOut", e.target.value)} />
+        <TextInput className="joinMiddle" type="number" placeholder="Adults *" min="1" max="4" required={currentPage === 1} value={formData.adults} onChange={(e) => handleChange("adults", e.target.value)} />
+        <TextInput className="joinBottom" type="number" placeholder="Children *" min="0" max="4" required={currentPage === 1} value={formData.children} onChange={(e) => handleChange("children", e.target.value)} />
+      </div>
 
-          <div className="d-flex gap-2">
-            <div className="flex-grow-1">
-              <label className="form-check-label mb-1">First Name *</label>
-              <TextInput
-                className="full-btn"
-                type="text"
-                required={currentPage === 1}
-                value={formData.firstName}
-                onChange={(e) => handleChange("firstName", e.target.value)}
-              />
-            </div>
-            <div className="flex-grow-1">
-              <label className="form-check-label mb-1">Last Name *</label>
-              <TextInput
-                className="full-btn"
-                type="text"
-                required={currentPage === 1}
-                value={formData.lastName}
-                onChange={(e) => handleChange("lastName", e.target.value)}
-              />
-            </div>
-          </div>
+      {/* --- PAGE 2 --- */}
+      <div style={{ display: currentPage === 2 ? "block" : "none" }} className="metro-anim-list-item delay-1 mb-4">
+        <Dropdown className="joinTop" options={roomOptions} value={formData.roomType} onChange={(val) => handleChange("roomType", val)} />
+        <Dropdown className="joinBottom" options={accessibleOptions} value={formData.accessible} onChange={(val) => handleChange("accessible", val)} />
+      </div>
 
-          <div>
-            <label className="form-check-label mb-1">Date of Birth *</label>
-            <TextInput
-              className="full-btn"
-              type="date"
-              required={currentPage === 1}
-              value={formData.dob}
-              onChange={(e) => handleChange("dob", e.target.value)}
-            />
-          </div>
+      {/* --- PAGE 3 --- */}
+      <div style={{ display: currentPage === 3 ? "block" : "none" }} className="metro-anim-list-item delay-1 mb-4">
+        <TextInput className="joinTop" type="text" placeholder="First Name *" required={currentPage === 3} value={formData.firstName} onChange={(e) => handleChange("firstName", e.target.value)} />
+        <TextInput className="joinMiddle" type="text" placeholder="Last Name *" required={currentPage === 3} value={formData.lastName} onChange={(e) => handleChange("lastName", e.target.value)} />
+        <TextInput className="joinMiddle" type="email" placeholder="Email Address *" required={currentPage === 3} value={formData.email} onChange={(e) => handleChange("email", e.target.value)} />
+        <TextInput className="joinMiddle" type="tel" placeholder="Contact Number *" required={currentPage === 3} value={formData.phone} onChange={(e) => handleChange("phone", e.target.value)} />
 
-          <div>
-            <label className="form-check-label mb-1">Email address *</label>
-            <TextInput
-              className="full-btn"
-              type="email"
-              required={currentPage === 1}
-              value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="form-check-label mb-1">Contact number *</label>
-            <TextInput
-              className="full-btn"
-              type="tel"
-              required={currentPage === 1}
-              value={formData.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* --- PAGE 2: YOUR STAY --- */}
-        <div style={{ display: currentPage === 2 ? "block" : "none" }} className="metro-anim-list-item delay-1">
-          <div>
-            <span className="opacity-75 fw-bold" style={{ fontSize: "0.85rem", textTransform: "uppercase" }}>Step 2 of 3</span>
-            <h4 className="blue-h3 mb-2 mt-1" style={{ fontSize: "1.3rem" }}>Your Stay</h4>
-            <p className="opacity-75 mb-3" style={{ fontSize: "0.85rem" }}>Enter your stay details</p>
-          </div>
-
-          <div className="d-flex gap-2">
-            <div className="flex-grow-1">
-              <label className="form-check-label mb-1">Start date *</label>
-              <TextInput
-                className="full-btn"
-                type="date"
-                required={currentPage === 2}
-                min={today}
-                value={formData.startDate}
-                onChange={(e) => handleChange("startDate", e.target.value)}
-              />
-            </div>
-            <div className="flex-grow-1">
-              <label className="form-check-label mb-1">End date *</label>
-              <TextInput
-                className="full-btn"
-                type="date"
-                required={currentPage === 2}
-                min={formData.startDate || today}
-                value={formData.endDate}
-                onChange={(e) => handleChange("endDate", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="form-check-label mb-1">Number of nights staying *</label>
-            <p className="opacity-75 mb-1" style={{ fontSize: "0.75rem" }}>Number must be between 0 ~ 14</p>
-            <TextInput
-              className="full-btn"
-              type="number"
-              min="0"
-              max="14"
-              required={currentPage === 2}
-              value={formData.nights}
-              onChange={(e) => handleChange("nights", e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="form-check-label mb-1">Type of room *</label>
-            <p className="opacity-75 mb-1" style={{ fontSize: "0.75rem" }}>All rooms are en-suite</p>
-            <Dropdown
-              className="full-btn"
-              options={roomOptions}
-              value={formData.roomType}
-              onChange={(val) => handleChange("roomType", val)}
-            />
-          </div>
-
-          <div>
-            <label className="form-check-label mb-1">How many rooms do you require? *</label>
-            <p className="opacity-75 mb-1" style={{ fontSize: "0.75rem" }}>Number must be between 1 ~ 4</p>
-            <TextInput
-              className="full-btn"
-              type="number"
-              min="1"
-              max="4"
-              required={currentPage === 2}
-              value={formData.roomCount}
-              onChange={(e) => handleChange("roomCount", e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* --- PAGE 3: ANYTHING ELSE --- */}
-        <div style={{ display: currentPage === 3 ? "block" : "none" }} className="metro-anim-list-item delay-1">
-          <div>
-            <span className="opacity-75 fw-bold" style={{ fontSize: "0.85rem", textTransform: "uppercase" }}>Step 3 of 3</span>
-            <h4 className="blue-h3 mb-2 mt-1" style={{ fontSize: "1.3rem" }}>Anything Else?</h4>
-            <p className="opacity-75 mb-3" style={{ fontSize: "0.85rem" }}>Enter anything else you need</p>
-          </div>
-
-          <div>
-            <label className="form-check-label mb-1">Do you need an accessible room? *</label>
-            <Dropdown
-              className="full-btn"
-              options={yesNoOptions}
-              value={formData.accessible}
-              onChange={(val) => handleChange("accessible", val)}
-            />
-          </div>
-
-          <div>
-            <label className="form-check-label mb-1">Anything else? *</label>
-            <Dropdown
-              className="full-btn"
-              options={yesNoOptions}
-              value={formData.anythingElse}
-              onChange={(val) => handleChange("anythingElse", val)}
-            />
-          </div>
-
-          {/* CONDITIONAL TELL US SECTION */}
-          {formData.anythingElse === "Yes" && (
-            <div className="mt-2 p-3 rounded" style={{ backgroundColor: "color-mix(in srgb, var(--primaryContainer) 40%, transparent)" }}>
-              <h4 className="blue-h3 mb-1" style={{ fontSize: "1.1rem" }}>You answered 'Yes' to Anything Else</h4>
-              <p className="opacity-75 mb-2" style={{ fontSize: "0.85rem" }}>Tell us below.</p>
-
-              <label className="form-check-label mb-1">Tell us *</label>
-              <TextInput
-                className="full-btn"
-                type="text"
-                placeholder="Enter special requests here..."
-                required={currentPage === 3 && formData.anythingElse === "Yes"}
-                value={formData.tellUs}
-                onChange={(e) => handleChange("tellUs", e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* --- ERROR MESSAGE --- */}
-        {errorMessage && (
-          <div className="infoBubble red mt-2">
-            {errorMessage}
-          </div>
+        {/* Dynamic Joining based on Special Requests */}
+        <Dropdown className={formData.anythingElse === "Yes" ? "joinMiddle" : "joinBottom"} options={requestsOptions} value={formData.anythingElse} onChange={(val) => handleChange("anythingElse", val)} />
+        {formData.anythingElse === "Yes" && (
+          <TextInput className="joinBottom" type="text" placeholder="Specify requests..." required={currentPage === 3} value={formData.tellUs} onChange={(e) => handleChange("tellUs", e.target.value)} />
         )}
+      </div>
 
-        {/* --- NAVIGATION BUTTONS --- */}
-        <div className="d-flex gap-2 mt-4 pt-3 border-top border-secondary border-opacity-25">
-          {currentPage > 1 && (
-            <RippleButton
-              type="button"
-              className="metro-list-btn m-0 flex-grow-1"
-              style={{ backgroundColor: "var(--secondaryContainer)", color: "var(--onSecondaryContainer)" }}
-              onClick={handleBack}
-            >
-              <span className="material-symbols-rounded">arrow_back</span>
-              <span className="button-text">Back</span>
-            </RippleButton>
-          )}
+      {errorMessage && <div className="infoBubble red mt-2 mb-3">{errorMessage}</div>}
 
-          <RippleButton
-            type="submit"
-            className="metro-list-btn m-0 flex-grow-1"
-            disabled={status === "submitting"}
-          >
-            <span className="button-text">{currentPage === 3 ? (status === "submitting" ? "Sending..." : "Book Room") : "Next"}</span>
-            {currentPage < 3 && <span className="material-symbols-rounded">arrow_forward</span>}
-            {currentPage === 3 && <span className="material-symbols-rounded">bed</span>}
-          </RippleButton>
-        </div>
-
-      </form>
-    </InfoBubble>
+      <div className="d-flex flex-column mt-2">
+        <MenuActionBtn
+          type="submit" className={currentPage > 1 ? "joinTop m-0" : "full m-0"} icon={currentPage === 3 ? "bed" : "arrow_forward"}
+          text={currentPage === 3 ? (status === "submitting" ? "Sending..." : "Confirm Booking") : "Next"} disabled={status === "submitting"}
+        />
+        {currentPage > 1 && (
+          <MenuActionBtn type="button" className="joinBottom m-0" icon="arrow_back" text="Back" onClick={handleBack} />
+        )}
+      </div>
+    </form>
   );
 }

@@ -13,6 +13,9 @@ import {
 import BookRoom from "../../components/forms/hotel/BookRoom";
 
 import ScrollTop from "../assets/buttons/scrolltop.bmp";
+import MyActivity from "../../components/forms/restaurant/MyActivity";
+import HotelCheckin from "../../components/forms/hotel/HotelCheckin";
+import HotelCheckout from "../../components/forms/hotel/HotelCheckout";
 
 export default function HotelActivities() {
   const navigate = useNavigate();
@@ -54,40 +57,72 @@ export default function HotelActivities() {
             </Col>
           </Row>
 
-          <Row>
+          <Row className="g-1">
                 <Col size={12} md={6}>
                   <Card className="joinBottomLeft metro-anim-list-item delay-3">
                     <BookRoom />
                   </Card>
+                </Col>
+
+                <Col size={12} md={6}>
+                  <MyActivity targetCollection="hotel_bookings" />
                 </Col>
           </Row>
         </div>
         )}
 
         {activeMainTab === "checkin" && (
-          <Row>
-            <Col size={12}>
-              <PageHeader
-                title="Check-in"
-                subtitle="Check-in to your hotel room below."
-                className="pb-3 joinMiddle metro-anim-list-item delay-2"
+          <div className="fade show ">
+            <Row>
+              <Col size={12}>
+                <PageHeader
+                  title="Check-in"
+                  subtitle="Check-in to your hotel room below."
+                  className="pb-3 joinMiddle metro-anim-list-item delay-2"
                 />
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+
+            <Row className="g-1">
+              <Col size={12} md={6}>
+                <Card className="joinBottomLeft metro-anim-list-item delay-3">
+                  <HotelCheckin />
+                </Card>
+              </Col>
+
+              <Col size={12} md={6}>
+                <MyActivity targetCollection="hotel_checkin" />
+              </Col>
+            </Row>
+          </div>
         )}
 
-        {activeMainTab === "checkout" && (
-          <Row>
-            <Col size={12}>
-              <PageHeader
-                title="Check-out"
-                subtitle="Thanks for staying with us! Check-out of your hotel room below."
-                className="pb-3 joinMiddle metro-anim-list-item delay-2"
-                />
-            </Col>
-          </Row>
-        )}
-      </div>
+          {activeMainTab === "checkout" && (
+            <div className="fade show">
+              <Row>
+                <Col size={12}>
+                  <PageHeader
+                    title="Check-out"
+                    subtitle="Thanks for staying with us! Check-out of your hotel room below."
+                    className="pb-3 joinMiddle metro-anim-list-item delay-2"
+                  />
+                </Col>
+              </Row>
+
+              <Row className="g-1">
+                <Col size={12} md={6}>
+                  <Card className="joinBottomLeft metro-anim-list-item delay-3">
+                    <HotelCheckout />
+                  </Card>
+                </Col>
+
+                <Col size={12} md={6}>
+                  <MyActivity targetCollection="hotel_checkout" />
+                </Col>
+              </Row>
+            </div>
+          )}
+        </div>
       </main>
     </>
   );

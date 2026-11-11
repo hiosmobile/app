@@ -74,9 +74,7 @@ export default function HiCafe() {
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4" title="Previous bookings">
-                  <MyActivity targetCollection="restaurant_bookings" />
-                </Card>
+                <MyActivity targetCollection="restaurant_bookings" />
               </Col>
             </Row>
           </div>
@@ -204,9 +202,7 @@ export default function HiCafe() {
               </Col>
 
               <Col size={12} md={6}>
-                <Card className="joinBottomRight-mobile metro-anim-list-item delay-4" title="Previous orders">
-                  <MyActivity targetCollection="restaurant_orders" />
-                </Card>
+                <MyActivity targetCollection="restaurant_orders" />
               </Col>
             </Row>
           </div>

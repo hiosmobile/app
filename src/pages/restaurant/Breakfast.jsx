@@ -42,9 +42,7 @@ export default function Breakfast() {
         </Col>
 
         <Col size={12} md={6}>
-          <Card className="joinBottomRight metro-anim-list-item delay-3">
-              <MyActivity targetCollection="breakfast_checkin" />
-          </Card>
+          <MyActivity targetCollection="breakfast_checkin" />
         </Col>
       </Row>
     </main>
