@@ -63,6 +63,7 @@ export function ProgressWidget({ className = "" }) {
 // =========================================
 export function WeatherWidget({ className = "", isExpanded = false }) {
   const [weather, setWeather] = useState(null);
+  const [daily, setDaily] = useState(null);
   const [locationName, setLocationName] = useState("Loading...");
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -87,9 +88,12 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+      const res = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto`
+      );
       const data = await res.json();
       setWeather(data.current_weather);
+      setDaily(data.daily || null);
       setLocationName(name);
     } catch (err) {
       setError("Failed to fetch weather.");
@@ -106,7 +110,9 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
       setIsSearching(true);
       setError(null);
       setSearchResults([]);
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchInput)}&format=json&limit=5`);
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchInput)}&format=json&limit=5`
+      );
       const data = await res.json();
       if (data && data.length > 0) setSearchResults(data);
       else setError("No locations found.");
@@ -119,9 +125,15 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
 
   const selectLocation = async (lat, lon, displayName) => {
     const nameParts = displayName.split(", ");
-    const shortName = nameParts.length > 1 ? `${nameParts[0]}, ${nameParts[nameParts.length - 1]}` : nameParts[0];
+    const shortName =
+      nameParts.length > 1
+        ? `${nameParts[0]}, ${nameParts[nameParts.length - 1]}`
+        : nameParts[0];
 
-    localStorage.setItem("hios_weather_pref", JSON.stringify({ lat, lon, name: shortName }));
+    localStorage.setItem(
+      "hios_weather_pref",
+      JSON.stringify({ lat, lon, name: shortName })
+    );
     setSearchResults([]);
     setSearchInput("");
     setIsEditing(false);
@@ -135,20 +147,29 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
         async (position) => {
           const { latitude, longitude } = position.coords;
           try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+            const res = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            );
             const data = await res.json();
-            const city = data.address.city || data.address.town || data.address.village || "Current Location";
-            localStorage.setItem("hios_weather_pref", JSON.stringify({ lat: latitude, lon: longitude, name: city }));
+            const city =
+              data.address.city ||
+              data.address.town ||
+              data.address.village ||
+              "Current Location";
+            localStorage.setItem(
+              "hios_weather_pref",
+              JSON.stringify({ lat: latitude, lon: longitude, name: city })
+            );
             setIsEditing(false);
             window.dispatchEvent(new Event("hiosWeatherUpdated"));
           } catch {
             fetchWeather(latitude, longitude, "Current Location");
           }
         },
-        () => fetchWeather(51.5085, -0.1257, "London, United Kingdom")
+        () => fetchWeather(56.462, -2.9707, "Dundee, United Kingdom")
       );
     } else {
-      fetchWeather(51.5085, -0.1257, "London, United Kingdom");
+      fetchWeather(56.462, -2.9707, "Dundee, United Kingdom");
     }
   };
 
@@ -164,63 +185,112 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
     };
     loadSavedWeather();
     window.addEventListener("hiosWeatherUpdated", loadSavedWeather);
-    return () => window.removeEventListener("hiosWeatherUpdated", loadSavedWeather);
+    return () =>
+      window.removeEventListener("hiosWeatherUpdated", loadSavedWeather);
   }, []);
 
-  const tilePadding = isExpanded ? "0" : "16px";
   const wrapperClass = `w-100 h-100 text-start d-flex flex-column ${className}`.trim();
 
+  // 1. EDIT LOCATION VIEW (Inside Modal)
   if (isEditing && isExpanded) {
     return (
       <div className={wrapperClass}>
         <div className="d-flex flex-column" style={{ gap: "8px" }}>
-          <form onSubmit={handleSearch} className="d-flex align-items-center" style={{ gap: "8px" }}>
+          <form
+            onSubmit={handleSearch}
+            className="d-flex align-items-center"
+            style={{ gap: "8px" }}
+          >
             <input
               type="text"
               className="form-control full"
               placeholder="search city..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              style={{ flexGrow: 1, margin: 0, padding: "10px 20px", height: "45px", borderRadius: "0", background: "color-mix(in srgb, var(--surface) 40%, transparent)", border: "1px solid var(--primary)", color: "var(--onBackground)" }}
+              style={{
+                flexGrow: 1,
+                margin: 0,
+                padding: "10px 20px",
+                height: "48px",
+                background: "color-mix(in srgb, var(--surface) 50%, transparent)",
+                border: "1px solid var(--primary)",
+                color: "var(--onBackground)",
+              }}
               autoFocus
             />
-            <button type="button" className="nav-icon-btn" onClick={() => setIsEditing(false)} style={{ color: "var(--onBackground)" }}>
-              <i className="material-symbols-rounded">close</i>
+            <button
+              type="button"
+              className="nav-icon-btn metro-tile-btn"
+              onClick={() => setIsEditing(false)}
+              style={{
+                color: "var(--onBackground)",
+                backgroundColor: "color-mix(in srgb, var(--surface) 45%, transparent)",
+                width: "48px",
+                height: "48px",
+              }}
+            >
+              <i className="material-symbols-sharp" style={{ fontSize: "22px" }}>
+                close
+              </i>
             </button>
           </form>
 
-          <button
-            onClick={getUserLocation}
-            className="metro-list-btn"
-          >
-            <i className="material-symbols-rounded" style={{ fontSize: "18px" }}>my_location</i> use current location
+          <button onClick={getUserLocation} className="metro-list-btn">
+            <i className="material-symbols-rounded">my_location</i>
+            <span className="button-text">use current location</span>
           </button>
 
           {isSearching && (
             <div className="d-flex justify-content-center p-4">
-              <i className="material-symbols-rounded" style={{ animation: "pulse 1.5s infinite", color: "var(--primary)" }}>sync</i>
+              <i
+                className="material-symbols-sharp"
+                style={{
+                  animation: "pulse 1.5s infinite",
+                  fontSize: "36px",
+                  color: "var(--primary)",
+                }}
+              >
+                sync
+              </i>
             </div>
           )}
 
           {searchResults.length > 0 && (
-            <div className="d-flex flex-column" style={{ gap: "2px", marginTop: "8px" }}>
-              {searchResults.map((result) => (
-                <button
-                  key={result.place_id}
-                  onClick={() => selectLocation(result.lat, result.lon, result.display_name)}
-                  style={{
-                    backgroundColor: "color-mix(in srgb, var(--surface) 30%, transparent)",
-                    padding: "12px",
-                    color: "var(--onBackground)",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontSize: "14px",
-                    border: "none",
-                  }}
-                >
-                  {result.display_name}
-                </button>
-              ))}
+            <div
+              className="d-flex flex-column"
+              style={{ gap: "3px", marginTop: "4px" }}
+            >
+              {searchResults.map((result, idx) => {
+                const joinCls =
+                  searchResults.length === 1
+                    ? "full"
+                    : idx === 0
+                    ? "joinTop"
+                    : idx === searchResults.length - 1
+                    ? "joinBottom"
+                    : "joinMiddle";
+                return (
+                  <button
+                    key={result.place_id}
+                    className={`metro-tile-btn ${joinCls}`}
+                    onClick={() =>
+                      selectLocation(result.lat, result.lon, result.display_name)
+                    }
+                    style={{
+                      backgroundColor:
+                        "color-mix(in srgb, var(--surface) 45%, transparent)",
+                      padding: "14px 18px",
+                      color: "var(--onBackground)",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      fontSize: "15px",
+                      border: "none",
+                    }}
+                  >
+                    {result.display_name}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -228,40 +298,367 @@ export function WeatherWidget({ className = "", isExpanded = false }) {
     );
   }
 
-  return (
-    <div className={wrapperClass} style={{ minHeight: isExpanded ? "auto" : "180px", position: "relative", padding: tilePadding }}>
-      <div className="d-flex justify-content-between align-items-start">
-        <span style={{ fontSize: isExpanded ? "2rem" : "1.2rem", fontWeight: "300", color: "var(--onBackground)", letterSpacing: "-0.5px", textTransform: "lowercase", position: "relative", zIndex: 2 }}>
-          {locationName}
-        </span>
-        {isExpanded && (
-          <button onClick={() => setIsEditing(true)} className="nav-icon-btn" style={{ padding: "0", color: "var(--onBackground)", zIndex: 2 }}>
-            <i className="material-symbols-rounded" style={{ fontSize: "12px", fontWeight: "300" }}>edit</i>
-          </button>
+  // 2. EXPANDED MODAL VIEW (Structured Join Tiles like ProgressWidget)
+  if (isExpanded) {
+    const details = weather
+      ? getWeatherDetails(weather.weathercode, weather.is_day)
+      : { icon: "cloud", text: "loading" };
+
+    const highTemp =
+      daily?.temperature_2m_max?.[0] !== undefined
+        ? `${Math.round(daily.temperature_2m_max[0])}°`
+        : "--";
+    const lowTemp =
+      daily?.temperature_2m_min?.[0] !== undefined
+        ? `${Math.round(daily.temperature_2m_min[0])}°`
+        : "--";
+
+    return (
+      <div className={wrapperClass}>
+        {/* Main Hero Tile (joinTop) */}
+        <div
+          className="joinTop"
+          style={{
+            backgroundColor:
+              "color-mix(in srgb, var(--primaryContainer) 65%, var(--surface) 35%)",
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            border: "0.5px solid var(--outline)",
+          }}
+        >
+          {/* Location & Edit Pill */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="d-flex align-items-center" style={{ gap: "6px" }}>
+              <i
+                className="material-symbols-sharp"
+                style={{ fontSize: "20px", color: "var(--primary)" }}
+              >
+                location_on
+              </i>
+              <span
+                style={{
+                  fontSize: "1.35rem",
+                  fontWeight: "400",
+                  color: "var(--onPrimaryContainer)",
+                  textTransform: "lowercase",
+                  letterSpacing: "-0.5px",
+                }}
+              >
+                {locationName}
+              </span>
+            </div>
+
+            <button
+              onClick={() => setIsEditing(true)}
+              className="metro-tile-btn"
+              style={{
+                backgroundColor:
+                  "color-mix(in srgb, var(--surface) 55%, transparent)",
+                border: "none",
+                borderRadius: "999px",
+                padding: "6px 14px",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                color: "var(--onPrimaryContainer)",
+                cursor: "pointer",
+                fontSize: "13px",
+                fontWeight: "500",
+                textTransform: "lowercase",
+              }}
+            >
+              <i
+                className="material-symbols-sharp"
+                style={{ fontSize: "16px" }}
+              >
+                edit
+              </i>
+              change
+            </button>
+          </div>
+
+          {error && (
+            <div
+              className="mb-2"
+              style={{ color: "var(--error)", fontSize: "14px" }}
+            >
+              {error}
+            </div>
+          )}
+
+          {/* Big Temp & Big Weather Icon */}
+          {loading ? (
+            <div className="py-4 d-flex justify-content-center">
+              <i
+                className="material-symbols-sharp"
+                style={{
+                  animation: "pulse 1.5s infinite",
+                  fontSize: "48px",
+                  color: "var(--primary)",
+                }}
+              >
+                sync
+              </i>
+            </div>
+          ) : weather ? (
+            <div className="d-flex justify-content-between align-items-end mt-2">
+              <div className="d-flex flex-column text-start">
+                <span
+                  style={{
+                    fontSize: "5.2rem",
+                    fontWeight: "200",
+                    lineHeight: "0.85",
+                    color: "var(--onPrimaryContainer)",
+                    letterSpacing: "-3px",
+                  }}
+                >
+                  {Math.round(weather.temperature)}°C
+                </span>
+                <span
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "500",
+                    color: "var(--primary)",
+                    textTransform: "lowercase",
+                    marginTop: "10px",
+                  }}
+                >
+                  {details.text}
+                </span>
+              </div>
+
+              {/* Using material-symbols-sharp bypasses the 30px !important lock on material-symbols-rounded */}
+              <i
+                className="material-symbols-sharp"
+                style={{
+                  fontSize: "84px",
+                  color: "var(--primary)",
+                  fontVariationSettings: "'FILL' 0, 'wght' 200, 'opsz' 48",
+                  lineHeight: "0.85",
+                }}
+              >
+                {details.icon}
+              </i>
+            </div>
+          ) : null}
+        </div>
+
+        {/* Bottom Split Stat Tiles (matching ProgressWidget) */}
+        {weather && !loading && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "3px",
+            }}
+          >
+            <div
+              className="joinBottomLeft"
+              style={{
+                backgroundColor:
+                  "color-mix(in srgb, var(--tertiaryContainer) 45%, transparent)",
+                borderRadius: "6px 6px 6px var(--radius-card)",
+                padding: "14px 16px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                border: "0.5px solid var(--outline)",
+              }}
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <span
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    textTransform: "lowercase",
+                    opacity: 0.65,
+                    color: "var(--onBackground)",
+                  }}
+                >
+                  wind speed
+                </span>
+                <i
+                  className="material-symbols-sharp"
+                  style={{
+                    fontSize: "22px",
+                    color: "var(--primary)",
+                    fontWeight: "200",
+                  }}
+                >
+                  air
+                </i>
+              </div>
+              <div className="text-start mt-2">
+                <span
+                  style={{
+                    fontSize: "2rem",
+                    fontWeight: "200",
+                    color: "var(--onBackground)",
+                    lineHeight: "1",
+                  }}
+                >
+                  {weather.windspeed}
+                  <span style={{ fontSize: "1rem", opacity: 0.55 }}> km/h</span>
+                </span>
+              </div>
+            </div>
+
+            <div
+              className="joinBottomRight"
+              style={{
+                backgroundColor:
+                  "color-mix(in srgb, var(--tertiaryContainer) 45%, transparent)",
+                borderRadius: "6px 6px var(--radius-card) 6px",
+                padding: "14px 16px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                border: "0.5px solid var(--outline)",
+              }}
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <span
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    textTransform: "lowercase",
+                    opacity: 0.65,
+                    color: "var(--onBackground)",
+                  }}
+                >
+                  high / low
+                </span>
+                <i
+                  className="material-symbols-sharp"
+                  style={{
+                    fontSize: "22px",
+                    color: "var(--primary)",
+                    fontWeight: "200",
+                  }}
+                >
+                  thermostat
+                </i>
+              </div>
+              <div className="text-start mt-2">
+                <span
+                  style={{
+                    fontSize: "2rem",
+                    fontWeight: "200",
+                    color: "var(--onBackground)",
+                    lineHeight: "1",
+                  }}
+                >
+                  {highTemp}
+                  <span style={{ fontSize: "1.1rem", opacity: 0.55 }}>
+                    {" "}
+                    / {lowTemp}
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
         )}
       </div>
+    );
+  }
 
-      {error && <div className="mt-2" style={{ color: "var(--error)", fontSize: "14px", zIndex: 2, position: "relative" }}>{error}</div>}
+  // 3. COMPACT DASHBOARD TILE VIEW (Unchanged layout, fixed icon scaling)
+  return (
+    <div
+      className={wrapperClass}
+      style={{
+        minHeight: "180px",
+        position: "relative",
+        padding: "16px",
+      }}
+    >
+      <div className="d-flex justify-content-between align-items-start">
+        <span
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "300",
+            color: "var(--onBackground)",
+            letterSpacing: "-0.5px",
+            textTransform: "lowercase",
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          {locationName}
+        </span>
+      </div>
 
-      <div style={{ position: isExpanded ? "relative" : "absolute", bottom: isExpanded ? "auto" : "16px", left: isExpanded ? "auto" : "16px", right: isExpanded ? "auto" : "16px", marginTop: isExpanded ? "40px" : "0", zIndex: 2 }}>
+      {error && (
+        <div
+          className="mt-2"
+          style={{
+            color: "var(--error)",
+            fontSize: "14px",
+            zIndex: 2,
+            position: "relative",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: "16px",
+          left: "16px",
+          right: "16px",
+          zIndex: 2,
+        }}
+      >
         {loading ? (
-          <i className="material-symbols-rounded" style={{ animation: "pulse 1.5s infinite", fontSize: isExpanded ? "48px" : "32px", color: "var(--onBackground)" }}>sync</i>
+          <i
+            className="material-symbols-sharp"
+            style={{
+              animation: "pulse 1.5s infinite",
+              fontSize: "32px",
+              color: "var(--onBackground)",
+            }}
+          >
+            sync
+          </i>
         ) : weather ? (
           <div className="d-flex justify-content-between align-items-end w-100">
             <div className="d-flex flex-column text-start">
-              <span style={{ fontSize: isExpanded ? "6rem" : "4.5rem", fontWeight: "200", lineHeight: "0.9", color: "var(--onBackground)", letterSpacing: "-2px" }}>
+              <span
+                style={{
+                  fontSize: "4.5rem",
+                  fontWeight: "200",
+                  lineHeight: "0.9",
+                  color: "var(--onBackground)",
+                  letterSpacing: "-2px",
+                }}
+              >
                 {Math.round(weather.temperature)}°C
               </span>
-              <div className="d-flex flex-column mt-2" style={{ color: "var(--onBackground)" }}>
-                <span style={{ fontSize: isExpanded ? "1.2rem" : "1rem", fontWeight: "400" }}>
+              <div
+                className="d-flex flex-column mt-2"
+                style={{ color: "var(--onBackground)" }}
+              >
+                <span style={{ fontSize: "1rem", fontWeight: "400" }}>
                   {getWeatherDetails(weather.weathercode, weather.is_day).text}
                 </span>
-                <span style={{ fontSize: isExpanded ? "1rem" : "0.85rem", opacity: 0.8 }}>
+                <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>
                   wind: {weather.windspeed} km/h
                 </span>
               </div>
             </div>
-            <i className="material-symbols-rounded" style={{ fontSize: isExpanded ? "100px" : "70px", color: "var(--onBackground)", fontVariationSettings: "'FILL' 0, 'wght' 200" }}>
+            <i
+              className="material-symbols-sharp"
+              style={{
+                fontSize: "64px",
+                color: "var(--onBackground)",
+                fontVariationSettings: "'FILL' 0, 'wght' 200, 'opsz' 48",
+                lineHeight: "0.9",
+              }}
+            >
               {getWeatherDetails(weather.weathercode, weather.is_day).icon}
             </i>
           </div>

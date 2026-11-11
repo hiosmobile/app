@@ -44,8 +44,8 @@
     --onErrorContainer: #93000a;
 
     /*Fonts*/
-    --fontPrimary: "Google Sans Flex Variable", sans-serif;
-    --fontCode: "Google Sans Flex Variable", sans-serif;
+    --fontPrimary: "Noto Sans Variable", sans-serif;
+    --fontCode: "Noto Sans Variable", sans-serif;
 
     font-variation-settings:
         "slnt" 0,
@@ -1831,8 +1831,7 @@ body {
 }
 
 :root {
-    --glass-tint: rgba(242, 242, 242, 0.62);
-    --glass-border: rgba(255, 255, 255, 0.45);
+    --glass-tint: rgba(255, 255, 255, 0.62); /* Was rgba(242, 242, 242, 0.62) */    --glass-border: rgba(255, 255, 255, 0.45);
     --glass-shadow: 0 10px 32px rgba(0, 0, 0, 0.1);
     --glass-noise-opacity: 0.22;
     --glass-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
@@ -1872,6 +1871,7 @@ body.theme-dark {
 body.acrylic-on .card,
 body.acrylic-on .card.glass-container-ready,
 body.acrylic-on .bottom-sheet,
+body.acrylic-on .metro-modal-content,
 body.acrylic-on .top-app-bar,
 body.acrylic-on .side-rail,
 body.acrylic-on .bottom-nav {
@@ -1884,6 +1884,7 @@ body.acrylic-on .bottom-nav {
 body.acrylic-on .card::before,
 body.acrylic-on .card.glass-container-ready::before,
 body.acrylic-on .bottom-sheet::before,
+body.acrylic-on .metro-modal-content::before,
 body.acrylic-on .top-app-bar::before,
 body.acrylic-on .side-rail::before,
 body.acrylic-on .bottom-nav::before {
@@ -1903,6 +1904,7 @@ body.acrylic-on .bottom-nav::before {
 body.acrylic-on .card::after,
 body.acrylic-on .card.glass-container-ready::after,
 body.acrylic-on .bottom-sheet::after,
+body.acrylic-on .metro-modal-content::after,
 body.acrylic-on .top-app-bar::after,
 body.acrylic-on .side-rail::after,
 body.acrylic-on .bottom-nav::after {
@@ -2006,6 +2008,7 @@ body.theme-dark.acrylic-on .glass-content {
 body:not(.acrylic-on) .card,
 body:not(.acrylic-on) .card.glass-container-ready,
 body:not(.acrylic-on) .bottom-sheet,
+body:not(.acrylic-on) .metro-modal-content,
 body:not(.acrylic-on) .top-app-bar,
 body:not(.acrylic-on) .side-rail,
 body:not(.acrylic-on) .bottom-nav {
@@ -2023,6 +2026,8 @@ body:not(.acrylic-on) .card::before,
 body:not(.acrylic-on) .card::after,
 body:not(.acrylic-on) .bottom-sheet::before,
 body:not(.acrylic-on) .bottom-sheet::after,
+body:not(.acrylic-on) .metro-modal-content::before,
+body:not(.acrylic-on) .metro-modal-content::after,
 body:not(.acrylic-on) .top-app-bar::before,
 body:not(.acrylic-on) .top-app-bar::after,
 body:not(.acrylic-on) .side-rail::before,
@@ -2042,6 +2047,7 @@ body:not(.acrylic-on) .bottom-nav::after {
     body:not(.theme-light):not(.acrylic-on) .card,
     body:not(.theme-light):not(.acrylic-on) .card.glass-container-ready,
     body:not(.theme-light):not(.acrylic-on) .bottom-sheet,
+    body:not(.theme-light):not(.acrylic-on) .metro-modal-content,
     body:not(.theme-light):not(.acrylic-on) .top-app-bar,
     body:not(.theme-light):not(.acrylic-on) .side-rail,
     body:not(.theme-light):not(.acrylic-on) .bottom-nav {
@@ -2055,6 +2061,7 @@ body.theme-dark .background-off .card.glass-container-ready,
 body.theme-dark:not(.acrylic-on) .card,
 body.theme-dark:not(.acrylic-on) .card.glass-container-ready,
 body.theme-dark:not(.acrylic-on) .bottom-sheet,
+body.theme-dark:not(.acrylic-on) .metro-modal-content,
 body.theme-dark:not(.acrylic-on) .top-app-bar,
 body.theme-dark:not(.acrylic-on) .side-rail,
 body.theme-dark:not(.acrylic-on) .bottom-nav {
@@ -2953,15 +2960,24 @@ body.theme-dark {
 .metro-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    z-index: 9999;
+    z-index: 2000;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    animation: fade-in 0.2s ease forwards;
+    transition: opacity 0.3s ease;
+}
+
+/* Put the dark dim and blur on ::before so it is a sibling to .metro-modal-content,
+   matching how .bottom-sheet-overlay and .bottom-sheet work! */
+.metro-modal-overlay::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: -1;
 }
 
 body:not(.acrylic-on) .metro-modal-overlay {
@@ -2969,12 +2985,10 @@ body:not(.acrylic-on) .metro-modal-overlay {
 }
 
 .metro-modal-content {
-    background: var(--glass-tint) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid var(--glass-border);
-    border-top: 6px solid var(--metro-cyan);
+    border-top: 6px solid var(--metro-cyan) !important; /* Preserves the Metro top bar over shared border rules */
     box-shadow: var(--glass-shadow);
+    color: var(--text-color);
     border-radius: var(--radius-card);
     width: 100%;
     max-width: 450px;
@@ -2986,19 +3000,15 @@ body:not(.acrylic-on) .metro-modal-overlay {
     isolation: isolate;
 }
 
-body:not(.acrylic-on) .metro-modal-content {
-    background-color: var(--secondaryContainer) !important;
-    color: var(--onSecondaryContainer) !important
+.metro-modal-content > * {
+    position: relative;
+    z-index: 1;
 }
 
-.metro-modal-content::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: var(--glass-sheen);
-    opacity: 0.35;
-    z-index: -1;
+.metro-modal-content,
+body.acrylic-on .metro-modal-content,
+body:not(.acrylic-on) .metro-modal-content {
+    border-top: 6px solid var(--primary) !important;
 }
 
 .wp7-app-title {

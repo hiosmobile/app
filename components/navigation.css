@@ -257,3 +257,31 @@ body.high-contrast .activeIcon {
     display: none;
   }
 }
+
+/* Smooth Chrome-style transitions for Bottom Nav and FAB */
+.bottom-nav {
+  transition:
+    transform 0.32s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.25s ease;
+}
+
+.fab {
+  transition:
+    transform 0.32s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.25s ease !important;
+}
+
+@media (max-width: 767px) {
+  /* Option A: Slide away & fade out completely (like Chrome Android) */
+  body.scroll-down .bottom-nav {
+    transform: translate(-50%, calc(100% + 32px));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  body.scroll-down .fab {
+    transform: translateY(calc(100% + 110px)) scale(0.85);
+    opacity: 0;
+    pointer-events: none;
+  }
+}

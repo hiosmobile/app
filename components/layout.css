@@ -107,7 +107,7 @@
 
 * {
     -webkit-tap-highlight-color: transparent;
-    font-family: "Google Sans Flex Variable", sans-serif;
+    font-family: "Noto Sans Variable", sans-serif;
     box-sizing: border-box;
 }
 
@@ -137,9 +137,7 @@ body.background-off .app-container {
 
 /* FAB */
 .fab {
-    position: fixed;
-    bottom: 1px;
-    right: 20px;
+    position: fixed !important;
     width: 56px;
     height: 56px;
     color: var(--onPrimary);
@@ -272,9 +270,11 @@ body.background-off .app-container {
     }
 
     .fab {
-        right: 20px;
-        bottom: calc(90px + var(--nav-pad-bottom));
-    }
+            left: auto;
+            right: 20px;
+            margin-left: 0;
+            bottom: calc(90px + var(--nav-pad-bottom));
+        }
 }
 
 @media (min-width: 768px) {
@@ -294,9 +294,11 @@ body.background-off .app-container {
     }
 
     .fab {
-        right: 16px;
-        bottom: calc(16px + var(--nav-pad-bottom));
-    }
+            left: 50%;
+            right: auto; /* Clears the mobile right value */
+            margin-left: calc(min(50vw, 554px) - 72px);
+            bottom: calc(16px + var(--nav-pad-bottom));
+        }
 }
 
 /* Top App Bar Styling */

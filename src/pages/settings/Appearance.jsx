@@ -225,7 +225,7 @@ export default function Appearance() {
                               </span>
                             )}
                           </div>
-                          <span className="d-block mt-2 fw-bold" style={{ fontSize: "0.85rem" }}>
+                          <span className="d-block mt-2" style={{ fontSize: "0.85rem" }}>
                             {theme.label}
                           </span>
                         </div>

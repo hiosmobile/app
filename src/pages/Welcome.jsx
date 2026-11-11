@@ -34,7 +34,7 @@ const WIDGET_REGISTRY = {
     label: "weather",
     icon: "partly_cloudy_day",
     color: "var(--primary)",
-    appName: "weather",
+    appName: "Current conditions",
   },
   calendar: {
     id: "calendar",
@@ -374,7 +374,7 @@ export default function Home() {
       </main>
 
       <RippleButton
-        className="fab-btn d-flex align-items-center justify-content-center shadow-lg"
+        className="fab shadow-lg"
         onClick={() => {
           if (isEditing) {
             setIsEditing(false);
@@ -382,21 +382,9 @@ export default function Home() {
             setIsFabOpen(true);
           }
         }}
-        style={{
-          position: "fixed",
-          bottom: "85px",
-          right: "20px",
-          width: "56px",
-          height: "56px",
-          borderRadius: "40%",
-          backgroundColor: "var(--primary)",
-          color: "var(--onPrimary)",
-          zIndex: 1000,
-          border: "none",
-        }}
       >
-        <span className="material-symbols-rounded">
-          {isEditing ? "check" : "edit"}
+        <span className="material-symbols-rounded fs-4">
+          {isEditing ? "check" : "tune"}
         </span>
       </RippleButton>
 

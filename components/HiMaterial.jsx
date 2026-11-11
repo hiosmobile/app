@@ -475,7 +475,7 @@ export const GoogleAuthButton = ({
 export function Modal({
   isOpen,
   onClose,
-  appName = "hios",
+  appName = "Harmony",
   title,
   color = "var(--primary)",
   children,
